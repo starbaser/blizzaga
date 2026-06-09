@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 
 	"github.com/alecthomas/chroma/v2/formatters/svg"
-	"github.com/charmbracelet/freeze/font"
+	"github.com/starbaser/blizzaga/font"
 )
 
 func fontOptions(config *Config) ([]svg.Option, error) {

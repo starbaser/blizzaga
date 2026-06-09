@@ -13,7 +13,7 @@ import (
 	"github.com/aymanbagabas/go-udiff"
 )
 
-var binary = "./test/freeze-test"
+var binary = "./test/blizzaga-test"
 
 func init() {
 	if runtime.GOOS == "windows" {
@@ -41,7 +41,7 @@ func TestMain(m *testing.M) {
 	os.Exit(exit)
 }
 
-func TestFreeze(t *testing.T) {
+func TestBlizzaga(t *testing.T) {
 	cmd := exec.Command(binary)
 	err := cmd.Run()
 	if err != nil {
@@ -49,7 +49,7 @@ func TestFreeze(t *testing.T) {
 	}
 }
 
-func TestFreezeOutput(t *testing.T) {
+func TestBlizzagaOutput(t *testing.T) {
 	output := "artichoke-test.svg"
 	defer os.Remove(output)
 
@@ -65,7 +65,7 @@ func TestFreezeOutput(t *testing.T) {
 	}
 }
 
-func TestFreezeHelp(t *testing.T) {
+func TestBlizzagaHelp(t *testing.T) {
 	out := bytes.Buffer{}
 	cmd := exec.Command(binary)
 	cmd.Stdout = &out
@@ -78,7 +78,7 @@ func TestFreezeHelp(t *testing.T) {
 
 	contains := []string{
 		"Generate images of code and terminal output.",
-		"freeze main.go [-o code.svg] [--flags]",
+		"blizzaga main.go [-o code.svg] [--flags]",
 		"--theme", "Theme to use for syntax highlighting",
 		"--border.color", "Border color.",
 		"--shadow.blur", "Shadow Gaussian Blur.",
@@ -92,7 +92,7 @@ func TestFreezeHelp(t *testing.T) {
 	}
 }
 
-func TestFreezeErrorFileMissing(t *testing.T) {
+func TestBlizzagaErrorFileMissing(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		t.Skip("this fails on windows for some reason")
 	}
@@ -117,7 +117,7 @@ func TestFreezeErrorFileMissing(t *testing.T) {
 	}
 }
 
-func TestFreezeConfigurations(t *testing.T) {
+func TestBlizzagaConfigurations(t *testing.T) {
 	tests := []struct {
 		input  string
 		flags  []string

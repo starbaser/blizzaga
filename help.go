@@ -30,8 +30,8 @@ func helpPrinter(_ kong.HelpOptions, ctx *kong.Context) error {
 		codeBlockStyle.Render(
 			lipgloss.JoinVertical(
 				lipgloss.Top,
-				lipgloss.JoinHorizontal(lipgloss.Left, programStyle.Render("freeze"), argumentStyle.Render("main.go"), flagStyle.Render("[-o code.svg] [--flags]")),
-				lipgloss.JoinHorizontal(lipgloss.Left, programStyle.Render("freeze"), argumentStyle.Render("--execute"), stringStyle.Render("\"ls -la\""), flagStyle.Render("[--flags]   ")),
+				lipgloss.JoinHorizontal(lipgloss.Left, programStyle.Render("blizzaga"), argumentStyle.Render("main.go"), flagStyle.Render("[-o code.svg] [--flags]")),
+				lipgloss.JoinHorizontal(lipgloss.Left, programStyle.Render("blizzaga"), argumentStyle.Render("--execute"), stringStyle.Render("\"ls -la\""), flagStyle.Render("[--flags]   ")),
 			),
 		),
 	)

@@ -18,7 +18,7 @@
     })
     // {
       overlays.default = final: prev: {
-        freeze = import ./default.nix {pkgs = final;};
+        blizzaga = import ./default.nix {pkgs = final;};
       };
     };
 }

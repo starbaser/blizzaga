@@ -21,8 +21,8 @@ import (
 	"github.com/charmbracelet/x/cellbuf"
 	"github.com/mattn/go-isatty"
 
-	in "github.com/charmbracelet/freeze/input"
-	"github.com/charmbracelet/freeze/svg"
+	in "github.com/starbaser/blizzaga/input"
+	"github.com/starbaser/blizzaga/svg"
 )
 
 const (
@@ -69,7 +69,7 @@ func main() {
 				Version = "unknown (built from source)"
 			}
 		}
-		version := fmt.Sprintf("freeze version %s", Version)
+		version := fmt.Sprintf("blizzaga version %s", Version)
 		if len(CommitSHA) >= shaLen {
 			version += " (" + CommitSHA[:shaLen] + ")"
 		}

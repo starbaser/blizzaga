@@ -1,4 +1,4 @@
-module github.com/charmbracelet/freeze
+module github.com/starbaser/blizzaga
 
 go 1.25.8
 
