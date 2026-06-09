@@ -1,14 +1,11 @@
 # Blizzaga
 
-<p>
-<img src="./assets/baka-blizzaga.jpg" width="500" alt="@VeryEclectic" /><br>
-</p>
+<p> <img src="./assets/baka-blizzaga.jpg" width="500" alt="@VeryEclectic" /><br> </p>
 
 Generate images of code and terminal output.
 
-<p align="left">
-<img width="600" src="https://vhs.charm.sh/vhs-1C6z5SUKlTdqdj4KL1ADlH.gif" alt="blizzaga code screenshot">
-</p>
+This fork of [freeze](https://github.com/charmbracelet/freeze) adds the
+[`srcery`](https://srcery.sh/) theme and sets it as the default.
 
 ## Examples
 
@@ -33,8 +30,7 @@ blizzaga --execute "eza -lah"
 ```
 
 <p align="center">
-<img alt="output of blizzaga command, ANSI" src="./test/golden/svg/eza.svg" width="800" />
-</p>
+<img alt="output of blizzaga command, ANSI" src="./test/golden/svg/eza.svg" width="800" /> </p>
 
 Blizzaga is also [super customizable](#customization) and ships with an
 [interactive TUI](#interactive-mode).
@@ -293,7 +289,8 @@ There are also some default configurations built into `blizzaga` which can be pa
 - `user`: Uses `~/.config/blizzaga/user.json`.
 
 If you use `--interactive` mode, a configuration file will be created for you at
-`~/.config/blizzaga/user.json`. This will be the default configuration file used in your screenshots.
+`~/.config/blizzaga/user.json`. This will be the default configuration file used in your
+screenshots.
 
 ```bash
 blizzaga -c base main.go
