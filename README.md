@@ -198,7 +198,7 @@ blizzaga artichoke.hs --window
 Set the background color of the terminal window.
 
 ```bash
-blizzaga artichoke.hs --background "#08163f"
+blizzaga artichoke.hs --background "#121110"
 ```
 
 ### Height
