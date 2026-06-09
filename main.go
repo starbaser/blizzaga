@@ -193,7 +193,7 @@ func main() {
 
 	s, ok := styles.Registry[strings.ToLower(config.Theme)]
 	if s == nil || !ok {
-		s = charmStyle
+		s = defaultStyle
 	}
 	if !s.Has(chroma.Background) {
 		s, err = s.Builder().Add(chroma.Background, "bg:"+config.Background).Build()

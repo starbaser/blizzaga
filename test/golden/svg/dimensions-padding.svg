@@ -8,19 +8,19 @@
 	font-weight: normal;
 	font-style: normal;
 }
-</style><rect width="600.00" height="300.00" fill="#171717" x="0.00px" y="0.00px"/>
-<g font-family="JetBrains Mono" font-size="14.00px" fill="#c4c4c4" clip-path="url(#terminalMask)">
-<text x="50.00px" y="66.80px" xml:space="preserve"><tspan fill="#ff48dd">module</tspan> Main <tspan fill="#ff48dd">where</tspan>
+</style><rect width="600.00" height="300.00" fill="#121110" x="0.00px" y="0.00px"/>
+<g font-family="JetBrains Mono" font-size="14.00px" fill="#fce8c3" clip-path="url(#terminalMask)">
+<text x="50.00px" y="66.80px" xml:space="preserve"><tspan fill="#ef2f27">module</tspan> Main <tspan fill="#ef2f27">where</tspan>
 </text><text x="50.00px" y="83.60px" xml:space="preserve">
-</text><text x="50.00px" y="100.40px" xml:space="preserve"><tspan fill="#ff48dd">import</tspan> Data.Function <tspan fill="#e8e8a8">(</tspan> <tspan fill="#e8e8a8">(</tspan><tspan fill="#ff7f83">&amp;</tspan><tspan fill="#e8e8a8">)</tspan> <tspan fill="#e8e8a8">)</tspan>
-</text><text x="50.00px" y="117.20px" xml:space="preserve"><tspan fill="#ff48dd">import</tspan> Data.List <tspan fill="#e8e8a8">(</tspan> <tspan fill="#00dc7f">intercalate</tspan> <tspan fill="#e8e8a8">)</tspan>
+</text><text x="50.00px" y="100.40px" xml:space="preserve"><tspan fill="#ef2f27">import</tspan> Data.Function <tspan fill="#917e6b">(</tspan> <tspan fill="#917e6b">(</tspan><tspan fill="#c5b088">&amp;</tspan><tspan fill="#917e6b">)</tspan> <tspan fill="#917e6b">)</tspan>
+</text><text x="50.00px" y="117.20px" xml:space="preserve"><tspan fill="#ef2f27">import</tspan> Data.List <tspan fill="#917e6b">(</tspan> <tspan fill="#fbb829">intercalate</tspan> <tspan fill="#917e6b">)</tspan>
 </text><text x="50.00px" y="134.00px" xml:space="preserve">
-</text><text x="50.00px" y="150.80px" xml:space="preserve"><tspan fill="#00dc7f">hello</tspan> <tspan fill="#ff7f83">::</tspan> <tspan fill="#635adf">String</tspan> <tspan fill="#ff7f83">-&gt;</tspan> <tspan fill="#635adf">String</tspan>
-</text><text x="50.00px" y="167.60px" xml:space="preserve"><tspan fill="#00dc7f">hello</tspan> s <tspan fill="#ff7f83">=</tspan>
-</text><text x="50.00px" y="184.40px" xml:space="preserve">  <tspan fill="#e38356">&quot;Hello, &quot;</tspan> <tspan fill="#ff7f83">++</tspan> s <tspan fill="#ff7f83">++</tspan> <tspan fill="#e38356">&quot;.&quot;</tspan>
+</text><text x="50.00px" y="150.80px" xml:space="preserve"><tspan fill="#fbb829">hello</tspan> <tspan fill="#c5b088">::</tspan> <tspan fill="#68a8e4" font-style="italic">String</tspan> <tspan fill="#c5b088">-&gt;</tspan> <tspan fill="#68a8e4" font-style="italic">String</tspan>
+</text><text x="50.00px" y="167.60px" xml:space="preserve"><tspan fill="#fbb829">hello</tspan> s <tspan fill="#c5b088">=</tspan>
+</text><text x="50.00px" y="184.40px" xml:space="preserve">  <tspan fill="#98bc37">&quot;Hello, &quot;</tspan> <tspan fill="#c5b088">++</tspan> s <tspan fill="#c5b088">++</tspan> <tspan fill="#98bc37">&quot;.&quot;</tspan>
 </text><text x="50.00px" y="201.20px" xml:space="preserve">
-</text><text x="50.00px" y="218.00px" xml:space="preserve"><tspan fill="#00dc7f">main</tspan> <tspan fill="#ff7f83">::</tspan> <tspan fill="#635adf">IO</tspan> <tspan fill="#ff7cdb">()</tspan>
-</text><text x="50.00px" y="234.80px" xml:space="preserve"><tspan fill="#00dc7f">main</tspan> <tspan fill="#ff7f83">=</tspan>
+</text><text x="50.00px" y="218.00px" xml:space="preserve"><tspan fill="#fbb829">main</tspan> <tspan fill="#c5b088">::</tspan> <tspan fill="#68a8e4" font-style="italic">IO</tspan> <tspan fill="#68a8e4">()</tspan>
+</text><text x="50.00px" y="234.80px" xml:space="preserve"><tspan fill="#fbb829">main</tspan> <tspan fill="#c5b088">=</tspan>
 </text>
 </g>
 <defs><clipPath id="terminalMask"><rect x="0.00" y="0.00" width="600.00" height="250.00"/></clipPath></defs></svg>

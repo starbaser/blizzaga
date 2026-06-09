@@ -133,16 +133,17 @@ cat artichoke.hs | freeze --language haskell
 
 ### Theme
 
-Change the color theme.
+The default theme is `srcery`. Change the color theme with `--theme`; the
+original `charm` theme remains available.
 
 ```bash
-freeze artichoke.hs --theme dracula
+freeze artichoke.hs --theme srcery
 ```
 
 <br />
 
 <a href="https://github.com/charmbracelet/freeze/assets/42545625/c693dc80-89b8-43c6-a34e-2d49a332d0c7">
-  <img alt="output of freeze command, Haskell code block with dracula theme" src="./test/golden/svg/dracula.svg" width="600" />
+  <img alt="output of freeze command, Haskell code block with srcery theme" src="./test/golden/svg/srcery.svg" width="600" />
 </a>
 
 ### Output
@@ -334,10 +335,12 @@ Here's what an example configuration looks like:
 ```json
 {
   "window": false,
+  "theme": "srcery",
+  "background": "#121110",
   "border": {
     "radius": 0,
     "width": 0,
-    "color": "#515151"
+    "color": "#504D47"
   },
   "shadow": false,
   "padding": [20, 40, 20, 20],

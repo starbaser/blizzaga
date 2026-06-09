@@ -159,6 +159,16 @@ func TestFreezeConfigurations(t *testing.T) {
 		},
 		{
 			input:  "test/input/artichoke.hs",
+			flags:  []string{"--theme", "srcery"},
+			output: "srcery",
+		},
+		{
+			input:  "test/input/artichoke.hs",
+			flags:  []string{"--theme", "charm", "--background", "#171717"},
+			output: "charm",
+		},
+		{
+			input:  "test/input/artichoke.hs",
 			flags:  []string{"--theme", "dracula"},
 			output: "dracula",
 		},

@@ -8,51 +8,51 @@
 	font-weight: normal;
 	font-style: normal;
 }
-</style><rect width="478.00" height="778.00" fill="#171717" rx="8.00" ry="8.00" filter="url(#shadow)" stroke="#515151" stroke-width="1.00" x="60.00px" y="50.00px"/>
-<g font-family="JetBrains Mono" font-size="14.00px" fill="#c4c4c4" clip-path="url(#terminalMask)">
-<text x="80.00px" y="101.80px" xml:space="preserve"><tspan fill="#b083ea">variables</tspan><tspan fill="#e8e8a8">:</tspan>
-</text><text x="80.00px" y="118.60px" xml:space="preserve">  <tspan fill="#b083ea">main</tspan><tspan fill="#e8e8a8">:</tspan> <tspan fill="#e38356">&quot;&quot;</tspan>
-</text><text x="80.00px" y="135.40px" xml:space="preserve">  <tspan fill="#b083ea">binary_name</tspan><tspan fill="#e8e8a8">:</tspan> <tspan fill="#e38356">&quot;&quot;</tspan>
-</text><text x="80.00px" y="152.20px" xml:space="preserve">  <tspan fill="#b083ea">description</tspan><tspan fill="#e8e8a8">:</tspan> <tspan fill="#e38356">&quot;&quot;</tspan>
-</text><text x="80.00px" y="169.00px" xml:space="preserve">  <tspan fill="#b083ea">maintainer</tspan><tspan fill="#e8e8a8">:</tspan> <tspan fill="#e38356">&quot;&quot;</tspan>
-</text><text x="80.00px" y="185.80px" xml:space="preserve">  <tspan fill="#b083ea">homepage</tspan><tspan fill="#e8e8a8">:</tspan> <tspan fill="#e38356">&quot;https://charm.sh/&quot;</tspan>
-</text><text x="80.00px" y="202.60px" xml:space="preserve">  <tspan fill="#b083ea">brew_commit_author_name</tspan><tspan fill="#e8e8a8">:</tspan> <tspan fill="#e38356">&quot;&quot;</tspan>
-</text><text x="80.00px" y="219.40px" xml:space="preserve">  <tspan fill="#b083ea">brew_commit_author_email</tspan><tspan fill="#e8e8a8">:</tspan> <tspan fill="#e38356">&quot;&quot;</tspan>
-</text><text x="80.00px" y="236.20px" xml:space="preserve">  <tspan fill="#b083ea">brew_owner</tspan><tspan fill="#e8e8a8">:</tspan> charmbracelet
-</text><text x="80.00px" y="253.00px" xml:space="preserve">  <tspan fill="#b083ea">docker_io_registry_owner</tspan><tspan fill="#e8e8a8">:</tspan> charmcli
-</text><text x="80.00px" y="269.80px" xml:space="preserve">  <tspan fill="#b083ea">ghcr_io_registry_owner</tspan><tspan fill="#e8e8a8">:</tspan> charmbracelet
-</text><text x="80.00px" y="286.60px" xml:space="preserve">  <tspan fill="#b083ea">aur_project_name</tspan><tspan fill="#e8e8a8">:</tspan> <tspan fill="#e38356">&quot;&quot;</tspan>
-</text><text x="80.00px" y="303.40px" xml:space="preserve">  <tspan fill="#b083ea">scoop_name</tspan><tspan fill="#e8e8a8">:</tspan> <tspan fill="#e38356">&quot;&quot;</tspan>
+</style><rect width="478.00" height="778.00" fill="#121110" rx="8.00" ry="8.00" filter="url(#shadow)" stroke="#504D47" stroke-width="1.00" x="60.00px" y="50.00px"/>
+<g font-family="JetBrains Mono" font-size="14.00px" fill="#fce8c3" clip-path="url(#terminalMask)">
+<text x="80.00px" y="101.80px" xml:space="preserve"><tspan fill="#2c78bf">variables</tspan><tspan fill="#917e6b">:</tspan>
+</text><text x="80.00px" y="118.60px" xml:space="preserve">  <tspan fill="#2c78bf">main</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#98bc37">&quot;&quot;</tspan>
+</text><text x="80.00px" y="135.40px" xml:space="preserve">  <tspan fill="#2c78bf">binary_name</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#98bc37">&quot;&quot;</tspan>
+</text><text x="80.00px" y="152.20px" xml:space="preserve">  <tspan fill="#2c78bf">description</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#98bc37">&quot;&quot;</tspan>
+</text><text x="80.00px" y="169.00px" xml:space="preserve">  <tspan fill="#2c78bf">maintainer</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#98bc37">&quot;&quot;</tspan>
+</text><text x="80.00px" y="185.80px" xml:space="preserve">  <tspan fill="#2c78bf">homepage</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#98bc37">&quot;https://charm.sh/&quot;</tspan>
+</text><text x="80.00px" y="202.60px" xml:space="preserve">  <tspan fill="#2c78bf">brew_commit_author_name</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#98bc37">&quot;&quot;</tspan>
+</text><text x="80.00px" y="219.40px" xml:space="preserve">  <tspan fill="#2c78bf">brew_commit_author_email</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#98bc37">&quot;&quot;</tspan>
+</text><text x="80.00px" y="236.20px" xml:space="preserve">  <tspan fill="#2c78bf">brew_owner</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#ff5c8f">charmbracelet</tspan>
+</text><text x="80.00px" y="253.00px" xml:space="preserve">  <tspan fill="#2c78bf">docker_io_registry_owner</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#ff5c8f">charmcli</tspan>
+</text><text x="80.00px" y="269.80px" xml:space="preserve">  <tspan fill="#2c78bf">ghcr_io_registry_owner</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#ff5c8f">charmbracelet</tspan>
+</text><text x="80.00px" y="286.60px" xml:space="preserve">  <tspan fill="#2c78bf">aur_project_name</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#98bc37">&quot;&quot;</tspan>
+</text><text x="80.00px" y="303.40px" xml:space="preserve">  <tspan fill="#2c78bf">scoop_name</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#98bc37">&quot;&quot;</tspan>
 </text><text x="80.00px" y="320.20px" xml:space="preserve">
-</text><text x="80.00px" y="337.00px" xml:space="preserve"><tspan fill="#b083ea">before</tspan><tspan fill="#e8e8a8">:</tspan>
-</text><text x="80.00px" y="353.80px" xml:space="preserve">  <tspan fill="#b083ea">hooks</tspan><tspan fill="#e8e8a8">:</tspan>
-</text><text x="80.00px" y="370.60px" xml:space="preserve">    - go mod tidy
-</text><text x="80.00px" y="387.40px" xml:space="preserve">    - rm -rf completions
-</text><text x="80.00px" y="404.20px" xml:space="preserve">    - mkdir completions
-</text><text x="80.00px" y="421.00px" xml:space="preserve">    - rm -rf manpages
-</text><text x="80.00px" y="437.80px" xml:space="preserve">    - mkdir manpages
-</text><text x="80.00px" y="454.60px" xml:space="preserve">    - sh -c &apos;go run {{ with .Var.main }}{{ . }}{{ else }}.{{ end }} completion &quot;bash&quot; &gt;./completions/{{ .ProjectName }}.bash&apos;
-</text><text x="80.00px" y="471.40px" xml:space="preserve">    - sh -c &apos;go run {{ with .Var.main }}{{ . }}{{ else }}.{{ end }} completion &quot;zsh&quot; &gt;./completions/{{ .ProjectName }}.zsh&apos;
-</text><text x="80.00px" y="488.20px" xml:space="preserve">    - sh -c &apos;go run {{ with .Var.main }}{{ . }}{{ else }}.{{ end }} completion &quot;fish&quot; &gt;./completions/{{ .ProjectName }}.fish&apos;
-</text><text x="80.00px" y="505.00px" xml:space="preserve">    - sh -c &apos;go run {{ with .Var.main }}{{ . }}{{ else }}.{{ end }} man | gzip -c &gt;./manpages/{{ .ProjectName }}.1.gz&apos;
+</text><text x="80.00px" y="337.00px" xml:space="preserve"><tspan fill="#2c78bf">before</tspan><tspan fill="#917e6b">:</tspan>
+</text><text x="80.00px" y="353.80px" xml:space="preserve">  <tspan fill="#2c78bf">hooks</tspan><tspan fill="#917e6b">:</tspan>
+</text><text x="80.00px" y="370.60px" xml:space="preserve">    - <tspan fill="#ff5c8f">go mod tidy</tspan>
+</text><text x="80.00px" y="387.40px" xml:space="preserve">    - <tspan fill="#ff5c8f">rm -rf completions</tspan>
+</text><text x="80.00px" y="404.20px" xml:space="preserve">    - <tspan fill="#ff5c8f">mkdir completions</tspan>
+</text><text x="80.00px" y="421.00px" xml:space="preserve">    - <tspan fill="#ff5c8f">rm -rf manpages</tspan>
+</text><text x="80.00px" y="437.80px" xml:space="preserve">    - <tspan fill="#ff5c8f">mkdir manpages</tspan>
+</text><text x="80.00px" y="454.60px" xml:space="preserve">    - <tspan fill="#ff5c8f">sh -c &apos;go run {{ with .Var.main }}{{ . }}{{ else }}.{{ end }} completion &quot;bash&quot; &gt;./completions/{{ .ProjectName }}.bash&apos;</tspan>
+</text><text x="80.00px" y="471.40px" xml:space="preserve">    - <tspan fill="#ff5c8f">sh -c &apos;go run {{ with .Var.main }}{{ . }}{{ else }}.{{ end }} completion &quot;zsh&quot; &gt;./completions/{{ .ProjectName }}.zsh&apos;</tspan>
+</text><text x="80.00px" y="488.20px" xml:space="preserve">    - <tspan fill="#ff5c8f">sh -c &apos;go run {{ with .Var.main }}{{ . }}{{ else }}.{{ end }} completion &quot;fish&quot; &gt;./completions/{{ .ProjectName }}.fish&apos;</tspan>
+</text><text x="80.00px" y="505.00px" xml:space="preserve">    - <tspan fill="#ff5c8f">sh -c &apos;go run {{ with .Var.main }}{{ . }}{{ else }}.{{ end }} man | gzip -c &gt;./manpages/{{ .ProjectName }}.1.gz&apos;</tspan>
 </text><text x="80.00px" y="521.80px" xml:space="preserve">
-</text><text x="80.00px" y="538.60px" xml:space="preserve"><tspan fill="#b083ea">gomod</tspan><tspan fill="#e8e8a8">:</tspan>
-</text><text x="80.00px" y="555.40px" xml:space="preserve">  <tspan fill="#b083ea">proxy</tspan><tspan fill="#e8e8a8">:</tspan> <tspan fill="#00aaff">true</tspan>
+</text><text x="80.00px" y="538.60px" xml:space="preserve"><tspan fill="#2c78bf">gomod</tspan><tspan fill="#917e6b">:</tspan>
+</text><text x="80.00px" y="555.40px" xml:space="preserve">  <tspan fill="#2c78bf">proxy</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#ff5c8f">true</tspan>
 </text><text x="80.00px" y="572.20px" xml:space="preserve">
-</text><text x="80.00px" y="589.00px" xml:space="preserve"><tspan fill="#b083ea">builds</tspan><tspan fill="#e8e8a8">:</tspan>
-</text><text x="80.00px" y="605.80px" xml:space="preserve">  - <tspan fill="#b083ea">binary</tspan><tspan fill="#e8e8a8">:</tspan> <tspan fill="#e38356">&quot;{{ with .Var.binary_name }}{{ . }}{{ else }}{{ .ProjectName }}{{ end }}&quot;</tspan>
-</text><text x="80.00px" y="622.60px" xml:space="preserve">    <tspan fill="#b083ea">env</tspan><tspan fill="#e8e8a8">:</tspan>
-</text><text x="80.00px" y="639.40px" xml:space="preserve">      - CGO_ENABLED=0
-</text><text x="80.00px" y="656.20px" xml:space="preserve">    <tspan fill="#b083ea">main</tspan><tspan fill="#e8e8a8">:</tspan> <tspan fill="#e38356">&quot;{{ with .Var.main }}{{ . }}{{ else }}.{{ end }}&quot;</tspan>
-</text><text x="80.00px" y="673.00px" xml:space="preserve">    <tspan fill="#b083ea">ldflags</tspan><tspan fill="#e8e8a8">:</tspan> -s -w -X main.Version=v{{ .Version }} -X main.CommitSHA={{ .Commit }} -X main.CommitDate={{ .CommitDate }}
-</text><text x="80.00px" y="689.80px" xml:space="preserve">    <tspan fill="#b083ea">goos</tspan><tspan fill="#e8e8a8">:</tspan>
-</text><text x="80.00px" y="706.60px" xml:space="preserve">      - linux
-</text><text x="80.00px" y="723.40px" xml:space="preserve">      - darwin
-</text><text x="80.00px" y="740.20px" xml:space="preserve">      - windows
-</text><text x="80.00px" y="757.00px" xml:space="preserve">      - freebsd
-</text><text x="80.00px" y="773.80px" xml:space="preserve">      - openbsd
-</text><text x="80.00px" y="790.60px" xml:space="preserve">      - netbsd
-</text><text x="80.00px" y="807.40px" xml:space="preserve">    <tspan fill="#b083ea">goarch</tspan><tspan fill="#e8e8a8">:</tspan>
+</text><text x="80.00px" y="589.00px" xml:space="preserve"><tspan fill="#2c78bf">builds</tspan><tspan fill="#917e6b">:</tspan>
+</text><text x="80.00px" y="605.80px" xml:space="preserve">  - <tspan fill="#2c78bf">binary</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#98bc37">&quot;{{ with .Var.binary_name }}{{ . }}{{ else }}{{ .ProjectName }}{{ end }}&quot;</tspan>
+</text><text x="80.00px" y="622.60px" xml:space="preserve">    <tspan fill="#2c78bf">env</tspan><tspan fill="#917e6b">:</tspan>
+</text><text x="80.00px" y="639.40px" xml:space="preserve">      - <tspan fill="#ff5c8f">CGO_ENABLED=0</tspan>
+</text><text x="80.00px" y="656.20px" xml:space="preserve">    <tspan fill="#2c78bf">main</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#98bc37">&quot;{{ with .Var.main }}{{ . }}{{ else }}.{{ end }}&quot;</tspan>
+</text><text x="80.00px" y="673.00px" xml:space="preserve">    <tspan fill="#2c78bf">ldflags</tspan><tspan fill="#917e6b">:</tspan> -<tspan fill="#ff5c8f">s -w -X main.Version=v{{ .Version }} -X main.CommitSHA={{ .Commit }} -X main.CommitDate={{ .CommitDate }}</tspan>
+</text><text x="80.00px" y="689.80px" xml:space="preserve">    <tspan fill="#2c78bf">goos</tspan><tspan fill="#917e6b">:</tspan>
+</text><text x="80.00px" y="706.60px" xml:space="preserve">      - <tspan fill="#ff5c8f">linux</tspan>
+</text><text x="80.00px" y="723.40px" xml:space="preserve">      - <tspan fill="#ff5c8f">darwin</tspan>
+</text><text x="80.00px" y="740.20px" xml:space="preserve">      - <tspan fill="#ff5c8f">windows</tspan>
+</text><text x="80.00px" y="757.00px" xml:space="preserve">      - <tspan fill="#ff5c8f">freebsd</tspan>
+</text><text x="80.00px" y="773.80px" xml:space="preserve">      - <tspan fill="#ff5c8f">openbsd</tspan>
+</text><text x="80.00px" y="790.60px" xml:space="preserve">      - <tspan fill="#ff5c8f">netbsd</tspan>
+</text><text x="80.00px" y="807.40px" xml:space="preserve">    <tspan fill="#2c78bf">goarch</tspan><tspan fill="#917e6b">:</tspan>
 </text>
 </g>
 <svg x="60.00px" y="50.00px"><circle cx="13.50" cy="12.00" r="5.50" fill="#FF5A54"/><circle cx="32.50" cy="12.00" r="5.50" fill="#E6BF29"/><circle cx="51.50" cy="12.00" r="5.50" fill="#52C12B"/></svg><defs><filter id="shadow" filterUnits="userSpaceOnUse"><feGaussianBlur in="SourceAlpha" stdDeviation="24.00"/><feOffset result="offsetblur" dx="0.00" dy="12.00"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><defs><clipPath id="terminalMask"><rect x="60.00" y="50.00" width="478.00" height="758.00"/></clipPath></defs></svg>

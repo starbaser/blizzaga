@@ -179,23 +179,23 @@ func (p *dispatcher) CsiDispatch(cmd ansi.Cmd, params ansi.Params) {
 }
 
 var ansiPalette = map[int]string{
-	30: "#282a2e", // black
-	31: "#D74E6F", // red
-	32: "#31BB71", // green
-	33: "#D3E561", // yellow
-	34: "#8056FF", // blue
-	35: "#ED61D7", // magenta
-	36: "#04D7D7", // cyan
-	37: "#C5C8C6", // white
+	30: srceryBlack,
+	31: srceryRed,
+	32: srceryGreen,
+	33: srceryYellow,
+	34: srceryBlue,
+	35: srceryMagenta,
+	36: srceryCyan,
+	37: srceryWhite,
 
-	90: "#4B4B4B", // bright black
-	91: "#FE5F86", // bright red
-	92: "#00D787", // bright green
-	93: "#EBFF71", // bright yellow
-	94: "#8F69FF", // bright blue
-	95: "#FF7AEA", // bright magenta
-	96: "#00FEFE", // bright cyan
-	97: "#FFFFFF", // bright white
+	90: srceryBrightBlack,
+	91: srceryBrightRed,
+	92: srceryBrightGreen,
+	93: srceryBrightYellow,
+	94: srceryBrightBlue,
+	95: srceryBrightMagenta,
+	96: srceryBrightCyan,
+	97: srceryBrightWhite,
 }
 
 var palette = []string{

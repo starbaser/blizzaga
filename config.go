@@ -18,7 +18,7 @@ type Config struct {
 	Input string `json:",omitempty" arg:"" help:"Code to screenshot." optional:""`
 
 	// Window
-	Background string    `json:"background" help:"Apply a background fill." short:"b" placeholder:"#171717" group:"Window"`
+	Background string    `json:"background" help:"Apply a background fill." short:"b" placeholder:"#121110" group:"Window"`
 	Margin     []float64 `json:"margin" help:"Apply margin to the window." short:"m" placeholder:"0" group:"Window"`
 	Padding    []float64 `json:"padding" help:"Apply padding to the code." short:"p" placeholder:"0" group:"Window"`
 	Window     bool      `json:"window" help:"Display window controls." group:"Window"`
@@ -30,7 +30,7 @@ type Config struct {
 	Config      string `json:"config,omitempty" help:"Base configuration file or template." short:"c" group:"Settings" default:"default" placeholder:"base"`
 	Interactive bool   `hidden:"" json:",omitempty" help:"Use an interactive form for configuration options." short:"i" group:"Settings"`
 	Language    string `json:"language,omitempty" help:"Language of code file." short:"l" group:"Settings" placeholder:"go"`
-	Theme       string `json:"theme" help:"Theme to use for syntax highlighting." short:"t" group:"Settings" placeholder:"charm"`
+	Theme       string `json:"theme" help:"Theme to use for syntax highlighting." short:"t" group:"Settings" placeholder:"srcery"`
 	Wrap        int    `json:"wrap" help:"Wrap lines at a specific width." short:"w" group:"Settings" default:"0" placeholder:"80"`
 
 	Output         string        `json:"output,omitempty" help:"Output location for {{.svg}}, {{.png}}, or {{.webp}}." short:"o" group:"Settings" default:"" placeholder:"freeze.svg"`

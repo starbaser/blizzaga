@@ -8,116 +8,116 @@
 	font-weight: normal;
 	font-style: normal;
 }
-</style><rect width="1308.33" height="1878.00" fill="#171717" rx="8.00" ry="8.00" filter="url(#shadow)" stroke="#515151" stroke-width="1.00" x="60.00px" y="50.00px"/>
-<g font-family="JetBrains Mono" font-size="14.00px" fill="#c4c4c4" clip-path="url(#terminalMask)">
-<text x="80.00px" y="101.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f">  1  </tspan><tspan fill="#b083ea">variables</tspan><tspan fill="#e8e8a8">:</tspan>
-</text><text x="80.00px" y="118.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f">  2  </tspan>  <tspan fill="#b083ea">main</tspan><tspan fill="#e8e8a8">:</tspan> <tspan fill="#e38356">&quot;&quot;</tspan>
-</text><text x="80.00px" y="135.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f">  3  </tspan>  <tspan fill="#b083ea">binary_name</tspan><tspan fill="#e8e8a8">:</tspan> <tspan fill="#e38356">&quot;&quot;</tspan>
-</text><text x="80.00px" y="152.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f">  4  </tspan>  <tspan fill="#b083ea">description</tspan><tspan fill="#e8e8a8">:</tspan> <tspan fill="#e38356">&quot;&quot;</tspan>
-</text><text x="80.00px" y="169.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f">  5  </tspan>  <tspan fill="#b083ea">maintainer</tspan><tspan fill="#e8e8a8">:</tspan> <tspan fill="#e38356">&quot;&quot;</tspan>
-</text><text x="80.00px" y="185.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f">  6  </tspan>  <tspan fill="#b083ea">homepage</tspan><tspan fill="#e8e8a8">:</tspan> <tspan fill="#e38356">&quot;https://charm.sh/&quot;</tspan>
-</text><text x="80.00px" y="202.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f">  7  </tspan>  <tspan fill="#b083ea">brew_commit_author_name</tspan><tspan fill="#e8e8a8">:</tspan> <tspan fill="#e38356">&quot;&quot;</tspan>
-</text><text x="80.00px" y="219.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f">  8  </tspan>  <tspan fill="#b083ea">brew_commit_author_email</tspan><tspan fill="#e8e8a8">:</tspan> <tspan fill="#e38356">&quot;&quot;</tspan>
-</text><text x="80.00px" y="236.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f">  9  </tspan>  <tspan fill="#b083ea">brew_owner</tspan><tspan fill="#e8e8a8">:</tspan> charmbracelet
-</text><text x="80.00px" y="253.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 10  </tspan>  <tspan fill="#b083ea">docker_io_registry_owner</tspan><tspan fill="#e8e8a8">:</tspan> charmcli
-</text><text x="80.00px" y="269.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 11  </tspan>  <tspan fill="#b083ea">ghcr_io_registry_owner</tspan><tspan fill="#e8e8a8">:</tspan> charmbracelet
-</text><text x="80.00px" y="286.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 12  </tspan>  <tspan fill="#b083ea">aur_project_name</tspan><tspan fill="#e8e8a8">:</tspan> <tspan fill="#e38356">&quot;&quot;</tspan>
-</text><text x="80.00px" y="303.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 13  </tspan>  <tspan fill="#b083ea">scoop_name</tspan><tspan fill="#e8e8a8">:</tspan> <tspan fill="#e38356">&quot;&quot;</tspan>
-</text><text x="80.00px" y="320.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 14  </tspan>
-</text><text x="80.00px" y="337.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 15  </tspan><tspan fill="#b083ea">before</tspan><tspan fill="#e8e8a8">:</tspan>
-</text><text x="80.00px" y="353.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 16  </tspan>  <tspan fill="#b083ea">hooks</tspan><tspan fill="#e8e8a8">:</tspan>
-</text><text x="80.00px" y="370.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 17  </tspan>    - go mod tidy
-</text><text x="80.00px" y="387.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 18  </tspan>    - rm -rf completions
-</text><text x="80.00px" y="404.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 19  </tspan>    - mkdir completions
-</text><text x="80.00px" y="421.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 20  </tspan>    - rm -rf manpages
-</text><text x="80.00px" y="437.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 21  </tspan>    - mkdir manpages
-</text><text x="80.00px" y="454.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 22  </tspan>    - sh -c &apos;go run {{ with .Var.main }}{{ . }}{{ else }}.{{ end }} completion &quot;bash&quot; &gt;./completions/{{ .ProjectName }}.bash&apos;
-</text><text x="80.00px" y="471.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 23  </tspan>    - sh -c &apos;go run {{ with .Var.main }}{{ . }}{{ else }}.{{ end }} completion &quot;zsh&quot; &gt;./completions/{{ .ProjectName }}.zsh&apos;
-</text><text x="80.00px" y="488.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 24  </tspan>    - sh -c &apos;go run {{ with .Var.main }}{{ . }}{{ else }}.{{ end }} completion &quot;fish&quot; &gt;./completions/{{ .ProjectName }}.fish&apos;
-</text><text x="80.00px" y="505.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 25  </tspan>    - sh -c &apos;go run {{ with .Var.main }}{{ . }}{{ else }}.{{ end }} man | gzip -c &gt;./manpages/{{ .ProjectName }}.1.gz&apos;
-</text><text x="80.00px" y="521.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 26  </tspan>
-</text><text x="80.00px" y="538.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 27  </tspan><tspan fill="#b083ea">gomod</tspan><tspan fill="#e8e8a8">:</tspan>
-</text><text x="80.00px" y="555.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 28  </tspan>  <tspan fill="#b083ea">proxy</tspan><tspan fill="#e8e8a8">:</tspan> <tspan fill="#00aaff">true</tspan>
-</text><text x="80.00px" y="572.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 29  </tspan>
-</text><text x="80.00px" y="589.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 30  </tspan><tspan fill="#b083ea">builds</tspan><tspan fill="#e8e8a8">:</tspan>
-</text><text x="80.00px" y="605.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 31  </tspan>  - <tspan fill="#b083ea">binary</tspan><tspan fill="#e8e8a8">:</tspan> <tspan fill="#e38356">&quot;{{ with .Var.binary_name }}{{ . }}{{ else }}{{ .ProjectName }}{{ end }}&quot;</tspan>
-</text><text x="80.00px" y="622.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 32  </tspan>    <tspan fill="#b083ea">env</tspan><tspan fill="#e8e8a8">:</tspan>
-</text><text x="80.00px" y="639.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 33  </tspan>      - CGO_ENABLED=0
-</text><text x="80.00px" y="656.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 34  </tspan>    <tspan fill="#b083ea">main</tspan><tspan fill="#e8e8a8">:</tspan> <tspan fill="#e38356">&quot;{{ with .Var.main }}{{ . }}{{ else }}.{{ end }}&quot;</tspan>
-</text><text x="80.00px" y="673.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 35  </tspan>    <tspan fill="#b083ea">ldflags</tspan><tspan fill="#e8e8a8">:</tspan> -s -w -X main.Version=v{{ .Version }} -X main.CommitSHA={{ .Commit }} -X main.CommitDate={{ .CommitDate }}
-</text><text x="80.00px" y="689.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 36  </tspan>    <tspan fill="#b083ea">goos</tspan><tspan fill="#e8e8a8">:</tspan>
-</text><text x="80.00px" y="706.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 37  </tspan>      - linux
-</text><text x="80.00px" y="723.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 38  </tspan>      - darwin
-</text><text x="80.00px" y="740.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 39  </tspan>      - windows
-</text><text x="80.00px" y="757.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 40  </tspan>      - freebsd
-</text><text x="80.00px" y="773.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 41  </tspan>      - openbsd
-</text><text x="80.00px" y="790.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 42  </tspan>      - netbsd
-</text><text x="80.00px" y="807.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 43  </tspan>    <tspan fill="#b083ea">goarch</tspan><tspan fill="#e8e8a8">:</tspan>
-</text><text x="80.00px" y="824.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 44  </tspan>      - amd64
-</text><text x="80.00px" y="841.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 45  </tspan>      - arm64
-</text><text x="80.00px" y="857.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 46  </tspan>      - <tspan fill="#e38356">&quot;386&quot;</tspan>
-</text><text x="80.00px" y="874.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 47  </tspan>      - arm
-</text><text x="80.00px" y="891.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 48  </tspan>    <tspan fill="#b083ea">goarm</tspan><tspan fill="#e8e8a8">:</tspan>
-</text><text x="80.00px" y="908.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 49  </tspan>      - <tspan fill="#e38356">&quot;6&quot;</tspan>
-</text><text x="80.00px" y="925.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 50  </tspan>      - <tspan fill="#e38356">&quot;7&quot;</tspan>
-</text><text x="80.00px" y="941.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 51  </tspan>    <tspan fill="#b083ea">ignore</tspan><tspan fill="#e8e8a8">:</tspan>
-</text><text x="80.00px" y="958.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 52  </tspan>      - <tspan fill="#b083ea">goos</tspan><tspan fill="#e8e8a8">:</tspan> windows
-</text><text x="80.00px" y="975.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 53  </tspan>        <tspan fill="#b083ea">goarch</tspan><tspan fill="#e8e8a8">:</tspan> arm64
-</text><text x="80.00px" y="992.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 54  </tspan>      - <tspan fill="#b083ea">goos</tspan><tspan fill="#e8e8a8">:</tspan> windows
-</text><text x="80.00px" y="1009.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 55  </tspan>        <tspan fill="#b083ea">goarch</tspan><tspan fill="#e8e8a8">:</tspan> arm
-</text><text x="80.00px" y="1025.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 56  </tspan>
-</text><text x="80.00px" y="1042.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 57  </tspan><tspan fill="#b083ea">archives</tspan><tspan fill="#e8e8a8">:</tspan>
-</text><text x="80.00px" y="1059.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 58  </tspan>  - <tspan fill="#b083ea">format_overrides</tspan><tspan fill="#e8e8a8">:</tspan>
-</text><text x="80.00px" y="1076.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 59  </tspan>      - <tspan fill="#b083ea">goos</tspan><tspan fill="#e8e8a8">:</tspan> windows
-</text><text x="80.00px" y="1093.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 60  </tspan>        <tspan fill="#b083ea">format</tspan><tspan fill="#e8e8a8">:</tspan> zip
-</text><text x="80.00px" y="1109.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 61  </tspan>    <tspan fill="#b083ea">name_template</tspan><tspan fill="#e8e8a8">:</tspan> <tspan fill="#e8e8a8">&gt;-</tspan><tspan fill="#e38356">
-</tspan></text><text x="80.00px" y="1126.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 62  </tspan><tspan fill="#e38356">      {{ .ProjectName }}_
-</tspan></text><text x="80.00px" y="1143.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 63  </tspan><tspan fill="#e38356">      {{- .Version }}_
-</tspan></text><text x="80.00px" y="1160.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 64  </tspan><tspan fill="#e38356">      {{- title .Os }}_
-</tspan></text><text x="80.00px" y="1177.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 65  </tspan><tspan fill="#e38356">      {{- if eq .Arch &quot;amd64&quot; }}x86_64
-</tspan></text><text x="80.00px" y="1193.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 66  </tspan><tspan fill="#e38356">      {{- else if eq .Arch &quot;386&quot; }}i386
-</tspan></text><text x="80.00px" y="1210.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 67  </tspan><tspan fill="#e38356">      {{- else }}{{ .Arch }}{{ end }}
-</tspan></text><text x="80.00px" y="1227.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 68  </tspan><tspan fill="#e38356">      {{- with .Arm}}v{{ . }}{{ end }}</tspan>
-</text><text x="80.00px" y="1244.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 69  </tspan>    <tspan fill="#b083ea">wrap_in_directory</tspan><tspan fill="#e8e8a8">:</tspan> <tspan fill="#00aaff">true</tspan>
-</text><text x="80.00px" y="1261.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 70  </tspan>    <tspan fill="#b083ea">files</tspan><tspan fill="#e8e8a8">:</tspan>
-</text><text x="80.00px" y="1277.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 71  </tspan>      - README*
-</text><text x="80.00px" y="1294.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 72  </tspan>      - LICENSE*
-</text><text x="80.00px" y="1311.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 73  </tspan>      - manpages/*
-</text><text x="80.00px" y="1328.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 74  </tspan>      - completions/*
-</text><text x="80.00px" y="1345.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 75  </tspan>
-</text><text x="80.00px" y="1361.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 76  </tspan><tspan fill="#b083ea">nfpms</tspan><tspan fill="#e8e8a8">:</tspan>
-</text><text x="80.00px" y="1378.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 77  </tspan>  - <tspan fill="#b083ea">vendor</tspan><tspan fill="#e8e8a8">:</tspan> charmbracelet
-</text><text x="80.00px" y="1395.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 78  </tspan>    <tspan fill="#b083ea">homepage</tspan><tspan fill="#e8e8a8">:</tspan> <tspan fill="#e38356">&quot;{{ .Var.homepage }}&quot;</tspan>
-</text><text x="80.00px" y="1412.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 79  </tspan>    <tspan fill="#b083ea">maintainer</tspan><tspan fill="#e8e8a8">:</tspan> <tspan fill="#e38356">&quot;{{ .Var.maintainer }}&quot;</tspan>
-</text><text x="80.00px" y="1429.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 80  </tspan>    <tspan fill="#b083ea">description</tspan><tspan fill="#e8e8a8">:</tspan> <tspan fill="#e38356">&quot;{{ .Var.description }}&quot;</tspan>
-</text><text x="80.00px" y="1445.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 81  </tspan>    <tspan fill="#b083ea">file_name_template</tspan><tspan fill="#e8e8a8">:</tspan> <tspan fill="#e8e8a8">&gt;-</tspan><tspan fill="#e38356">
-</tspan></text><text x="80.00px" y="1462.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 82  </tspan><tspan fill="#e38356">      {{- trimsuffix .ConventionalFileName .ConventionalExtension -}}
-</tspan></text><text x="80.00px" y="1479.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 83  </tspan><tspan fill="#e38356">      {{- if and (eq .Arm &quot;6&quot;) (eq .ConventionalExtension &quot;.deb&quot;) }}6{{ end -}}
-</tspan></text><text x="80.00px" y="1496.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 84  </tspan><tspan fill="#e38356">      {{- .ConventionalExtension -}}</tspan>
-</text><text x="80.00px" y="1513.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 85  </tspan>    <tspan fill="#b083ea">license</tspan><tspan fill="#e8e8a8">:</tspan> MIT
-</text><text x="80.00px" y="1529.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 86  </tspan>    <tspan fill="#b083ea">formats</tspan><tspan fill="#e8e8a8">:</tspan>
-</text><text x="80.00px" y="1546.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 87  </tspan>      - apk
-</text><text x="80.00px" y="1563.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 88  </tspan>      - deb
-</text><text x="80.00px" y="1580.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 89  </tspan>      - rpm
-</text><text x="80.00px" y="1597.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 90  </tspan>    <tspan fill="#b083ea">contents</tspan><tspan fill="#e8e8a8">:</tspan>
-</text><text x="80.00px" y="1613.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 91  </tspan>      - <tspan fill="#b083ea">src</tspan><tspan fill="#e8e8a8">:</tspan> ./completions/{{ .ProjectName }}.bash
-</text><text x="80.00px" y="1630.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 92  </tspan>        <tspan fill="#b083ea">dst</tspan><tspan fill="#e8e8a8">:</tspan> /etc/bash_completion.d/{{ .ProjectName }}
-</text><text x="80.00px" y="1647.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 93  </tspan>      - <tspan fill="#b083ea">src</tspan><tspan fill="#e8e8a8">:</tspan> ./completions/{{ .ProjectName }}.fish
-</text><text x="80.00px" y="1664.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 94  </tspan>        <tspan fill="#b083ea">dst</tspan><tspan fill="#e8e8a8">:</tspan> /usr/share/fish/vendor_completions.d/{{ .ProjectName }}.fish
-</text><text x="80.00px" y="1681.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 95  </tspan>      - <tspan fill="#b083ea">src</tspan><tspan fill="#e8e8a8">:</tspan> ./completions/{{ .ProjectName }}.zsh
-</text><text x="80.00px" y="1697.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 96  </tspan>        <tspan fill="#b083ea">dst</tspan><tspan fill="#e8e8a8">:</tspan> /usr/share/zsh/site-functions/_{{ .ProjectName }}
-</text><text x="80.00px" y="1714.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 97  </tspan>      - <tspan fill="#b083ea">src</tspan><tspan fill="#e8e8a8">:</tspan> ./manpages/{{ .ProjectName }}.1.gz
-</text><text x="80.00px" y="1731.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 98  </tspan>        <tspan fill="#b083ea">dst</tspan><tspan fill="#e8e8a8">:</tspan> /usr/share/man/man1/{{ .ProjectName }}.1.gz
-</text><text x="80.00px" y="1748.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f"> 99  </tspan>    <tspan fill="#b083ea">rpm</tspan><tspan fill="#e8e8a8">:</tspan>
-</text><text x="80.00px" y="1765.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f">100  </tspan>      <tspan fill="#b083ea">signature</tspan><tspan fill="#e8e8a8">:</tspan>
-</text><text x="80.00px" y="1781.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f">101  </tspan>        <tspan fill="#b083ea">key_file</tspan><tspan fill="#e8e8a8">:</tspan> <tspan fill="#e38356">&apos;{{ if ne (index .Env &quot;GPG_KEY_PATH&quot;) &quot;&quot; }}{{ .Env.GPG_KEY_PATH }}{{ else }}{{ end }}&apos;</tspan>
-</text><text x="80.00px" y="1798.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f">102  </tspan>    <tspan fill="#b083ea">deb</tspan><tspan fill="#e8e8a8">:</tspan>
-</text><text x="80.00px" y="1815.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f">103  </tspan>      <tspan fill="#b083ea">signature</tspan><tspan fill="#e8e8a8">:</tspan>
-</text><text x="80.00px" y="1832.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f">104  </tspan>        <tspan fill="#b083ea">key_file</tspan><tspan fill="#e8e8a8">:</tspan> <tspan fill="#e38356">&apos;{{ if ne (index .Env &quot;GPG_KEY_PATH&quot;) &quot;&quot; }}{{ .Env.GPG_KEY_PATH }}{{ else }}{{ end }}&apos;</tspan>
-</text><text x="80.00px" y="1849.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f">105  </tspan>
-</text><text x="80.00px" y="1865.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f">106  </tspan><tspan fill="#b083ea">furies</tspan><tspan fill="#e8e8a8">:</tspan>
-</text><text x="80.00px" y="1882.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f">107  </tspan>  - <tspan fill="#b083ea">account</tspan><tspan fill="#e8e8a8">:</tspan> <tspan fill="#e38356">&quot;{{ with .Env.FURY_TOKEN }}charmcli{{ else }}{{ end }}&quot;</tspan>
-</text><text x="80.00px" y="1899.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#7f7f7f">108  </tspan>    <tspan fill="#b083ea">secret_name</tspan><tspan fill="#e8e8a8">:</tspan> FURY_TOKEN
+</style><rect width="1308.33" height="1878.00" fill="#121110" rx="8.00" ry="8.00" filter="url(#shadow)" stroke="#504D47" stroke-width="1.00" x="60.00px" y="50.00px"/>
+<g font-family="JetBrains Mono" font-size="14.00px" fill="#fce8c3" clip-path="url(#terminalMask)">
+<text x="80.00px" y="101.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b">  1  </tspan><tspan fill="#2c78bf">variables</tspan><tspan fill="#917e6b">:</tspan>
+</text><text x="80.00px" y="118.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b">  2  </tspan>  <tspan fill="#2c78bf">main</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#98bc37">&quot;&quot;</tspan>
+</text><text x="80.00px" y="135.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b">  3  </tspan>  <tspan fill="#2c78bf">binary_name</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#98bc37">&quot;&quot;</tspan>
+</text><text x="80.00px" y="152.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b">  4  </tspan>  <tspan fill="#2c78bf">description</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#98bc37">&quot;&quot;</tspan>
+</text><text x="80.00px" y="169.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b">  5  </tspan>  <tspan fill="#2c78bf">maintainer</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#98bc37">&quot;&quot;</tspan>
+</text><text x="80.00px" y="185.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b">  6  </tspan>  <tspan fill="#2c78bf">homepage</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#98bc37">&quot;https://charm.sh/&quot;</tspan>
+</text><text x="80.00px" y="202.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b">  7  </tspan>  <tspan fill="#2c78bf">brew_commit_author_name</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#98bc37">&quot;&quot;</tspan>
+</text><text x="80.00px" y="219.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b">  8  </tspan>  <tspan fill="#2c78bf">brew_commit_author_email</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#98bc37">&quot;&quot;</tspan>
+</text><text x="80.00px" y="236.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b">  9  </tspan>  <tspan fill="#2c78bf">brew_owner</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#ff5c8f">charmbracelet</tspan>
+</text><text x="80.00px" y="253.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 10  </tspan>  <tspan fill="#2c78bf">docker_io_registry_owner</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#ff5c8f">charmcli</tspan>
+</text><text x="80.00px" y="269.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 11  </tspan>  <tspan fill="#2c78bf">ghcr_io_registry_owner</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#ff5c8f">charmbracelet</tspan>
+</text><text x="80.00px" y="286.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 12  </tspan>  <tspan fill="#2c78bf">aur_project_name</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#98bc37">&quot;&quot;</tspan>
+</text><text x="80.00px" y="303.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 13  </tspan>  <tspan fill="#2c78bf">scoop_name</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#98bc37">&quot;&quot;</tspan>
+</text><text x="80.00px" y="320.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 14  </tspan>
+</text><text x="80.00px" y="337.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 15  </tspan><tspan fill="#2c78bf">before</tspan><tspan fill="#917e6b">:</tspan>
+</text><text x="80.00px" y="353.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 16  </tspan>  <tspan fill="#2c78bf">hooks</tspan><tspan fill="#917e6b">:</tspan>
+</text><text x="80.00px" y="370.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 17  </tspan>    - <tspan fill="#ff5c8f">go mod tidy</tspan>
+</text><text x="80.00px" y="387.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 18  </tspan>    - <tspan fill="#ff5c8f">rm -rf completions</tspan>
+</text><text x="80.00px" y="404.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 19  </tspan>    - <tspan fill="#ff5c8f">mkdir completions</tspan>
+</text><text x="80.00px" y="421.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 20  </tspan>    - <tspan fill="#ff5c8f">rm -rf manpages</tspan>
+</text><text x="80.00px" y="437.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 21  </tspan>    - <tspan fill="#ff5c8f">mkdir manpages</tspan>
+</text><text x="80.00px" y="454.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 22  </tspan>    - <tspan fill="#ff5c8f">sh -c &apos;go run {{ with .Var.main }}{{ . }}{{ else }}.{{ end }} completion &quot;bash&quot; &gt;./completions/{{ .ProjectName }}.bash&apos;</tspan>
+</text><text x="80.00px" y="471.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 23  </tspan>    - <tspan fill="#ff5c8f">sh -c &apos;go run {{ with .Var.main }}{{ . }}{{ else }}.{{ end }} completion &quot;zsh&quot; &gt;./completions/{{ .ProjectName }}.zsh&apos;</tspan>
+</text><text x="80.00px" y="488.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 24  </tspan>    - <tspan fill="#ff5c8f">sh -c &apos;go run {{ with .Var.main }}{{ . }}{{ else }}.{{ end }} completion &quot;fish&quot; &gt;./completions/{{ .ProjectName }}.fish&apos;</tspan>
+</text><text x="80.00px" y="505.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 25  </tspan>    - <tspan fill="#ff5c8f">sh -c &apos;go run {{ with .Var.main }}{{ . }}{{ else }}.{{ end }} man | gzip -c &gt;./manpages/{{ .ProjectName }}.1.gz&apos;</tspan>
+</text><text x="80.00px" y="521.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 26  </tspan>
+</text><text x="80.00px" y="538.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 27  </tspan><tspan fill="#2c78bf">gomod</tspan><tspan fill="#917e6b">:</tspan>
+</text><text x="80.00px" y="555.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 28  </tspan>  <tspan fill="#2c78bf">proxy</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#ff5c8f">true</tspan>
+</text><text x="80.00px" y="572.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 29  </tspan>
+</text><text x="80.00px" y="589.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 30  </tspan><tspan fill="#2c78bf">builds</tspan><tspan fill="#917e6b">:</tspan>
+</text><text x="80.00px" y="605.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 31  </tspan>  - <tspan fill="#2c78bf">binary</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#98bc37">&quot;{{ with .Var.binary_name }}{{ . }}{{ else }}{{ .ProjectName }}{{ end }}&quot;</tspan>
+</text><text x="80.00px" y="622.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 32  </tspan>    <tspan fill="#2c78bf">env</tspan><tspan fill="#917e6b">:</tspan>
+</text><text x="80.00px" y="639.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 33  </tspan>      - <tspan fill="#ff5c8f">CGO_ENABLED=0</tspan>
+</text><text x="80.00px" y="656.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 34  </tspan>    <tspan fill="#2c78bf">main</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#98bc37">&quot;{{ with .Var.main }}{{ . }}{{ else }}.{{ end }}&quot;</tspan>
+</text><text x="80.00px" y="673.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 35  </tspan>    <tspan fill="#2c78bf">ldflags</tspan><tspan fill="#917e6b">:</tspan> -<tspan fill="#ff5c8f">s -w -X main.Version=v{{ .Version }} -X main.CommitSHA={{ .Commit }} -X main.CommitDate={{ .CommitDate }}</tspan>
+</text><text x="80.00px" y="689.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 36  </tspan>    <tspan fill="#2c78bf">goos</tspan><tspan fill="#917e6b">:</tspan>
+</text><text x="80.00px" y="706.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 37  </tspan>      - <tspan fill="#ff5c8f">linux</tspan>
+</text><text x="80.00px" y="723.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 38  </tspan>      - <tspan fill="#ff5c8f">darwin</tspan>
+</text><text x="80.00px" y="740.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 39  </tspan>      - <tspan fill="#ff5c8f">windows</tspan>
+</text><text x="80.00px" y="757.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 40  </tspan>      - <tspan fill="#ff5c8f">freebsd</tspan>
+</text><text x="80.00px" y="773.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 41  </tspan>      - <tspan fill="#ff5c8f">openbsd</tspan>
+</text><text x="80.00px" y="790.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 42  </tspan>      - <tspan fill="#ff5c8f">netbsd</tspan>
+</text><text x="80.00px" y="807.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 43  </tspan>    <tspan fill="#2c78bf">goarch</tspan><tspan fill="#917e6b">:</tspan>
+</text><text x="80.00px" y="824.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 44  </tspan>      - <tspan fill="#ff5c8f">amd64</tspan>
+</text><text x="80.00px" y="841.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 45  </tspan>      - <tspan fill="#ff5c8f">arm64</tspan>
+</text><text x="80.00px" y="857.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 46  </tspan>      - <tspan fill="#98bc37">&quot;386&quot;</tspan>
+</text><text x="80.00px" y="874.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 47  </tspan>      - <tspan fill="#ff5c8f">arm</tspan>
+</text><text x="80.00px" y="891.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 48  </tspan>    <tspan fill="#2c78bf">goarm</tspan><tspan fill="#917e6b">:</tspan>
+</text><text x="80.00px" y="908.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 49  </tspan>      - <tspan fill="#98bc37">&quot;6&quot;</tspan>
+</text><text x="80.00px" y="925.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 50  </tspan>      - <tspan fill="#98bc37">&quot;7&quot;</tspan>
+</text><text x="80.00px" y="941.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 51  </tspan>    <tspan fill="#2c78bf">ignore</tspan><tspan fill="#917e6b">:</tspan>
+</text><text x="80.00px" y="958.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 52  </tspan>      - <tspan fill="#2c78bf">goos</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#ff5c8f">windows</tspan>
+</text><text x="80.00px" y="975.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 53  </tspan>        <tspan fill="#2c78bf">goarch</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#ff5c8f">arm64</tspan>
+</text><text x="80.00px" y="992.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 54  </tspan>      - <tspan fill="#2c78bf">goos</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#ff5c8f">windows</tspan>
+</text><text x="80.00px" y="1009.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 55  </tspan>        <tspan fill="#2c78bf">goarch</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#ff5c8f">arm</tspan>
+</text><text x="80.00px" y="1025.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 56  </tspan>
+</text><text x="80.00px" y="1042.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 57  </tspan><tspan fill="#2c78bf">archives</tspan><tspan fill="#917e6b">:</tspan>
+</text><text x="80.00px" y="1059.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 58  </tspan>  - <tspan fill="#2c78bf">format_overrides</tspan><tspan fill="#917e6b">:</tspan>
+</text><text x="80.00px" y="1076.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 59  </tspan>      - <tspan fill="#2c78bf">goos</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#ff5c8f">windows</tspan>
+</text><text x="80.00px" y="1093.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 60  </tspan>        <tspan fill="#2c78bf">format</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#ff5c8f">zip</tspan>
+</text><text x="80.00px" y="1109.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 61  </tspan>    <tspan fill="#2c78bf">name_template</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#917e6b">&gt;-</tspan><tspan fill="#98bc37">
+</tspan></text><text x="80.00px" y="1126.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 62  </tspan><tspan fill="#98bc37">      {{ .ProjectName }}_
+</tspan></text><text x="80.00px" y="1143.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 63  </tspan><tspan fill="#98bc37">      {{- .Version }}_
+</tspan></text><text x="80.00px" y="1160.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 64  </tspan><tspan fill="#98bc37">      {{- title .Os }}_
+</tspan></text><text x="80.00px" y="1177.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 65  </tspan><tspan fill="#98bc37">      {{- if eq .Arch &quot;amd64&quot; }}x86_64
+</tspan></text><text x="80.00px" y="1193.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 66  </tspan><tspan fill="#98bc37">      {{- else if eq .Arch &quot;386&quot; }}i386
+</tspan></text><text x="80.00px" y="1210.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 67  </tspan><tspan fill="#98bc37">      {{- else }}{{ .Arch }}{{ end }}
+</tspan></text><text x="80.00px" y="1227.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 68  </tspan><tspan fill="#98bc37">      {{- with .Arm}}v{{ . }}{{ end }}</tspan>
+</text><text x="80.00px" y="1244.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 69  </tspan>    <tspan fill="#2c78bf">wrap_in_directory</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#ff5c8f">true</tspan>
+</text><text x="80.00px" y="1261.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 70  </tspan>    <tspan fill="#2c78bf">files</tspan><tspan fill="#917e6b">:</tspan>
+</text><text x="80.00px" y="1277.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 71  </tspan>      - <tspan fill="#ff5c8f">README*</tspan>
+</text><text x="80.00px" y="1294.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 72  </tspan>      - <tspan fill="#ff5c8f">LICENSE*</tspan>
+</text><text x="80.00px" y="1311.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 73  </tspan>      - <tspan fill="#ff5c8f">manpages/*</tspan>
+</text><text x="80.00px" y="1328.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 74  </tspan>      - <tspan fill="#ff5c8f">completions/*</tspan>
+</text><text x="80.00px" y="1345.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 75  </tspan>
+</text><text x="80.00px" y="1361.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 76  </tspan><tspan fill="#2c78bf">nfpms</tspan><tspan fill="#917e6b">:</tspan>
+</text><text x="80.00px" y="1378.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 77  </tspan>  - <tspan fill="#2c78bf">vendor</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#ff5c8f">charmbracelet</tspan>
+</text><text x="80.00px" y="1395.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 78  </tspan>    <tspan fill="#2c78bf">homepage</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#98bc37">&quot;{{ .Var.homepage }}&quot;</tspan>
+</text><text x="80.00px" y="1412.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 79  </tspan>    <tspan fill="#2c78bf">maintainer</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#98bc37">&quot;{{ .Var.maintainer }}&quot;</tspan>
+</text><text x="80.00px" y="1429.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 80  </tspan>    <tspan fill="#2c78bf">description</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#98bc37">&quot;{{ .Var.description }}&quot;</tspan>
+</text><text x="80.00px" y="1445.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 81  </tspan>    <tspan fill="#2c78bf">file_name_template</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#917e6b">&gt;-</tspan><tspan fill="#98bc37">
+</tspan></text><text x="80.00px" y="1462.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 82  </tspan><tspan fill="#98bc37">      {{- trimsuffix .ConventionalFileName .ConventionalExtension -}}
+</tspan></text><text x="80.00px" y="1479.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 83  </tspan><tspan fill="#98bc37">      {{- if and (eq .Arm &quot;6&quot;) (eq .ConventionalExtension &quot;.deb&quot;) }}6{{ end -}}
+</tspan></text><text x="80.00px" y="1496.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 84  </tspan><tspan fill="#98bc37">      {{- .ConventionalExtension -}}</tspan>
+</text><text x="80.00px" y="1513.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 85  </tspan>    <tspan fill="#2c78bf">license</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#ff5c8f">MIT</tspan>
+</text><text x="80.00px" y="1529.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 86  </tspan>    <tspan fill="#2c78bf">formats</tspan><tspan fill="#917e6b">:</tspan>
+</text><text x="80.00px" y="1546.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 87  </tspan>      - <tspan fill="#ff5c8f">apk</tspan>
+</text><text x="80.00px" y="1563.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 88  </tspan>      - <tspan fill="#ff5c8f">deb</tspan>
+</text><text x="80.00px" y="1580.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 89  </tspan>      - <tspan fill="#ff5c8f">rpm</tspan>
+</text><text x="80.00px" y="1597.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 90  </tspan>    <tspan fill="#2c78bf">contents</tspan><tspan fill="#917e6b">:</tspan>
+</text><text x="80.00px" y="1613.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 91  </tspan>      - <tspan fill="#2c78bf">src</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#ff5c8f">./completions/{{ .ProjectName }}.bash</tspan>
+</text><text x="80.00px" y="1630.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 92  </tspan>        <tspan fill="#2c78bf">dst</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#ff5c8f">/etc/bash_completion.d/{{ .ProjectName }}</tspan>
+</text><text x="80.00px" y="1647.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 93  </tspan>      - <tspan fill="#2c78bf">src</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#ff5c8f">./completions/{{ .ProjectName }}.fish</tspan>
+</text><text x="80.00px" y="1664.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 94  </tspan>        <tspan fill="#2c78bf">dst</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#ff5c8f">/usr/share/fish/vendor_completions.d/{{ .ProjectName }}.fish</tspan>
+</text><text x="80.00px" y="1681.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 95  </tspan>      - <tspan fill="#2c78bf">src</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#ff5c8f">./completions/{{ .ProjectName }}.zsh</tspan>
+</text><text x="80.00px" y="1697.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 96  </tspan>        <tspan fill="#2c78bf">dst</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#ff5c8f">/usr/share/zsh/site-functions/_{{ .ProjectName }}</tspan>
+</text><text x="80.00px" y="1714.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 97  </tspan>      - <tspan fill="#2c78bf">src</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#ff5c8f">./manpages/{{ .ProjectName }}.1.gz</tspan>
+</text><text x="80.00px" y="1731.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 98  </tspan>        <tspan fill="#2c78bf">dst</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#ff5c8f">/usr/share/man/man1/{{ .ProjectName }}.1.gz</tspan>
+</text><text x="80.00px" y="1748.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b"> 99  </tspan>    <tspan fill="#2c78bf">rpm</tspan><tspan fill="#917e6b">:</tspan>
+</text><text x="80.00px" y="1765.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b">100  </tspan>      <tspan fill="#2c78bf">signature</tspan><tspan fill="#917e6b">:</tspan>
+</text><text x="80.00px" y="1781.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b">101  </tspan>        <tspan fill="#2c78bf">key_file</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#98bc37">&apos;{{ if ne (index .Env &quot;GPG_KEY_PATH&quot;) &quot;&quot; }}{{ .Env.GPG_KEY_PATH }}{{ else }}{{ end }}&apos;</tspan>
+</text><text x="80.00px" y="1798.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b">102  </tspan>    <tspan fill="#2c78bf">deb</tspan><tspan fill="#917e6b">:</tspan>
+</text><text x="80.00px" y="1815.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b">103  </tspan>      <tspan fill="#2c78bf">signature</tspan><tspan fill="#917e6b">:</tspan>
+</text><text x="80.00px" y="1832.20px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b">104  </tspan>        <tspan fill="#2c78bf">key_file</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#98bc37">&apos;{{ if ne (index .Env &quot;GPG_KEY_PATH&quot;) &quot;&quot; }}{{ .Env.GPG_KEY_PATH }}{{ else }}{{ end }}&apos;</tspan>
+</text><text x="80.00px" y="1849.00px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b">105  </tspan>
+</text><text x="80.00px" y="1865.80px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b">106  </tspan><tspan fill="#2c78bf">furies</tspan><tspan fill="#917e6b">:</tspan>
+</text><text x="80.00px" y="1882.60px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b">107  </tspan>  - <tspan fill="#2c78bf">account</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#98bc37">&quot;{{ with .Env.FURY_TOKEN }}charmcli{{ else }}{{ end }}&quot;</tspan>
+</text><text x="80.00px" y="1899.40px" xml:space="preserve"><tspan xml:space="preserve" fill="#917e6b">108  </tspan>    <tspan fill="#2c78bf">secret_name</tspan><tspan fill="#917e6b">:</tspan> <tspan fill="#ff5c8f">FURY_TOKEN</tspan>
 </text>
 </g>
 <svg x="60.00px" y="50.00px"><circle cx="13.50" cy="12.00" r="5.50" fill="#FF5A54"/><circle cx="32.50" cy="12.00" r="5.50" fill="#E6BF29"/><circle cx="51.50" cy="12.00" r="5.50" fill="#52C12B"/></svg><defs><filter id="shadow" filterUnits="userSpaceOnUse"><feGaussianBlur in="SourceAlpha" stdDeviation="24.00"/><feOffset result="offsetblur" dx="0.00" dy="12.00"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><defs><clipPath id="terminalMask"><rect x="60.00" y="50.00" width="1308.33" height="1858.00"/></clipPath></defs></svg>

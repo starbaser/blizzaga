@@ -8,8 +8,8 @@
 	font-weight: normal;
 	font-style: normal;
 }
-</style><rect width="176.67" height="83.00" fill="#171717" x="0.00px" y="0.00px"/>
-<g font-family="JetBrains Mono" font-size="14.00px" fill="#c4c4c4" clip-path="url(#terminalMask)">
+</style><rect width="176.67" height="83.00" fill="#121110" x="0.00px" y="0.00px"/>
+<g font-family="JetBrains Mono" font-size="14.00px" fill="#fce8c3" clip-path="url(#terminalMask)">
 <text x="20.00px" y="36.80px" xml:space="preserve"><tspan xml:space="preserve">Hello, world!</tspan></text>
 </g>
 </svg>
