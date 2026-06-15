@@ -10,6 +10,8 @@ import (
 	"github.com/alecthomas/chroma/v2/styles"
 	"github.com/charmbracelet/huh"
 	"github.com/charmbracelet/lipgloss"
+
+	"github.com/starbaser/blizzaga/render"
 )
 
 var green = lipgloss.Color("#03BF87")
@@ -262,7 +264,7 @@ func parsePadding(v string) []float64 {
 		pi, _ := strconv.ParseFloat(p, 64) // already validated
 		values = append(values, pi)
 	}
-	return expandPadding(values, 1)
+	return render.ExpandPadding(values, 1)
 }
 
 var parseMargin = parsePadding

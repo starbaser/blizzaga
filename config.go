@@ -9,6 +9,8 @@ import (
 	"time"
 
 	"github.com/adrg/xdg"
+
+	"github.com/starbaser/blizzaga/render"
 )
 
 const defaultOutputFilename = "blizzaga.png"
@@ -75,29 +77,23 @@ type Font struct {
 //go:embed configurations/*
 var configs embed.FS
 
-func expandPadding(p []float64, scale float64) []float64 {
-	switch len(p) {
-	case 1:
-		return []float64{p[top] * scale, p[top] * scale, p[top] * scale, p[top] * scale}
-	case 2:
-		return []float64{p[top] * scale, p[right] * scale, p[top] * scale, p[right] * scale}
-	case 4:
-		return []float64{p[top] * scale, p[right] * scale, p[bottom] * scale, p[left] * scale}
-	default:
-		return []float64{0, 0, 0, 0}
+// renderConfig projects the CLI configuration onto the shared render.Config
+// consumed by the rendering core.
+func (c Config) renderConfig() render.Config {
+	return render.Config{
+		Background:      c.Background,
+		Margin:          c.Margin,
+		Padding:         c.Padding,
+		Window:          c.Window,
+		Width:           c.Width,
+		Height:          c.Height,
+		Border:          render.Border{Radius: c.Border.Radius, Width: c.Border.Width, Color: c.Border.Color},
+		Shadow:          render.Shadow{Blur: c.Shadow.Blur, X: c.Shadow.X, Y: c.Shadow.Y},
+		Font:            render.Font{Family: c.Font.Family, File: c.Font.File, Size: c.Font.Size, Ligatures: c.Font.Ligatures},
+		LineHeight:      c.LineHeight,
+		ShowLineNumbers: c.ShowLineNumbers,
 	}
 }
-
-var expandMargin = expandPadding
-
-type side int
-
-const (
-	top    side = 0
-	right  side = 1
-	bottom side = 2
-	left   side = 3
-)
 
 var userConfigPath = filepath.Join(xdg.ConfigHome, "blizzaga", "user.json")
 

@@ -6,13 +6,15 @@ import (
 	"github.com/beevik/etree"
 	"github.com/charmbracelet/x/ansi"
 	"github.com/mattn/go-runewidth"
+
+	"github.com/starbaser/blizzaga/render"
 )
 
 type dispatcher struct {
 	scale   float64
 	svg     *etree.Element
 	bg      *etree.Element
-	config  *Config
+	config  *render.Config
 	lines   []*etree.Element
 	row     int
 	col     int
@@ -61,18 +63,16 @@ func (p *dispatcher) Execute(code byte) {
 	}
 }
 
-const fontHeightToWidthRatio = 1.68
-
 func (p *dispatcher) beginBackground(fill string) {
 	rect := etree.NewElement("rect")
 	rect.CreateAttr("fill", fill)
 
-	topOffset := p.config.Padding[top] + p.config.Margin[top] + (((p.config.Font.Size + p.config.LineHeight) / 5) * p.scale)
+	topOffset := p.config.PaddingTop() + p.config.MarginTop() + (((p.config.Font.Size + p.config.LineHeight) / 5) * p.scale)
 	rowMultiplier := p.config.Font.Size * p.config.LineHeight
 
 	y := fmt.Sprintf("%.2fpx", float64(p.row)*rowMultiplier+topOffset)
-	x := p.scale * float64(p.col) * (p.config.Font.Size / fontHeightToWidthRatio)
-	x += float64(p.config.Margin[left] + p.config.Padding[left])
+	x := p.scale * float64(p.col) * (p.config.Font.Size / render.FontHeightToWidthRatio)
+	x += p.config.MarginLeft() + p.config.PaddingLeft()
 	if p.config.ShowLineNumbers {
 		x += float64(p.config.Font.Size) * 3
 	}
@@ -92,7 +92,7 @@ func (p *dispatcher) endBackground() {
 		width = 0
 	}
 
-	p.bg.CreateAttr("width", fmt.Sprintf("%.5fpx", width*(p.config.Font.Size/fontHeightToWidthRatio)))
+	p.bg.CreateAttr("width", fmt.Sprintf("%.5fpx", width*(p.config.Font.Size/render.FontHeightToWidthRatio)))
 	p.svg.InsertChildAt(0, p.bg)
 	p.bg = nil
 	p.bgWidth = 0

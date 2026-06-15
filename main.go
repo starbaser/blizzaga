@@ -22,12 +22,7 @@ import (
 	"github.com/mattn/go-isatty"
 
 	in "github.com/starbaser/blizzaga/input"
-	"github.com/starbaser/blizzaga/svg"
-)
-
-const (
-	defaultFontSize   = 14.0
-	defaultLineHeight = 1.2
+	"github.com/starbaser/blizzaga/render"
 )
 
 var (
@@ -138,9 +133,6 @@ func main() {
 		scale = 4
 	}
 
-	config.Margin = expandMargin(config.Margin, scale)
-	config.Padding = expandPadding(config.Padding, scale)
-
 	if config.Input == "" && !in.IsPipe(os.Stdin) && len(ctx.Args) <= 0 {
 		_ = helpPrinter(kong.HelpOptions{}, ctx)
 		os.Exit(0)
@@ -239,147 +231,39 @@ func main() {
 		printErrorFatal("Bad SVG", err)
 	}
 
-	elements := doc.ChildElements()
-	if len(elements) < 1 {
-		printErrorFatal("Bad Output", nil)
+	rcfg := config.renderConfig()
+	rcfg.Margin = render.ExpandMargin(rcfg.Margin, scale)
+	rcfg.Padding = render.ExpandPadding(rcfg.Padding, scale)
+
+	tabWidth := 4
+	if isAnsi {
+		tabWidth = 6
 	}
-
-	image := elements[0]
-
-	hPadding := config.Padding[left] + config.Padding[right]
-	hMargin := config.Margin[left] + config.Margin[right]
-	vMargin := config.Margin[top] + config.Margin[bottom]
-	vPadding := config.Padding[top] + config.Padding[bottom]
-
-	terminal := image.SelectElement("rect")
-
-	w, h := svg.GetDimensions(image)
-
-	imageWidth := float64(w)
-	imageHeight := float64(h)
-
-	imageWidth *= scale
-	imageHeight *= scale
-
-	// chroma automatically calculates the height based on a font size of 14
-	// and a line height of 1.2
-	imageHeight *= (config.Font.Size / defaultFontSize)
-	imageHeight *= (config.LineHeight / defaultLineHeight)
-
-	terminalWidth := imageWidth
-	terminalHeight := imageHeight
-
-	if !autoWidth {
-		imageWidth = config.Width
-		terminalWidth = config.Width - hMargin
-	} else {
-		imageWidth += hMargin + hPadding
-		terminalWidth += hPadding
-	}
-
-	if !autoHeight {
-		imageHeight = config.Height
-		terminalHeight = config.Height - vMargin
-	} else {
-		imageHeight += vMargin + vPadding
-		terminalHeight += vPadding
-	}
-
-	if config.Window {
-		windowControls := svg.NewWindowControls(5.5*float64(scale), 19.0*scale, 12.0*scale)
-		svg.Move(windowControls, float64(config.Margin[left]), float64(config.Margin[top]))
-		image.AddChild(windowControls)
-		config.Padding[top] += (15 * scale)
-	}
-
-	if config.Border.Radius > 0 {
-		svg.AddCornerRadius(terminal, config.Border.Radius*scale)
-	}
-
-	if config.Shadow.Blur > 0 || config.Shadow.X > 0 || config.Shadow.Y > 0 {
-		id := "shadow"
-		svg.AddShadow(image, id, config.Shadow.X*scale, config.Shadow.Y*scale, config.Shadow.Blur*scale)
-		terminal.CreateAttr("filter", fmt.Sprintf("url(#%s)", id))
-	}
-
-	textGroup := image.SelectElement("g")
-	textGroup.CreateAttr("font-size", fmt.Sprintf("%.2fpx", config.Font.Size*float64(scale)))
-	textGroup.CreateAttr("clip-path", "url(#terminalMask)")
-	text := textGroup.SelectElements("text")
-
-	d := dispatcher{lines: text, svg: textGroup, config: &config, scale: scale}
+	longestLineCols := lipgloss.Width(strings.ReplaceAll(strippedInput, "\t", strings.Repeat(" ", tabWidth)))
 
 	offsetLine := 0
 	if len(config.Lines) > 0 {
 		offsetLine = config.Lines[0]
 	}
 
-	config.LineHeight *= float64(scale)
-
-	for i, line := range text {
-		if isAnsi {
-			line.SetText("")
-		}
-		// Offset the text by padding...
-		// (x, y) -> (x+p, y+p)
-		if config.ShowLineNumbers {
-			ln := etree.NewElement("tspan")
-			ln.CreateAttr("xml:space", "preserve")
-			ln.CreateAttr("fill", s.Get(chroma.LineNumbers).Colour.String())
-			ln.SetText(fmt.Sprintf("%3d  ", i+1+offsetLine))
-			line.InsertChildAt(0, ln)
-		}
-		x := float64(config.Padding[left] + config.Margin[left])
-		y := (float64(i+1))*(config.Font.Size*config.LineHeight) + float64(config.Padding[top]) + float64(config.Margin[top])
-
-		svg.Move(line, x, y)
-
-		// We are passed visible lines, remove the rest.
-		if y > float64(imageHeight-config.Margin[bottom]-config.Padding[bottom]) {
-			textGroup.RemoveChild(line)
-		}
+	decorated, err := render.Decorate(&rcfg, render.DecorateParams{
+		Doc:             doc,
+		Scale:           scale,
+		AutoWidth:       autoWidth,
+		AutoHeight:      autoHeight,
+		IsAnsi:          isAnsi,
+		LongestLineCols: longestLineCols,
+		OffsetLine:      offsetLine,
+		LineNumberColor: s.Get(chroma.LineNumbers).Colour.String(),
+	})
+	if err != nil {
+		printErrorFatal("Bad Output", err)
 	}
-
-	if autoWidth {
-		tabWidth := 4
-		if isAnsi {
-			tabWidth = 6
-		}
-		longestLine := lipgloss.Width(strings.ReplaceAll(strippedInput, "\t", strings.Repeat(" ", tabWidth)))
-		terminalWidth = float64(longestLine+1) * (config.Font.Size / fontHeightToWidthRatio)
-		terminalWidth *= scale
-		terminalWidth += hPadding
-		imageWidth = terminalWidth + hMargin
-	}
-
-	if config.Border.Width > 0 {
-		svg.AddOutline(terminal, config.Border.Width, config.Border.Color)
-
-		// NOTE: necessary so that we don't clip the outline.
-		terminalHeight -= (config.Border.Width * 2)
-		terminalWidth -= (config.Border.Width * 2)
-	}
-
-	if config.ShowLineNumbers {
-		if autoWidth {
-			terminalWidth += config.Font.Size * 3 * scale
-			imageWidth += config.Font.Size * 3 * scale
-		} else {
-			terminalWidth -= config.Font.Size * 3
-		}
-	}
-
-	if !autoHeight || !autoWidth {
-		svg.AddClipPath(image, "terminalMask",
-			config.Margin[left], config.Margin[top],
-			terminalWidth, terminalHeight-config.Padding[bottom])
-	}
-
-	svg.Move(terminal, max(float64(config.Margin[left]), float64(config.Border.Width)/2), max(float64(config.Margin[top]), float64(config.Border.Width)/2))
-	svg.SetDimensions(image, imageWidth, imageHeight)
-	svg.SetDimensions(terminal, terminalWidth, terminalHeight)
+	imageWidth := decorated.Width
+	imageHeight := decorated.Height
 
 	if isAnsi {
+		d := dispatcher{lines: decorated.TextLines, svg: decorated.TextGroup, config: &rcfg, scale: decorated.Scale}
 		parser := ansi.NewParser()
 		parser.SetHandler(ansi.Handler{
 			Print:     d.Print,
@@ -396,17 +280,12 @@ func main() {
 
 	switch {
 	case strings.HasSuffix(config.Output, ".png"):
-		// use libsvg conversion.
-		svgConversionErr := libsvgConvert(doc, imageWidth, imageHeight, config.Output)
-		if svgConversionErr == nil {
-			printFilenameOutput(config.Output)
-			break
+		pngBytes, rerr := render.Rasterize(doc, imageWidth, imageHeight)
+		if rerr != nil {
+			printErrorFatal("Unable to convert SVG to PNG", rerr)
 		}
-
-		// could not convert with libsvg, try resvg
-		svgConversionErr = resvgConvert(doc, imageWidth, imageHeight, config.Output)
-		if svgConversionErr != nil {
-			printErrorFatal("Unable to convert SVG to PNG", svgConversionErr)
+		if werr := os.WriteFile(config.Output, pngBytes, 0o600); werr != nil {
+			printErrorFatal("Unable to write output", werr)
 		}
 		printFilenameOutput(config.Output)
 

@@ -15,6 +15,14 @@
       pkgs = import nixpkgs {inherit system;};
     in {
       packages.default = import ./default.nix {inherit pkgs;};
+
+      devShells.default = pkgs.mkShell {
+        packages = with pkgs; [
+          go
+          gopls
+          librsvg # rsvg-convert: preferred SVG->PNG rasterizer
+        ];
+      };
     })
     // {
       overlays.default = final: prev: {
