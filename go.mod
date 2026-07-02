@@ -19,6 +19,7 @@ require (
 	github.com/kanrichan/resvg-go v0.0.2-0.20231001163256-63db194ca9f5
 	github.com/mattn/go-isatty v0.0.22
 	github.com/mattn/go-runewidth v0.0.23
+	golang.org/x/image v0.43.0
 )
 
 require (
@@ -49,7 +50,6 @@ require (
 	github.com/tetratelabs/wazero v1.8.0 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
 	golang.org/x/exp v0.0.0-20240904232852-e7e105dedf7e // indirect
-	golang.org/x/image v0.43.0 // indirect
 	golang.org/x/sync v0.21.0 // indirect
 	golang.org/x/sys v0.38.0 // indirect
 	golang.org/x/text v0.38.0 // indirect
