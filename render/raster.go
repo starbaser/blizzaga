@@ -51,10 +51,10 @@ func rasterizeResvg(svgBytes []byte, width, height float64) ([]byte, error) {
 		return nil, fmt.Errorf("resvg font db: %w", err)
 	}
 	defer fontdb.Close() //nolint:errcheck
-	if err := fontdb.LoadFontData(font.JetBrainsMonoTTF); err != nil {
+	if err := fontdb.LoadFontData(font.IosevkaCustomTTF); err != nil {
 		return nil, fmt.Errorf("load font: %w", err)
 	}
-	if err := fontdb.LoadFontData(font.JetBrainsMonoNLTTF); err != nil {
+	if err := fontdb.LoadFontData(font.IosevkaCustomNLTTF); err != nil {
 		return nil, fmt.Errorf("load font: %w", err)
 	}
 

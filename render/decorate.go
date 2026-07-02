@@ -143,7 +143,11 @@ func Decorate(cfg *Config, p DecorateParams) (Decorated, error) {
 	}
 
 	if p.AutoWidth {
-		terminalWidth = float64(p.LongestLineCols+1) * (cfg.Font.Size / FontHeightToWidthRatio)
+		colAdvance, err := ColAdvance(*cfg)
+		if err != nil {
+			return Decorated{}, err
+		}
+		terminalWidth = float64(p.LongestLineCols+1) * colAdvance
 		terminalWidth *= scale
 		terminalWidth += hPadding
 		imageWidth = terminalWidth + hMargin

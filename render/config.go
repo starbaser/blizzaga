@@ -9,11 +9,6 @@ const (
 	defaultFontSize   = 14.0
 	defaultLineHeight = 1.2
 
-	// FontHeightToWidthRatio derives the per-column advance from the font
-	// size. JetBrains Mono's designed advance width is 0.6 em (600/1000 UPM),
-	// so the ratio is exactly 5/3; with the designed 1.2 line height the
-	// resulting cell box is the canonical 2:1 monospace cell.
-	FontHeightToWidthRatio = 5.0 / 3.0
 )
 
 // Config holds the window-decoration options for a rendered image. Its JSON

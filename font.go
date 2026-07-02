@@ -8,6 +8,7 @@ import (
 
 	"github.com/alecthomas/chroma/v2/formatters/svg"
 	"github.com/starbaser/blizzaga/font"
+	"github.com/starbaser/blizzaga/render"
 )
 
 func fontOptions(config *Config) ([]svg.Option, error) {
@@ -38,18 +39,17 @@ func fontOptions(config *Config) ([]svg.Option, error) {
 			svg.FontFamily(config.Font.Family),
 		}, nil
 	}
-	if config.Font.Family != "JetBrains Mono" {
+	if config.Font.Family != render.DefaultFontFamily {
 		return []svg.Option{
 			svg.FontFamily(config.Font.Family),
 		}, nil
 	}
-	config.Font.Family = "JetBrains Mono"
-	fontBase64 := font.JetBrainsMono
+	fontBase64 := font.IosevkaCustom
 	if !config.Font.Ligatures {
-		fontBase64 = font.JetBrainsMonoNL
+		fontBase64 = font.IosevkaCustomNL
 	}
 	return []svg.Option{
-		svg.EmbedFont(config.Font.Family, fontBase64, svg.WOFF2),
+		svg.EmbedFont(config.Font.Family, fontBase64, svg.TRUETYPE),
 		svg.FontFamily(config.Font.Family),
 	}, nil
 }

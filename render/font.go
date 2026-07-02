@@ -12,7 +12,7 @@ import (
 )
 
 // DefaultFontFamily is the bundled monospace font family.
-const DefaultFontFamily = "JetBrains Mono"
+const DefaultFontFamily = "Iosevka Custom"
 
 // EmbedFont injects an @font-face definition into the SVG root's <defs> and sets
 // the root font-family, so a content document renders with the configured
@@ -59,7 +59,7 @@ func fontData(cfg Config) (data, mime string, err error) {
 	}
 
 	if cfg.Font.Ligatures {
-		return font.JetBrainsMono, "font/ttf", nil
+		return font.IosevkaCustom, "font/ttf", nil
 	}
-	return font.JetBrainsMonoNL, "font/ttf", nil
+	return font.IosevkaCustomNL, "font/ttf", nil
 }

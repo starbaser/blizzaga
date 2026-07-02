@@ -263,7 +263,11 @@ func main() {
 	imageHeight := decorated.Height
 
 	if isAnsi {
-		d := dispatcher{lines: decorated.TextLines, svg: decorated.TextGroup, config: &rcfg, scale: decorated.Scale}
+		colAdvance, err := render.ColAdvance(rcfg)
+		if err != nil {
+			printErrorFatal("Font metrics", err)
+		}
+		d := dispatcher{lines: decorated.TextLines, svg: decorated.TextGroup, config: &rcfg, scale: decorated.Scale, colAdvance: colAdvance}
 		parser := ansi.NewParser()
 		parser.SetHandler(ansi.Handler{
 			Print:     d.Print,

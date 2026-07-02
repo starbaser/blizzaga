@@ -11,14 +11,17 @@ import (
 )
 
 type dispatcher struct {
-	scale   float64
-	svg     *etree.Element
-	bg      *etree.Element
-	config  *render.Config
-	lines   []*etree.Element
-	row     int
-	col     int
-	bgWidth int
+	scale  float64
+	svg    *etree.Element
+	bg     *etree.Element
+	config *render.Config
+	// colAdvance is the per-column pixel advance resolved from the embedded
+	// font's design metrics.
+	colAdvance float64
+	lines      []*etree.Element
+	row        int
+	col        int
+	bgWidth    int
 }
 
 func (p *dispatcher) Print(r rune) {
@@ -71,7 +74,7 @@ func (p *dispatcher) beginBackground(fill string) {
 	rowMultiplier := p.config.Font.Size * p.config.LineHeight
 
 	y := fmt.Sprintf("%.2fpx", float64(p.row)*rowMultiplier+topOffset)
-	x := p.scale * float64(p.col) * (p.config.Font.Size / render.FontHeightToWidthRatio)
+	x := p.scale * float64(p.col) * p.colAdvance
 	x += p.config.MarginLeft() + p.config.PaddingLeft()
 	if p.config.ShowLineNumbers {
 		x += float64(p.config.Font.Size) * 3
@@ -92,7 +95,7 @@ func (p *dispatcher) endBackground() {
 		width = 0
 	}
 
-	p.bg.CreateAttr("width", fmt.Sprintf("%.5fpx", width*(p.config.Font.Size/render.FontHeightToWidthRatio)))
+	p.bg.CreateAttr("width", fmt.Sprintf("%.5fpx", width*p.colAdvance))
 	p.svg.InsertChildAt(0, p.bg)
 	p.bg = nil
 	p.bgWidth = 0

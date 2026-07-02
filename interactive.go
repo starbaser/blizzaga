@@ -109,7 +109,7 @@ func runForm(config *Config) (*Config, error) {
 
 			huh.NewInput().Title("Font Family ").
 				// Description("Font family to use for code").
-				Placeholder("JetBrains Mono").
+				Placeholder("Iosevka Custom").
 				Inline(true).
 				Prompt("").
 				Value(&config.Font.Family),
