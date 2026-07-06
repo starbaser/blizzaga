@@ -109,13 +109,16 @@ func (p *dispatcher) CsiDispatch(cmd ansi.Cmd, params ansi.Params) {
 
 	span := etree.NewElement("tspan")
 	span.CreateAttr("xml:space", "preserve")
+	resetForeground := func() {
+		if p.row < len(p.lines) {
+			p.lines[p.row].AddChild(span)
+		}
+	}
 	reset := func() {
 		// reset ANSI, this is done by creating a new empty tspan,
 		// which would reset all the styles such that when text is appended to the last
 		// child of this line there is no styling applied.
-		if p.row < len(p.lines) {
-			p.lines[p.row].AddChild(span)
-		}
+		resetForeground()
 		p.endBackground()
 	}
 
@@ -134,6 +137,10 @@ func (p *dispatcher) CsiDispatch(cmd ansi.Cmd, params ansi.Params) {
 		case 1:
 			// span.CreateAttr("font-weight", "bold")
 			p.lines[p.row].AddChild(span)
+		case 39:
+			resetForeground()
+		case 49:
+			p.endBackground()
 		case 9:
 			span.CreateAttr("text-decoration", "line-through")
 			p.lines[p.row].AddChild(span)
@@ -146,16 +153,31 @@ func (p *dispatcher) CsiDispatch(cmd ansi.Cmd, params ansi.Params) {
 		case 30, 31, 32, 33, 34, 35, 36, 37, 90, 91, 92, 93, 94, 95, 96, 97:
 			span.CreateAttr("fill", ansiPalette[v])
 			p.lines[p.row].AddChild(span)
+		case 40, 41, 42, 43, 44, 45, 46, 47, 100, 101, 102, 103, 104, 105, 106, 107:
+			p.endBackground()
+			p.beginBackground(ansiPalette[v-10])
 		case 38:
 			i++
+			if i >= len(params) {
+				break
+			}
 			switch params[i] {
 			case 5:
+				if i+1 >= len(params) {
+					break
+				}
 				n := params[i+1]
 				i++
+				if n < 0 || int(n) >= len(palette) {
+					break
+				}
 				fill := palette[n]
 				span.CreateAttr("fill", fill)
 				p.lines[p.row].AddChild(span)
 			case 2:
+				if i+3 >= len(params) {
+					break
+				}
 				span.CreateAttr("fill", fmt.Sprintf("#%02x%02x%02x", params[i+1], params[i+2], params[i+3]))
 				p.lines[p.row].AddChild(span)
 				i += 3
@@ -163,19 +185,29 @@ func (p *dispatcher) CsiDispatch(cmd ansi.Cmd, params ansi.Params) {
 		case 48:
 			p.endBackground()
 			i++
+			if i >= len(params) {
+				break
+			}
 			switch params[i] {
 			case 5:
+				if i+1 >= len(params) {
+					break
+				}
 				n := params[i+1]
 				i++
+				if n < 0 || int(n) >= len(palette) {
+					break
+				}
 				fill := palette[n]
 				p.beginBackground(fill)
 			case 2:
+				if i+3 >= len(params) {
+					break
+				}
 				fill := fmt.Sprintf("#%02x%02x%02x", params[i+1], params[i+2], params[i+3])
 				p.beginBackground(fill)
 				i += 3
 			}
-		case 100, 101, 102, 103, 104, 105, 106, 107:
-			p.beginBackground(ansiPalette[v])
 		}
 		i++
 	}

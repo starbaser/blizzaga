@@ -160,6 +160,16 @@ func main() {
 		config.Lines[i]--
 	}
 
+	if isMarkdownLanguage(config.Language) {
+		input, err = renderMarkdown(input, config.Theme, config.Wrap)
+		if err != nil {
+			printErrorFatal("Markdown render", err)
+		}
+		config.Language = "ansi"
+		config.Wrap = 0
+		lexer = nil
+	}
+
 	strippedInput := ansi.Strip(input)
 	isAnsi := strings.ToLower(config.Language) == "ansi" || strippedInput != input
 	strippedInput = cut(strippedInput, config.Lines)

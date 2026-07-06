@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"runtime"
 	"strings"
 	"testing"
@@ -63,6 +64,45 @@ func TestBlizzagaOutput(t *testing.T) {
 	_, err = os.Stat(output)
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestBlizzagaMarkdownLanguage(t *testing.T) {
+	dir := t.TempDir()
+	input := filepath.Join(dir, "doc.md")
+	output := filepath.Join(dir, "doc.svg")
+
+	content := "# Rendered Title\n\nThis is **strong**, _emphasized_, and `inline code`.\n\n```go\nfunc main() {\n\tprintln(\"srcery\")\n}\n```\n"
+	if err := os.WriteFile(input, []byte(content), 0o600); err != nil {
+		t.Fatal(err)
+	}
+
+	cmd := exec.Command(binary, input, "--language", "markdown", "--wrap", "48", "--output", output)
+	cmd.Env = append(os.Environ(), "CLICOLOR_FORCE=1", "COLORTERM=truecolor", "TERM=xterm-256color")
+	out := bytes.Buffer{}
+	cmd.Stdout = &out
+	if err := cmd.Run(); err != nil {
+		t.Log(out.String())
+		t.Fatal(err)
+	}
+
+	got, err := os.ReadFile(output)
+	if err != nil {
+		t.Fatal(err)
+	}
+	svg := string(got)
+	for _, want := range []string{"Rendered", "Title", "strong", "emphasized", "func", "srcery"} {
+		if !strings.Contains(svg, want) {
+			t.Fatalf("expected markdown output SVG to contain %q:\n%s", want, svg)
+		}
+	}
+	for _, want := range []string{"#fce8c3", "#fed06e", "#ff5c8f"} {
+		if !strings.Contains(strings.ToLower(svg), want) {
+			t.Fatalf("expected markdown output SVG to contain Srcery color %q:\n%s", want, svg)
+		}
+	}
+	if strings.Contains(svg, "# Rendered Title") {
+		t.Fatalf("markdown source heading was syntax-highlighted instead of rendered:\n%s", svg)
 	}
 }
 

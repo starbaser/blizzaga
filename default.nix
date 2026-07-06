@@ -7,7 +7,7 @@ in
 pkgs.buildGoModule {
   name = "blizzaga";
   src = ./.;
-  vendorHash = "sha256-auggealYd2dgWwga/bwAg0IUYdkOFDCFkMxgIq83juY=";
+  vendorHash = "sha256-GA7HvR9URuDwANYxIqjitPBk8ZGZECZhnbu+2uO1wNo=";
   nativeBuildInputs = [ pkgs.makeWrapper ];
 
   postInstall = ''
