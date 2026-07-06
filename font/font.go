@@ -1,14 +1,16 @@
+// Package font embeds the Iosevka Custom font assets used by Blizzaga.
+//
 // Iosevka Custom is a first-party build of Iosevka
-// (https://github.com/be5invis/Iosevka), Copyright 2015-2026 Renzhi Li
-// (aka. Belleve Invis) and Iosevka contributors, licensed under the SIL Open
-// Font License 1.1 (https://openfontlicense.org).
+// (https://github.com/be5invis/Iosevka), Copyright 2015-2026 Renzhi Li (aka.
+// Belleve Invis) and Iosevka contributors, licensed under the SIL Open Font
+// License 1.1 (https://openfontlicense.org).
 //
 // The embedded files are terminal-oriented subsets of the iosevka-eigenmage
 // build (Latin/Greek/Cyrillic, punctuation, arrows, math, box drawing,
 // blocks, geometric shapes, braille, powerline). The NL variant strips the
 // calt/liga ligature features; both preserve the design metrics
 // (0.5 em advance, 1.25 em line, 2.5 cell aspect).
-package font //nolint:revive
+package font
 
 import (
 	_ "embed"

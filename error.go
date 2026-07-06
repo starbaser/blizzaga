@@ -9,15 +9,15 @@ import (
 
 var (
 	errorHeader = lipgloss.NewStyle().
-			Foreground(lipgloss.Color("#F1F1F1")).
-			Background(lipgloss.Color("#FF5F87")).
+			Foreground(lipgloss.Color(srceryBrightWhite)).
+			Background(lipgloss.Color(srceryRed)).
 			Bold(true).
 			Padding(0, 1).
 			Margin(1).
 			MarginLeft(2).
 			SetString("ERROR")
 	errorDetails = lipgloss.NewStyle().
-			Foreground(lipgloss.Color("#757575")).
+			Foreground(lipgloss.Color(srceryBrightBlack)).
 			MarginLeft(2)
 )
 

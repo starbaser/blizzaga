@@ -14,7 +14,60 @@ import (
 	"github.com/starbaser/blizzaga/render"
 )
 
-var green = lipgloss.Color("#03BF87")
+func newFormTheme() *huh.Theme {
+	accent := lipgloss.Color(srceryBrightGreen)
+	highlight := lipgloss.Color(srceryBrightOrange)
+	text := lipgloss.Color(srceryBrightWhite)
+	soft := lipgloss.Color(srceryWhite)
+	muted := lipgloss.Color(srceryBrightBlack)
+	errorColor := lipgloss.Color(srceryRed)
+
+	theme := huh.ThemeBase()
+	theme.FieldSeparator = lipgloss.NewStyle()
+
+	theme.Focused.Base = theme.Focused.Base.BorderForeground(accent)
+	theme.Focused.Card = theme.Focused.Base
+	theme.Focused.Title = theme.Focused.Title.Width(18).Foreground(accent).Bold(true)
+	theme.Focused.NoteTitle = theme.Focused.NoteTitle.Foreground(accent).Bold(true).Margin(1, 0)
+	theme.Focused.Description = theme.Focused.Description.Foreground(soft)
+	theme.Focused.ErrorIndicator = theme.Focused.ErrorIndicator.Foreground(errorColor)
+	theme.Focused.ErrorMessage = theme.Focused.ErrorMessage.Foreground(errorColor)
+	theme.Focused.SelectSelector = theme.Focused.SelectSelector.Foreground(highlight)
+	theme.Focused.NextIndicator = theme.Focused.NextIndicator.Foreground(highlight)
+	theme.Focused.PrevIndicator = theme.Focused.PrevIndicator.Foreground(highlight)
+	theme.Focused.Option = theme.Focused.Option.Foreground(text)
+	theme.Focused.Directory = theme.Focused.Directory.Foreground(lipgloss.Color(srceryBrightBlue))
+	theme.Focused.File = theme.Focused.File.Foreground(text)
+	theme.Focused.MultiSelectSelector = theme.Focused.MultiSelectSelector.Foreground(highlight)
+	theme.Focused.SelectedOption = lipgloss.NewStyle().Foreground(accent)
+	theme.Focused.SelectedPrefix = lipgloss.NewStyle().Foreground(accent).SetString("✓ ")
+	theme.Focused.UnselectedOption = theme.Focused.UnselectedOption.Foreground(text)
+	theme.Focused.UnselectedPrefix = lipgloss.NewStyle().Foreground(muted).SetString("• ")
+	theme.Focused.FocusedButton = lipgloss.NewStyle().Foreground(text).PaddingRight(1)
+	theme.Focused.BlurredButton = lipgloss.NewStyle().Foreground(muted).PaddingRight(1)
+	theme.Focused.Next = theme.Focused.FocusedButton
+	theme.Focused.TextInput.Cursor = theme.Focused.TextInput.Cursor.Foreground(accent)
+	theme.Focused.TextInput.Placeholder = theme.Focused.TextInput.Placeholder.Foreground(muted)
+	theme.Focused.TextInput.Prompt = theme.Focused.TextInput.Prompt.Foreground(highlight)
+	theme.Focused.TextInput.Text = theme.Focused.TextInput.Text.Foreground(text)
+
+	theme.Blurred = theme.Focused
+	theme.Blurred.Base = theme.Focused.Base.BorderStyle(lipgloss.HiddenBorder())
+	theme.Blurred.Card = theme.Blurred.Base
+	theme.Blurred.Title = theme.Blurred.Title.Width(18).Foreground(soft).Bold(false)
+	theme.Blurred.NoteTitle = theme.Blurred.NoteTitle.Foreground(soft).Bold(false).Margin(1, 0)
+	theme.Blurred.Description = theme.Blurred.Description.Foreground(muted)
+	theme.Blurred.SelectSelector = theme.Blurred.SelectSelector.Foreground(muted)
+	theme.Blurred.MultiSelectSelector = theme.Blurred.MultiSelectSelector.Foreground(muted)
+	theme.Blurred.SelectedOption = theme.Blurred.SelectedOption.Foreground(muted)
+	theme.Blurred.TextInput.Text = theme.Blurred.TextInput.Text.Foreground(muted)
+	theme.Blurred.NextIndicator = lipgloss.NewStyle()
+	theme.Blurred.PrevIndicator = lipgloss.NewStyle()
+
+	theme.Group.Title = theme.Focused.Title
+	theme.Group.Description = theme.Focused.Description
+	return theme
+}
 
 func runForm(config *Config) (*Config, error) {
 	var (
@@ -29,22 +82,7 @@ func runForm(config *Config) (*Config, error) {
 		shadowY      = fmt.Sprintf("%.0f", config.Shadow.Y)
 	)
 
-	theme := huh.ThemeCharm()
-	theme.FieldSeparator = lipgloss.NewStyle()
-	theme.Blurred.TextInput.Text = theme.Blurred.TextInput.Text.Foreground(lipgloss.Color("243"))
-	theme.Blurred.BlurredButton = lipgloss.NewStyle().Foreground(lipgloss.Color("8")).PaddingRight(1)
-	theme.Blurred.FocusedButton = lipgloss.NewStyle().Foreground(lipgloss.Color("7")).PaddingRight(1)
-	theme.Focused.BlurredButton = lipgloss.NewStyle().Foreground(lipgloss.Color("8")).PaddingRight(1)
-	theme.Focused.FocusedButton = lipgloss.NewStyle().Foreground(lipgloss.Color("15")).PaddingRight(1)
-	theme.Focused.NoteTitle = theme.Focused.NoteTitle.Margin(1, 0)
-	theme.Blurred.NoteTitle = theme.Blurred.NoteTitle.Margin(1, 0)
-	theme.Blurred.Description = theme.Blurred.Description.Foreground(lipgloss.Color("0"))
-	theme.Focused.Description = theme.Focused.Description.Foreground(lipgloss.Color("7"))
-	theme.Blurred.Title = theme.Blurred.Title.Width(18).Foreground(lipgloss.Color("7"))
-	theme.Focused.Title = theme.Focused.Title.Width(18).Foreground(green).Bold(true)
-	theme.Blurred.SelectedOption = theme.Blurred.SelectedOption.Foreground(lipgloss.Color("243"))
-	theme.Focused.SelectedOption = lipgloss.NewStyle().Foreground(green)
-	theme.Focused.Base.BorderForeground(green)
+	theme := newFormTheme()
 
 	f := huh.NewForm(
 		huh.NewGroup(

@@ -8,7 +8,6 @@ package render
 const (
 	defaultFontSize   = 14.0
 	defaultLineHeight = 1.2
-
 )
 
 // Config holds the window-decoration options for a rendered image. Its JSON

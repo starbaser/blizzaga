@@ -11,6 +11,7 @@ import (
 	"testing"
 
 	"github.com/aymanbagabas/go-udiff"
+	"github.com/charmbracelet/lipgloss"
 )
 
 var binary = "./test/blizzaga-test"
@@ -90,6 +91,32 @@ func TestBlizzagaHelp(t *testing.T) {
 			t.Fatalf("expected %s to contain \"%s\"", got, c)
 		}
 	}
+}
+
+func TestCLIStylesUseSrcery(t *testing.T) {
+	usage := newUsageStyles()
+	assertLipglossColor(t, usage.codeBlock.GetBackground(), srceryGray1)
+	assertLipglossColor(t, usage.program.GetForeground(), srceryBrightBlue)
+	assertLipglossColor(t, usage.string.GetForeground(), srceryBrightGreen)
+	assertLipglossColor(t, usage.argument.GetForeground(), srceryBrightWhite)
+	assertLipglossColor(t, usage.flag.GetForeground(), srceryBrightBlack)
+	assertLipglossColor(t, usage.title.GetForeground(), srceryBrightBlue)
+
+	flagHelp := newFlagHelpStyles()
+	assertLipglossColor(t, flagHelp.dash.GetForeground(), srceryBrightBlack)
+	assertLipglossColor(t, flagHelp.help.GetForeground(), srceryBrightBlack)
+	assertLipglossColor(t, flagHelp.keyword.GetForeground(), srceryBrightRed)
+
+	form := newFormTheme()
+	assertLipglossColor(t, form.Focused.Title.GetForeground(), srceryBrightGreen)
+	assertLipglossColor(t, form.Focused.SelectSelector.GetForeground(), srceryBrightOrange)
+	assertLipglossColor(t, form.Blurred.Description.GetForeground(), srceryBrightBlack)
+
+	assertLipglossColor(t, outputHeader.GetForeground(), srceryBrightWhite)
+	assertLipglossColor(t, outputHeader.GetBackground(), srceryBlue)
+	assertLipglossColor(t, errorHeader.GetForeground(), srceryBrightWhite)
+	assertLipglossColor(t, errorHeader.GetBackground(), srceryRed)
+	assertLipglossColor(t, errorDetails.GetForeground(), srceryBrightBlack)
 }
 
 func TestBlizzagaErrorFileMissing(t *testing.T) {
@@ -352,6 +379,18 @@ func TestBlizzagaConfigurations(t *testing.T) {
 				}
 			}
 		})
+	}
+}
+
+func assertLipglossColor(t *testing.T, got lipgloss.TerminalColor, want string) {
+	t.Helper()
+
+	color, ok := got.(lipgloss.Color)
+	if !ok {
+		t.Fatalf("expected lipgloss.Color %q, got %T", want, got)
+	}
+	if string(color) != want {
+		t.Fatalf("expected color %q, got %q", want, string(color))
 	}
 }
 
