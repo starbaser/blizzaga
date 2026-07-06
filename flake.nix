@@ -21,7 +21,15 @@
           go
           gopls
           librsvg # rsvg-convert: preferred SVG->PNG rasterizer
+          jetbrains-mono
         ];
+        shellHook = ''
+          mkdir -p .direnv/blizzaga-fonts/share/fonts/truetype/blizzaga
+          for font in ./font/*.ttf; do
+            ln -sf "$PWD/''${font#./}" ".direnv/blizzaga-fonts/share/fonts/truetype/blizzaga/$(basename "$font")"
+          done
+          export XDG_DATA_DIRS="$PWD/.direnv/blizzaga-fonts/share:${pkgs.jetbrains-mono}/share''${XDG_DATA_DIRS:+:$XDG_DATA_DIRS}"
+        '';
       };
     })
     // {

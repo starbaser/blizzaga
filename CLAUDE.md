@@ -30,8 +30,9 @@ invalidates it — the Nix build will fail with a hash mismatch until you update
 value to the one Nix reports.
 
 **PNG dependency**: PNG output prefers the external `rsvg-convert` (librsvg) binary if present on
-`PATH`, otherwise falls back to the embedded `resvg-go` (WASM) renderer in `png.go`. `rsvg-convert`
-is not guaranteed to be installed in the dev environment.
+`PATH`, otherwise falls back to the embedded `resvg-go` (WASM) renderer in `png.go`. The Nix dev
+shell and wrapped package install `librsvg` and expose the bundled/default fonts through
+fontconfig, so Nix-backed runs use the fast external rasterizer without changing text metrics.
 
 ## Rendering pipeline (the core architecture)
 
