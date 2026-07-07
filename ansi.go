@@ -7,6 +7,7 @@ import (
 	"github.com/charmbracelet/x/ansi"
 	"github.com/mattn/go-runewidth"
 
+	"github.com/starbaser/blizzaga/font"
 	"github.com/starbaser/blizzaga/render"
 )
 
@@ -135,8 +136,10 @@ func (p *dispatcher) CsiDispatch(cmd ansi.Cmd, params ansi.Params) {
 		case 0:
 			reset()
 		case 1:
-			// span.CreateAttr("font-weight", "bold")
+			span.CreateAttr("font-weight", font.BoldWeight)
 			p.lines[p.row].AddChild(span)
+		case 22:
+			resetForeground()
 		case 39:
 			resetForeground()
 		case 49:

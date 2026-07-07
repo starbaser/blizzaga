@@ -93,16 +93,47 @@ func TestBlizzagaMarkdownLanguage(t *testing.T) {
 	svg := string(got)
 	for _, want := range []string{"Rendered", "Title", "strong", "emphasized", "func", "srcery"} {
 		if !strings.Contains(svg, want) {
-			t.Fatalf("expected markdown output SVG to contain %q:\n%s", want, svg)
+			t.Fatalf("expected markdown output SVG to contain %q", want)
 		}
 	}
 	for _, want := range []string{"#fce8c3", "#fed06e", "#ff5c8f"} {
 		if !strings.Contains(strings.ToLower(svg), want) {
-			t.Fatalf("expected markdown output SVG to contain Srcery color %q:\n%s", want, svg)
+			t.Fatalf("expected markdown output SVG to contain Srcery color %q", want)
+		}
+	}
+	for _, want := range []string{`font-weight="700"`, `font-style="italic"`, "font-weight:700;font-style:normal", "font-weight:700;font-style:italic"} {
+		if !strings.Contains(svg, want) {
+			t.Fatalf("expected markdown output SVG to contain %q", want)
 		}
 	}
 	if strings.Contains(svg, "# Rendered Title") {
-		t.Fatalf("markdown source heading was syntax-highlighted instead of rendered:\n%s", svg)
+		t.Fatal("markdown source heading was syntax-highlighted instead of rendered")
+	}
+}
+
+func TestBlizzagaANSIBold(t *testing.T) {
+	dir := t.TempDir()
+	input := filepath.Join(dir, "bold.ansi")
+	output := filepath.Join(dir, "bold.svg")
+
+	if err := os.WriteFile(input, []byte("\x1b[1mbold\x1b[0m normal\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+
+	cmd := exec.Command(binary, input, "--language", "ansi", "--output", output)
+	out := bytes.Buffer{}
+	cmd.Stdout = &out
+	if err := cmd.Run(); err != nil {
+		t.Log(out.String())
+		t.Fatal(err)
+	}
+
+	got, err := os.ReadFile(output)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(string(got), `font-weight="700"`) {
+		t.Fatal("expected ANSI bold output SVG to contain a bold font-weight span")
 	}
 }
 

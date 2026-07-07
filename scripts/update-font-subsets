@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+iosevka_repo="${IOSEVKA_EIGENMAGE:-"$repo_root/../iosevka-eigenmage"}"
+font_dir="$repo_root/font"
+reference_font="$font_dir/IosevkaCustom-Regular.ttf"
+
+if [[ ! -f "$reference_font" ]]; then
+	echo "missing reference subset: $reference_font" >&2
+	exit 1
+fi
+
+tmp="$(mktemp -d)"
+trap 'rm -rf "$tmp"' EXIT
+
+nix build "$iosevka_repo#iosevka-custom" -o "$tmp/iosevka"
+full_font_dir="$tmp/iosevka/share/fonts/truetype"
+unicodes_file="$tmp/unicodes.txt"
+
+nix shell --impure --expr 'with import <nixpkgs> {}; python312.withPackages (ps: [ ps.fonttools ])' \
+	-c python - "$reference_font" "$unicodes_file" <<'PY'
+import sys
+from fontTools.ttLib import TTFont
+
+font = TTFont(sys.argv[1])
+codepoints = set()
+for table in font["cmap"].tables:
+    if table.isUnicode():
+        codepoints.update(table.cmap)
+
+with open(sys.argv[2], "w", encoding="utf-8") as out:
+    for codepoint in sorted(codepoints):
+        out.write(f"{codepoint:04X}\n")
+PY
+
+subset() {
+	local source="$1"
+	local output="$2"
+	local features="$3"
+	local source_path="$full_font_dir/$source"
+	local output_path="$font_dir/$output"
+
+	if [[ ! -f "$source_path" ]]; then
+		echo "missing source font: $source_path" >&2
+		exit 1
+	fi
+
+	nix shell --impure --expr 'with import <nixpkgs> {}; python312.withPackages (ps: [ ps.fonttools ])' \
+		-c pyftsubset "$source_path" \
+		"--output-file=$output_path" \
+		"--unicodes-file=$unicodes_file" \
+		"--layout-features=$features" \
+		--name-IDs=0,1,2,3,4,5,6,8,9,10,13,14,16,17,21,22 \
+		'--name-languages=*'
+}
+
+subset IosevkaCustom-Regular.ttf IosevkaCustom-Regular.ttf calt,ccmp,locl
+subset IosevkaCustom-Italic.ttf IosevkaCustom-Italic.ttf calt,ccmp,locl
+subset IosevkaCustom-Bold.ttf IosevkaCustom-Bold.ttf calt,ccmp,locl
+subset IosevkaCustom-BoldItalic.ttf IosevkaCustom-BoldItalic.ttf calt,ccmp,locl
+
+subset IosevkaCustom-Regular.ttf IosevkaCustomNL-Regular.ttf ccmp,locl
+subset IosevkaCustom-Italic.ttf IosevkaCustomNL-Italic.ttf ccmp,locl
+subset IosevkaCustom-Bold.ttf IosevkaCustomNL-Bold.ttf ccmp,locl
+subset IosevkaCustom-BoldItalic.ttf IosevkaCustomNL-BoldItalic.ttf ccmp,locl

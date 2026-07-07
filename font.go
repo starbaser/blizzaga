@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 
 	"github.com/alecthomas/chroma/v2/formatters/svg"
+	"github.com/beevik/etree"
 	"github.com/starbaser/blizzaga/font"
 	"github.com/starbaser/blizzaga/render"
 )
@@ -44,12 +45,23 @@ func fontOptions(config *Config) ([]svg.Option, error) {
 			svg.FontFamily(config.Font.Family),
 		}, nil
 	}
-	fontBase64 := font.IosevkaCustom
-	if !config.Font.Ligatures {
-		fontBase64 = font.IosevkaCustomNL
-	}
 	return []svg.Option{
-		svg.EmbedFont(config.Font.Family, fontBase64, svg.TRUETYPE),
 		svg.FontFamily(config.Font.Family),
 	}, nil
+}
+
+func embedDefaultFontFaces(root *etree.Element, config *Config) {
+	if root == nil || config.Font.File != "" || config.Font.Family != render.DefaultFontFamily {
+		return
+	}
+
+	style := etree.NewElement("style")
+	style.SetText(font.FaceCSS(config.Font.Family, config.Font.Ligatures))
+
+	defs := root.FindElement("defs")
+	if defs == nil {
+		defs = etree.NewElement("defs")
+		root.InsertChildAt(0, defs)
+	}
+	defs.InsertChildAt(0, style)
 }

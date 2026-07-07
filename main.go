@@ -240,6 +240,7 @@ func main() {
 	if err != nil {
 		printErrorFatal("Bad SVG", err)
 	}
+	embedDefaultFontFaces(doc.Root(), &config)
 
 	rcfg := config.renderConfig()
 	rcfg.Margin = render.ExpandMargin(rcfg.Margin, scale)

@@ -25,13 +25,13 @@ func EmbedFont(root *etree.Element, cfg Config) error {
 		family = DefaultFontFamily
 	}
 
-	data, mime, err := fontData(cfg)
+	css, err := fontFaceCSS(family, cfg)
 	if err != nil {
 		return err
 	}
 
 	style := etree.NewElement("style")
-	style.SetText(fmt.Sprintf(`@font-face{font-family:"%s";src:url("data:%s;base64,%s");}`, family, mime, data))
+	style.SetText(css)
 	defs := etree.NewElement("defs")
 	defs.AddChild(style)
 	root.AddChild(defs)
@@ -39,12 +39,13 @@ func EmbedFont(root *etree.Element, cfg Config) error {
 	return nil
 }
 
-func fontData(cfg Config) (data, mime string, err error) {
+func fontFaceCSS(family string, cfg Config) (string, error) {
 	if cfg.Font.File != "" {
 		raw, readErr := os.ReadFile(cfg.Font.File)
 		if readErr != nil {
-			return "", "", fmt.Errorf("read font file: %w", readErr)
+			return "", fmt.Errorf("read font file: %w", readErr)
 		}
+		var mime string
 		switch filepath.Ext(cfg.Font.File) {
 		case ".woff2":
 			mime = "font/woff2"
@@ -55,11 +56,15 @@ func fontData(cfg Config) (data, mime string, err error) {
 		default:
 			mime = "font/ttf"
 		}
-		return base64.StdEncoding.EncodeToString(raw), mime, nil
+		return fmt.Sprintf(
+			`@font-face{font-family:"%s";src:url("data:%s;base64,%s");font-weight:%s;font-style:%s;}`,
+			family,
+			mime,
+			base64.StdEncoding.EncodeToString(raw),
+			font.NormalWeight,
+			font.NormalStyle,
+		), nil
 	}
 
-	if cfg.Font.Ligatures {
-		return font.IosevkaCustom, "font/ttf", nil
-	}
-	return font.IosevkaCustomNL, "font/ttf", nil
+	return font.FaceCSS(family, cfg.Font.Ligatures), nil
 }

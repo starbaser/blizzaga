@@ -136,7 +136,9 @@ func srceryMarkdownStyle() glamouransi.StyleConfig {
 	cfg.H1.BackgroundColor = stringPtr(srceryBrightYellow)
 	cfg.H6.Color = stringPtr(srceryBrightBlack)
 	cfg.Emph.Color = stringPtr(srceryWhite)
+	cfg.Emph.Italic = boolPtr(true)
 	cfg.Strong.Color = stringPtr(srceryBrightYellow)
+	cfg.Strong.Bold = boolPtr(true)
 	cfg.HorizontalRule.Color = stringPtr(srceryBrightBlack)
 	cfg.Link.Color = stringPtr(srceryBrightCyan)
 	cfg.LinkText.Color = stringPtr(srceryBrightCyan)
@@ -152,4 +154,5 @@ func srceryMarkdownStyle() glamouransi.StyleConfig {
 }
 
 func stringPtr(s string) *string { return &s }
+func boolPtr(b bool) *bool       { return &b }
 func uintPtr(n uint) *uint       { return &n }
