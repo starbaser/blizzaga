@@ -16,6 +16,15 @@
     in {
       packages.default = import ./default.nix {inherit pkgs;};
 
+      # The committed font/ tree in XDG layout — the same files font.go
+      # embeds, so installed and embedded fonts can never diverge. Consumers
+      # take this output instead of reaching into the source tree.
+      # Provenance: regenerated from iosevka-eigenmage in the dev loop.
+      packages.fonts = pkgs.runCommand "blizzaga-fonts" {} ''
+        mkdir -p $out/share/fonts/truetype/blizzaga
+        cp ${./font}/*.ttf $out/share/fonts/truetype/blizzaga/
+      '';
+
       devShells.default = pkgs.mkShell {
         packages = with pkgs; [
           go
@@ -24,11 +33,7 @@
           jetbrains-mono
         ];
         shellHook = ''
-          mkdir -p .direnv/blizzaga-fonts/share/fonts/truetype/blizzaga
-          for font in ./font/*.ttf; do
-            ln -sf "$PWD/''${font#./}" ".direnv/blizzaga-fonts/share/fonts/truetype/blizzaga/$(basename "$font")"
-          done
-          export XDG_DATA_DIRS="$PWD/.direnv/blizzaga-fonts/share:${pkgs.jetbrains-mono}/share''${XDG_DATA_DIRS:+:$XDG_DATA_DIRS}"
+          export XDG_DATA_DIRS="${self.packages.${system}.fonts}/share:${pkgs.jetbrains-mono}/share''${XDG_DATA_DIRS:+:$XDG_DATA_DIRS}"
         '';
       };
     })
