@@ -20,6 +20,8 @@ require (
 	github.com/kanrichan/resvg-go v0.0.2-0.20231001163256-63db194ca9f5
 	github.com/mattn/go-isatty v0.0.22
 	github.com/mattn/go-runewidth v0.0.23
+	github.com/tree-sitter/go-tree-sitter v0.25.0
+	github.com/tree-sitter/tree-sitter-go v0.25.0
 	golang.org/x/image v0.43.0
 )
 
@@ -49,6 +51,7 @@ require (
 	github.com/gorilla/css v1.0.1 // indirect
 	github.com/lucasb-eyer/go-colorful v1.4.0 // indirect
 	github.com/mattn/go-localereader v0.0.1 // indirect
+	github.com/mattn/go-pointer v0.0.1 // indirect
 	github.com/microcosm-cc/bluemonday v1.0.27 // indirect
 	github.com/mitchellh/hashstructure/v2 v2.0.2 // indirect
 	github.com/muesli/ansi v0.0.0-20230316100256-276c6243b2f6 // indirect

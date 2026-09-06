@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"flag"
-	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -15,13 +14,9 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
-var binary = "./test/blizzaga-test"
+const testProcessEnvironment = "BLIZZAGA_TEST_PROCESS=1"
 
-func init() {
-	if runtime.GOOS == "windows" {
-		binary += ".exe"
-	}
-}
+var binary string
 
 var (
 	update = flag.Bool("update", false, "update golden files")
@@ -29,22 +24,24 @@ var (
 )
 
 func TestMain(m *testing.M) {
+	if os.Getenv("BLIZZAGA_TEST_PROCESS") == "1" {
+		main()
+		return
+	}
+
 	flag.Parse()
-	cmd := exec.Command("go", "build", "-o", binary)
-	err := cmd.Run()
-	if err != nil {
-		fmt.Println(err)
-	}
-	exit := m.Run()
-	err = os.Remove(binary)
-	if err != nil {
-		fmt.Println(err)
-	}
-	os.Exit(exit)
+	binary = os.Args[0]
+	os.Exit(m.Run())
+}
+
+func blizzagaCommand(args ...string) *exec.Cmd {
+	cmd := exec.Command(binary, args...)
+	cmd.Env = append(os.Environ(), testProcessEnvironment)
+	return cmd
 }
 
 func TestBlizzaga(t *testing.T) {
-	cmd := exec.Command(binary)
+	cmd := blizzagaCommand()
 	err := cmd.Run()
 	if err != nil {
 		t.Fatal(err)
@@ -55,7 +52,7 @@ func TestBlizzagaOutput(t *testing.T) {
 	output := "artichoke-test.svg"
 	defer os.Remove(output)
 
-	cmd := exec.Command(binary, "test/input/artichoke.hs", "-o", output)
+	cmd := blizzagaCommand("test/input/artichoke.hs", "-o", output)
 	err := cmd.Run()
 	if err != nil {
 		t.Fatal(err)
@@ -77,8 +74,8 @@ func TestBlizzagaMarkdownLanguage(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	cmd := exec.Command(binary, input, "--language", "markdown", "--wrap", "48", "--output", output)
-	cmd.Env = append(os.Environ(), "CLICOLOR_FORCE=1", "COLORTERM=truecolor", "TERM=xterm-256color")
+	cmd := blizzagaCommand(input, "--language", "markdown", "--wrap", "48", "--output", output)
+	cmd.Env = append(cmd.Env, "CLICOLOR_FORCE=1", "COLORTERM=truecolor", "TERM=xterm-256color")
 	out := bytes.Buffer{}
 	cmd.Stdout = &out
 	if err := cmd.Run(); err != nil {
@@ -120,7 +117,7 @@ func TestBlizzagaANSIBold(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	cmd := exec.Command(binary, input, "--language", "ansi", "--output", output)
+	cmd := blizzagaCommand(input, "--language", "ansi", "--output", output)
 	out := bytes.Buffer{}
 	cmd.Stdout = &out
 	if err := cmd.Run(); err != nil {
@@ -139,7 +136,7 @@ func TestBlizzagaANSIBold(t *testing.T) {
 
 func TestBlizzagaHelp(t *testing.T) {
 	out := bytes.Buffer{}
-	cmd := exec.Command(binary)
+	cmd := blizzagaCommand()
 	cmd.Stdout = &out
 	err := cmd.Run()
 	if err != nil {
@@ -196,7 +193,7 @@ func TestBlizzagaErrorFileMissing(t *testing.T) {
 	}
 
 	out := bytes.Buffer{}
-	cmd := exec.Command(binary, "this-file-does-not-exist")
+	cmd := blizzagaCommand("this-file-does-not-exist")
 	cmd.Stdout = &out
 	err := cmd.Run()
 
@@ -405,7 +402,7 @@ func TestBlizzagaConfigurations(t *testing.T) {
 			args := []string{tc.input}
 			args = append(args, tc.flags...)
 			args = append(args, "--output", "test/output/svg/"+tc.output+".svg")
-			cmd := exec.Command(binary, args...)
+			cmd := blizzagaCommand(args...)
 			cmd.Stdout = &out
 			err := cmd.Run()
 			if err != nil {
@@ -440,7 +437,7 @@ func TestBlizzagaConfigurations(t *testing.T) {
 				args = []string{tc.input}
 				args = append(args, tc.flags...)
 				args = append(args, "--output", "test/output/png/"+tc.output+".png")
-				cmd = exec.Command(binary, args...)
+				cmd = blizzagaCommand(args...)
 				cmd.Stdout = &out
 				err = cmd.Run()
 				if err != nil {

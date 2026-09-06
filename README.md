@@ -106,6 +106,10 @@ Screenshots can be customized with `--flags` or [Configuration](#configuration) 
 If possible, `blizzaga` auto-detects the language from the file name or analyzing the file contents.
 Override this inference with the `--language` flag.
 
+Go source is highlighted by a statically linked Tree-sitter grammar. Its syntax tree and highlight
+query are translated into Chroma tokens, so it uses the same themes and SVG formatter as every
+other language. The remaining languages continue to use Chroma's built-in lexers.
+
 ```bash
 cat artichoke.hs | blizzaga --language haskell
 ```
@@ -113,6 +117,27 @@ cat artichoke.hs | blizzaga --language haskell
 <br />
 
 <img alt="output of blizzaga command, Haskell code block" src="./test/golden/svg/haskell.svg" width="600" />
+
+#### Adding a Tree-sitter language
+
+Tree-sitter support is intentionally a Blizzaga integration rather than a Chroma fork. The neutral
+engine under `internal/highlight/treesitter` executes a grammar's `highlights.scm` query and emits
+byte spans. The adapter under `internal/highlight/chromalexer` resolves overlapping captures and
+converts those spans to Chroma v2 tokens.
+
+To add another statically linked language:
+
+1. Add the grammar's Go binding to `go.mod`.
+2. Embed its highlight query beside the language constructor under `internal/highlight/languages`.
+3. Construct a neutral engine, optionally extend the standard capture map, and wrap it with the
+   Chroma adapter.
+4. Register the lexer explicitly in `RegisterTreeSitterLexers` before Chroma performs a lookup.
+
+Registration replaces the matching Chroma lexer name while retaining its aliases, filename globs,
+MIME types, priority, and content analyser. Highlight queries may use Tree-sitter's built-in text
+predicates and the `priority` setting. Unsupported property predicates, custom predicates, and
+other settings fail during registration rather than being ignored. Grammar bindings use cgo and
+are compiled into the Blizzaga binary; runtime-loaded parser plug-ins are not part of this contract.
 
 ### Theme
 

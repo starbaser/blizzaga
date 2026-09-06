@@ -7,7 +7,10 @@ in
 pkgs.buildGoModule {
   name = "blizzaga";
   src = ./.;
-  vendorHash = "sha256-GA7HvR9URuDwANYxIqjitPBk8ZGZECZhnbu+2uO1wNo=";
+  vendorHash = "sha256-okgtlHtTOgNI8PQdExj1pa8HnbQjJVgbTM025u8b/ws=";
+  # Tree-sitter's Go bindings include native sources outside their Go package
+  # directories, which standard Go vendoring omits.
+  proxyVendor = true;
   nativeBuildInputs = [ pkgs.makeWrapper ];
 
   postInstall = ''

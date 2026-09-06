@@ -22,6 +22,7 @@ import (
 	"github.com/mattn/go-isatty"
 
 	in "github.com/starbaser/blizzaga/input"
+	"github.com/starbaser/blizzaga/internal/highlight"
 	"github.com/starbaser/blizzaga/render"
 )
 
@@ -138,6 +139,10 @@ func main() {
 		os.Exit(0)
 	}
 
+	if err := highlight.RegisterTreeSitterLexers(); err != nil {
+		printErrorFatal("Could not initialize syntax highlighting", err)
+	}
+
 	if config.Input == "-" || in.IsPipe(os.Stdin) {
 		input, err = in.ReadInput(os.Stdin)
 		lexer = lexers.Analyse(input)
@@ -173,9 +178,10 @@ func main() {
 	strippedInput := ansi.Strip(input)
 	isAnsi := strings.ToLower(config.Language) == "ansi" || strippedInput != input
 	strippedInput = cut(strippedInput, config.Lines)
+	input = cut(input, config.Lines)
 
 	// wrap to character limit.
-	if config.Wrap > 0 {
+	if config.Wrap > 0 && isAnsi {
 		strippedInput = cellbuf.Wrap(strippedInput, config.Wrap, "")
 		input = cellbuf.Wrap(input, config.Wrap, "")
 	}
@@ -184,7 +190,6 @@ func main() {
 		printErrorFatal("Language Unknown", errors.New("specify a language with the --language flag"))
 	}
 
-	input = cut(input, config.Lines)
 	if input == "" {
 		if err != nil {
 			printErrorFatal("No input", err)
@@ -214,6 +219,12 @@ func main() {
 		it, err = chroma.Coalesce(lexer).Tokenise(nil, input)
 		if err != nil {
 			printErrorFatal("Could not lex file", err)
+		}
+		if config.Wrap > 0 {
+			it, strippedInput, err = highlight.WrapTokens(it, config.Wrap)
+			if err != nil {
+				printErrorFatal("Could not wrap highlighted file", err)
+			}
 		}
 	}
 
