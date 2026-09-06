@@ -53,7 +53,7 @@ From a local checkout:
 
 ```sh
 nix run '.#'
-go run .
+nix develop -c go run .
 ```
 
 ## Customization
@@ -106,9 +106,10 @@ Screenshots can be customized with `--flags` or [Configuration](#configuration) 
 If possible, `blizzaga` auto-detects the language from the file name or analyzing the file contents.
 Override this inference with the `--language` flag.
 
-Go source is highlighted by a statically linked Tree-sitter grammar. Its syntax tree and highlight
-query are translated into Chroma tokens, so it uses the same themes and SVG formatter as every
-other language. The remaining languages continue to use Chroma's built-in lexers.
+Go and BAML source are highlighted by statically linked Tree-sitter grammars. Their syntax trees and
+highlight queries are translated into Chroma tokens, so they use the same themes and SVG formatter
+as every other language. BAML uses the first-party grammar pinned from Alloy through the Nix flake;
+the remaining languages continue to use Chroma's built-in lexers.
 
 ```bash
 cat artichoke.hs | blizzaga --language haskell

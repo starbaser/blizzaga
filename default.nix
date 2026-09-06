@@ -1,4 +1,7 @@
-{pkgs}:
+{
+  pkgs,
+  treeSitterBaml,
+}:
 let
   fontDataDirs = pkgs.lib.makeSearchPathOutput "out" "share" [
     pkgs.jetbrains-mono
@@ -12,6 +15,12 @@ pkgs.buildGoModule {
   # directories, which standard Go vendoring omits.
   proxyVendor = true;
   nativeBuildInputs = [ pkgs.makeWrapper ];
+
+  # The Go module records dependency identity while the flake supplies the
+  # concrete first-party grammar source pinned in flake.lock.
+  preBuild = ''
+    go mod edit -replace=github.com/starbaser/tree-sitter-baml=${treeSitterBaml}
+  '';
 
   postInstall = ''
     mkdir -p "$out/share/fonts/truetype/blizzaga"

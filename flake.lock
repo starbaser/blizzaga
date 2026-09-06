@@ -37,7 +37,8 @@
     "root": {
       "inputs": {
         "flake-utils": "flake-utils",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "tree-sitter-baml": "tree-sitter-baml"
       }
     },
     "systems": {
@@ -53,6 +54,21 @@
         "owner": "nix-systems",
         "repo": "default",
         "type": "github"
+      }
+    },
+    "tree-sitter-baml": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788656876,
+        "narHash": "sha256-HAiX0mwTl0Zhzn85b9EHQM6WCFW2etmNijvk+oZpP8A=",
+        "rev": "4a37c0a610e950a93981f8acec236eb112b3d6d1",
+        "revCount": 4,
+        "type": "git",
+        "url": "file:/home/eigenmage/dev/projects/alloy/crates/tree-sitter-baml"
+      },
+      "original": {
+        "type": "git",
+        "url": "file:/home/eigenmage/dev/projects/alloy/crates/tree-sitter-baml"
       }
     }
   },

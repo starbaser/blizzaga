@@ -37,3 +37,27 @@ func TestRegisterTreeSitterLexersReplacesGoAndPreservesAnalysis(t *testing.T) {
 		t.Fatal("idempotent registration replaced the Tree-sitter Go lexer")
 	}
 }
+
+func TestRegisterTreeSitterLexersAddsBAML(t *testing.T) {
+	if err := highlight.RegisterTreeSitterLexers(); err != nil {
+		t.Fatal(err)
+	}
+
+	baml := lexers.Get("baml")
+	if _, ok := baml.(*chromalexer.Lexer); !ok {
+		t.Fatalf("registered BAML lexer type = %T, want *chromalexer.Lexer", baml)
+	}
+	if lexers.Get("program.baml") != baml {
+		t.Fatal("filename lookup did not resolve to the Tree-sitter BAML lexer")
+	}
+	if got := baml.AnalyseText("class Input {}\nfunction Run(input: Input) -> Input {}\n"); got != 0.8 {
+		t.Fatalf("analysis score = %v, want 0.8", got)
+	}
+
+	if err := highlight.RegisterTreeSitterLexers(); err != nil {
+		t.Fatalf("idempotent registration failed: %v", err)
+	}
+	if lexers.Get("baml") != baml {
+		t.Fatal("idempotent registration replaced the Tree-sitter BAML lexer")
+	}
+}

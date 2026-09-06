@@ -4,17 +4,33 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
     flake-utils.url = "github:numtide/flake-utils";
+    tree-sitter-baml = {
+      url = "git+file:/home/eigenmage/dev/projects/alloy/crates/tree-sitter-baml";
+      flake = false;
+    };
   };
 
   outputs = {
     self,
     nixpkgs,
     flake-utils,
+    tree-sitter-baml,
   }:
     flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {inherit system;};
+      devGoModule = pkgs.runCommand "blizzaga-dev-go-module" {} ''
+        mkdir -p "$out"
+        cp ${./go.mod} "$out/blizzaga.mod"
+        cp ${./go.sum} "$out/blizzaga.sum"
+        chmod u+w "$out/blizzaga.mod"
+        printf '\nreplace github.com/starbaser/tree-sitter-baml => %s\n' \
+          '${tree-sitter-baml}' >> "$out/blizzaga.mod"
+      '';
     in {
-      packages.default = import ./default.nix {inherit pkgs;};
+      packages.default = import ./default.nix {
+        inherit pkgs;
+        treeSitterBaml = tree-sitter-baml;
+      };
 
       # The committed font/ tree in XDG layout — the same files font.go
       # embeds, so installed and embedded fonts can never diverge. Consumers
@@ -33,13 +49,17 @@
           jetbrains-mono
         ];
         shellHook = ''
+          export GOFLAGS="-modfile=${devGoModule}/blizzaga.mod''${GOFLAGS:+ $GOFLAGS}"
           export XDG_DATA_DIRS="${self.packages.${system}.fonts}/share:${pkgs.jetbrains-mono}/share''${XDG_DATA_DIRS:+:$XDG_DATA_DIRS}"
         '';
       };
     })
     // {
       overlays.default = final: prev: {
-        blizzaga = import ./default.nix {pkgs = final;};
+        blizzaga = import ./default.nix {
+          pkgs = final;
+          treeSitterBaml = tree-sitter-baml;
+        };
       };
     };
 }
