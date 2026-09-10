@@ -76,3 +76,60 @@ func BenchmarkSessionApplyEdit(b *testing.B) {
 		}
 	}
 }
+
+func benchmarkFMLSource(member string) string {
+	var source strings.Builder
+	source.WriteString("class Props { label string title string }\n")
+	source.WriteString("function View(props: Props) -> filament.Template {\n  return ##\"")
+	for range 100 {
+		source.WriteString("<text content=\"Unicode ✦ {{ props.")
+		source.WriteString(member)
+		source.WriteString(" }}\" />\n")
+	}
+	source.WriteString("\"##\n}\n")
+	return source.String()
+}
+
+func BenchmarkFMLHighlightFresh(b *testing.B) {
+	registry, err := DefaultRegistry()
+	if err != nil {
+		b.Fatal(err)
+	}
+	sources := [2]string{benchmarkFMLSource("label"), benchmarkFMLSource("title")}
+	b.ReportAllocs()
+	b.ResetTimer()
+	for i := range b.N {
+		if _, err := registry.Highlight(sources[i%2], Query{Language: "baml"}); err != nil {
+			b.Fatal(err)
+		}
+	}
+}
+
+func BenchmarkFMLSessionApplyEdit(b *testing.B) {
+	registry, err := DefaultRegistry()
+	if err != nil {
+		b.Fatal(err)
+	}
+	source := benchmarkFMLSource("label")
+	offset := strings.Index(source, "props.label") + len("props.")
+	session, err := registry.NewSession(source, Query{Language: "baml"})
+	if err != nil {
+		b.Fatal(err)
+	}
+	b.Cleanup(func() { _ = session.Close() })
+	b.ReportAllocs()
+	b.ResetTimer()
+	for i := range b.N {
+		replacement := "title"
+		if i%2 == 1 {
+			replacement = "label"
+		}
+		if _, err := session.ApplyEdit(Edit{
+			StartByte:  offset,
+			OldEndByte: offset + len(replacement),
+			NewText:    replacement,
+		}); err != nil {
+			b.Fatal(err)
+		}
+	}
+}

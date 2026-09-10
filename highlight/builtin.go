@@ -16,6 +16,12 @@ var goHighlights string
 //go:embed queries/baml/highlights.scm
 var bamlHighlights string
 
+//go:embed queries/baml/injections.scm
+var bamlInjections string
+
+//go:embed queries/fml/highlights.scm
+var fmlHighlights string
+
 // BuiltinLanguages returns fresh descriptors for Blizzaga's bundled
 // Tree-sitter languages.
 func BuiltinLanguages() []Language {
@@ -49,7 +55,18 @@ func BuiltinLanguages() []Language {
 			Grammar:    sitter.NewLanguage(tree_sitter_baml.Language()),
 			Highlights: bamlHighlights,
 			Captures:   StandardCaptures(),
+			Injections: []Injection{{
+				Query:     bamlInjections,
+				Languages: map[string]string{"fml": "fml"},
+			}},
 			Analyse:    analyseBAML,
+		},
+		{
+			Name:       "FML",
+			Aliases:    []string{"fml"},
+			Grammar:    sitter.NewLanguage(tree_sitter_baml.LanguageFML()),
+			Highlights: fmlHighlights,
+			Captures:   StandardCaptures(),
 		},
 	}
 }

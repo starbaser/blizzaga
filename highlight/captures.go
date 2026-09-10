@@ -37,6 +37,7 @@ func StandardCaptures() CaptureMap {
 		"keyword.operator":      {TokenType: chroma.Operator, Priority: 170},
 		"keyword.type":          {TokenType: chroma.KeywordType, Priority: 170},
 		"label":                 {TokenType: chroma.NameLabel, Priority: 150},
+		"markup":                {TokenType: chroma.Text, Priority: 90},
 		"module":                {TokenType: chroma.NameNamespace, Priority: 150},
 		"namespace":             {TokenType: chroma.NameNamespace, Priority: 150},
 		"number":                {TokenType: chroma.LiteralNumber, Priority: 120},

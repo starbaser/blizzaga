@@ -3,6 +3,7 @@ package highlight
 import (
 	"fmt"
 	"strconv"
+	"strings"
 
 	sitter "github.com/tree-sitter/go-tree-sitter"
 )
@@ -208,14 +209,16 @@ type injectionRuntime struct {
 }
 
 type treeState struct {
-	spec       *languageSpec
-	source     string
-	parser     *sitter.Parser
-	tree       *sitter.Tree
-	query      *sitter.Query
-	cursor     *sitter.QueryCursor
-	injections []injectionRuntime
-	children   []*injectedState
+	spec        *languageSpec
+	source      string
+	parser      *sitter.Parser
+	parse       func([]byte, *sitter.Tree) *sitter.Tree
+	tree        *sitter.Tree
+	query       *sitter.Query
+	cursor      *sitter.QueryCursor
+	injections  []injectionRuntime
+	children    []*injectedState
+	pendingEdit *Edit
 }
 
 type injectedState struct {
@@ -231,7 +234,8 @@ func newTreeState(spec *languageSpec, source string) (*treeState, error) {
 		state.Close()
 		return nil, fmt.Errorf("set %s Tree-sitter language: %w", spec.name, err)
 	}
-	state.tree = state.parser.Parse([]byte(source), nil)
+	state.parse = state.parser.Parse
+	state.tree = state.parse([]byte(source), nil)
 	if state.tree == nil {
 		state.Close()
 		return nil, fmt.Errorf("%s Tree-sitter parser returned no syntax tree", spec.name)
@@ -282,14 +286,20 @@ func (s *treeState) applyEdit(edit Edit, source string) error {
 		OldEndPosition: pointAt(s.source, edit.OldEndByte),
 		NewEndPosition: pointAfter(pointAt(s.source, edit.StartByte), edit.NewText),
 	}
-	s.tree.Edit(&inputEdit)
-	newTree := s.parser.Parse([]byte(source), s.tree)
+	// Editing a clone preserves the current tree/source pair if the native
+	// parser fails. The edited clone is only an incremental-parse input.
+	editedTree := s.tree.Clone()
+	editedTree.Edit(&inputEdit)
+	newTree := s.parse([]byte(source), editedTree)
+	editedTree.Close()
 	if newTree == nil {
 		return fmt.Errorf("%s Tree-sitter parser returned no syntax tree after edit", s.spec.name)
 	}
 	s.tree.Close()
 	s.tree = newTree
 	s.source = source
+	pending := edit
+	s.pendingEdit = &pending
 	return nil
 }
 
@@ -340,9 +350,10 @@ func (s *treeState) rawSpans(baseOffset, depth int, order *uint) ([]rawSpan, err
 	if err != nil {
 		return nil, err
 	}
-	if err := s.reconcileChildren(injected); err != nil {
+	if err := s.reconcileChildren(injected, s.pendingEdit); err != nil {
 		return nil, err
 	}
+	s.pendingEdit = nil
 	for _, child := range s.children {
 		childSpans, err := child.tree.rawSpans(baseOffset+child.start, depth+1, order)
 		if err != nil {
@@ -401,18 +412,31 @@ func (s *treeState) injectionRanges() ([]injectionRange, error) {
 	return ranges, nil
 }
 
-func (s *treeState) reconcileChildren(ranges []injectionRange) error {
+func (s *treeState) reconcileChildren(ranges []injectionRange, edit *Edit) error {
 	used := make([]bool, len(s.children))
 	children := make([]*injectedState, 0, len(ranges))
 	for _, region := range ranges {
 		source := s.source[region.start:region.end]
 		var child *injectedState
+		var childEdit *Edit
 		for index, existing := range s.children {
-			if used[index] || existing.tree.spec != region.target || existing.tree.source != source {
+			if used[index] || existing.tree.spec != region.target {
+				continue
+			}
+			translated, ok := retainedChildEdit(existing, region, edit)
+			if !ok {
+				continue
+			}
+			if translated == nil {
+				if existing.tree.source != source {
+					continue
+				}
+			} else if applyStringEdit(existing.tree.source, *translated) != source {
 				continue
 			}
 			used[index] = true
 			child = existing
+			childEdit = translated
 			break
 		}
 		if child == nil {
@@ -426,6 +450,15 @@ func (s *treeState) reconcileChildren(ranges []injectionRange) error {
 				return err
 			}
 			child = &injectedState{tree: state}
+		} else if childEdit != nil {
+			if err := child.tree.applyEdit(*childEdit, source); err != nil {
+				for _, allocated := range children {
+					if !containsChild(s.children, allocated) {
+						allocated.tree.Close()
+					}
+				}
+				return err
+			}
 		}
 		child.start = region.start
 		child.end = region.end
@@ -438,6 +471,44 @@ func (s *treeState) reconcileChildren(ranges []injectionRange) error {
 	}
 	s.children = children
 	return nil
+}
+
+// retainedChildEdit identifies the same injected region across one parent
+// edit. Edits wholly inside its captured content are rebased into child byte
+// coordinates. Edits outside only move or preserve the region. Any overlap
+// with a capture boundary deliberately rejects reuse.
+func retainedChildEdit(child *injectedState, region injectionRange, edit *Edit) (*Edit, bool) {
+	if edit == nil {
+		return nil, child.start == region.start && child.end == region.end
+	}
+	delta := len(edit.NewText) - (edit.OldEndByte - edit.StartByte)
+	if edit.StartByte >= child.start && edit.OldEndByte <= child.end {
+		if region.start != child.start || region.end != child.end+delta {
+			return nil, false
+		}
+		translated := Edit{
+			StartByte:  edit.StartByte - child.start,
+			OldEndByte: edit.OldEndByte - child.start,
+			NewText:    edit.NewText,
+		}
+		return &translated, true
+	}
+	if edit.OldEndByte <= child.start {
+		return nil, region.start == child.start+delta && region.end == child.end+delta
+	}
+	if edit.StartByte >= child.end {
+		return nil, region.start == child.start && region.end == child.end
+	}
+	return nil, false
+}
+
+func applyStringEdit(source string, edit Edit) string {
+	var next strings.Builder
+	next.Grow(len(source) - (edit.OldEndByte - edit.StartByte) + len(edit.NewText))
+	next.WriteString(source[:edit.StartByte])
+	next.WriteString(edit.NewText)
+	next.WriteString(source[edit.OldEndByte:])
+	return next.String()
 }
 
 func containsChild(children []*injectedState, target *injectedState) bool {

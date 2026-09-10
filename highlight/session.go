@@ -112,12 +112,7 @@ func (s *Session) ApplyEdit(edit Edit) (Result, error) {
 		return Result{}, err
 	}
 
-	var source strings.Builder
-	source.Grow(len(s.source) - (edit.OldEndByte - edit.StartByte) + len(edit.NewText))
-	source.WriteString(s.source[:edit.StartByte])
-	source.WriteString(edit.NewText)
-	source.WriteString(s.source[edit.OldEndByte:])
-	next := source.String()
+	next := applyStringEdit(s.source, edit)
 	if s.tree == nil {
 		result, err := highlightChroma(next, s.selected)
 		if err != nil {
@@ -134,7 +129,8 @@ func (s *Session) ApplyEdit(edit Edit) (Result, error) {
 	s.source = next
 	s.hasCache = false
 	if _, err := s.computeLocked(); err != nil {
-		return Result{}, err
+		s.closeLocked()
+		return Result{}, fmt.Errorf("highlight edited source (session closed): %w", err)
 	}
 	return cloneResult(s.cached), nil
 }
@@ -150,6 +146,11 @@ func (s *Session) Close() error {
 	if s.closed {
 		return nil
 	}
+	s.closeLocked()
+	return nil
+}
+
+func (s *Session) closeLocked() {
 	s.closed = true
 	s.cached = Result{}
 	s.hasCache = false
@@ -157,7 +158,6 @@ func (s *Session) Close() error {
 		s.tree.Close()
 		s.tree = nil
 	}
-	return nil
 }
 
 func cloneResult(result Result) Result {

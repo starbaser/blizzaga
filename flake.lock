@@ -59,14 +59,17 @@
     "tree-sitter-baml": {
       "flake": false,
       "locked": {
-        "lastModified": 1788656876,
-        "narHash": "sha256-HAiX0mwTl0Zhzn85b9EHQM6WCFW2etmNijvk+oZpP8A=",
-        "rev": "4a37c0a610e950a93981f8acec236eb112b3d6d1",
-        "revCount": 4,
+        "lastModified": 1789084287,
+        "narHash": "sha256-7T86kdopmKAohDmM+5REkq3b6cjSrsMnaYwEO1d3ZNY=",
+        "ref": "code/fml-grammar",
+        "rev": "cc27fb58a2a6687d5ee725c19996b4f67e037f08",
+        "revCount": 6,
         "type": "git",
         "url": "file:/home/eigenmage/dev/projects/alloy/crates/tree-sitter-baml"
       },
       "original": {
+        "ref": "code/fml-grammar",
+        "rev": "cc27fb58a2a6687d5ee725c19996b4f67e037f08",
         "type": "git",
         "url": "file:/home/eigenmage/dev/projects/alloy/crates/tree-sitter-baml"
       }

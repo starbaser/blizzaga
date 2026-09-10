@@ -370,7 +370,7 @@ var (
 )
 
 // DefaultRegistry returns the process-wide immutable registry containing the
-// bundled Go and BAML grammars over Chroma's fallback catalog.
+// bundled Go, BAML, and FML grammars over Chroma's fallback catalog.
 func DefaultRegistry() (*Registry, error) {
 	defaultRegistryOnce.Do(func() {
 		defaultRegistry, defaultRegistryErr = NewRegistry(BuiltinLanguages()...)

@@ -106,10 +106,12 @@ Screenshots can be customized with `--flags` or [Configuration](#configuration) 
 If possible, `blizzaga` auto-detects the language from the file name or analyzing the file contents.
 Override this inference with the `--language` flag.
 
-Go and BAML source are highlighted by statically linked Tree-sitter grammars. Their syntax trees and
-highlight queries are translated into Chroma tokens, so they use the same themes and SVG formatter
-as every other language. BAML uses the first-party grammar pinned from Alloy through the Nix flake;
-the remaining languages continue to use Chroma's built-in lexers.
+Go, BAML, and injected FML source are highlighted by statically linked Tree-sitter grammars. Their
+syntax trees and highlight queries are translated into Chroma tokens, so they use the same themes
+and SVG formatter as every other language. FML is scoped to raw-string function tails whose
+declared return type is `filament.Template`; ordinary BAML raw strings remain strings. BAML and FML
+use the first-party grammar pinned from Alloy through the Nix flake; the remaining languages
+continue to use Chroma's built-in lexers.
 
 ```bash
 cat artichoke.hs | blizzaga --language haskell
@@ -140,7 +142,9 @@ result, err := highlight.Highlight(source, highlight.Query{Language: "go"})
 Tree-sitter support is intentionally a Blizzaga integration rather than a Chroma fork. Construct a
 validated, frozen registry with `highlight.NewRegistry`, passing `highlight.Language` descriptors
 that carry the statically linked grammar, aliases, highlight query, and capture map. Registered
-Tree-sitter languages take precedence over Chroma's complete fallback catalog.
+Tree-sitter languages take precedence over Chroma's complete fallback catalog. A descriptor can
+also register validated `highlight.Injection` queries, whose byte ranges own retained child parsers
+and syntax trees that are closed with the parent session.
 
 To add another statically linked language:
 

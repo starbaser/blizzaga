@@ -79,6 +79,111 @@ func TestDefaultRegistryBundlesBAML(t *testing.T) {
 	assertClassifies(t, result, "1024.0", chroma.LiteralNumber, "tree-sitter.constant.numeric")
 }
 
+func TestDefaultRegistryScopesFMLInjection(t *testing.T) {
+	t.Parallel()
+	registry, err := DefaultRegistry()
+	if err != nil {
+		t.Fatal(err)
+	}
+	source := "class Props {\r\n  label string\r\n}\r\n" +
+		"function Ordinary(name: string) -> string {\r\n  return ####\"ordinary {{ name }}\"####\r\n}\r\n" +
+		"function View(props: Props) -> filament.Template {\r\n  return ###\"<region class=\"board\">\r\n    Plain Unicode ✦\r\n    <text content=\"{{ props.label }}\" />\r\n  </region>\"###\r\n}\r\n"
+	result, err := registry.Highlight(source, Query{Language: "baml"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertExactSource(t, result, source)
+	assertClassifiesAt(t, result, strings.Index(source, "{{ name }}")+3, "name", chroma.LiteralString, "tree-sitter.string")
+	assertClassifiesAt(t, result, strings.Index(source, "<region")+1, "region", chroma.NameTag, "tree-sitter.tag")
+	assertClassifiesAt(t, result, strings.Index(source, "class=\"board\""), "class", chroma.NameAttribute, "tree-sitter.attribute")
+	assertClassifiesAt(t, result, strings.Index(source, "Plain Unicode"), "Plain Unicode ✦", chroma.Text, "tree-sitter.markup")
+	assertClassifiesAt(t, result, strings.Index(source, "props.label")+len("props."), "label", chroma.NameProperty, "tree-sitter.variable.other.member")
+}
+
+func TestFMLInjectionIncrementalMatchesFreshAndRetainsChild(t *testing.T) {
+	t.Parallel()
+	registry, err := DefaultRegistry()
+	if err != nil {
+		t.Fatal(err)
+	}
+	source := "class Props { label string }\n" +
+		"function View(props: Props) -> filament.Template {\n" +
+		"  return ##\"<text content=\"Unicode ✦ {{ props.label }}\" />\"##\n}\n"
+	session, err := registry.NewSession(source, Query{Language: "baml"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { _ = session.Close() })
+	if len(session.tree.children) != 1 {
+		t.Fatalf("injected children = %d, want 1", len(session.tree.children))
+	}
+	child := session.tree.children[0]
+	parser := child.tree.parser
+	nativeTree := child.tree.tree
+
+	start := strings.Index(source, "props.label") + len("props.")
+	incremental, err := session.ApplyEdit(Edit{StartByte: start, OldEndByte: start + len("label"), NewText: "title"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertRetainedInjectedChild(t, session, child, parser, nativeTree, true)
+	assertMatchesFresh(t, registry, incremental)
+	assertExactSource(t, incremental, incremental.Source)
+
+	childNativeTree := child.tree.tree
+	start = strings.Index(incremental.Source, " }}\"")
+	incomplete, err := session.ApplyEdit(Edit{StartByte: start, OldEndByte: start + len(" }}\""), NewText: ""})
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertRetainedInjectedChild(t, session, child, parser, childNativeTree, true)
+	assertMatchesFresh(t, registry, incomplete)
+	assertExactSource(t, incomplete, incomplete.Source)
+}
+
+func TestSessionClosesRemovedAndRetainedInjectionResources(t *testing.T) {
+	t.Parallel()
+	registry, err := DefaultRegistry()
+	if err != nil {
+		t.Fatal(err)
+	}
+	const source = "function View() -> filament.Template {\n  return ##\"<text />\"##\n}\n"
+	session, err := registry.NewSession(source, Query{Language: "baml"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	removed := session.tree.children[0].tree
+	start := strings.Index(source, "filament.Template")
+	result, err := session.ApplyEdit(Edit{
+		StartByte:  start,
+		OldEndByte: start + len("filament.Template"),
+		NewText:    "string",
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(session.tree.children) != 0 {
+		t.Fatalf("children after removing template return type = %d, want 0", len(session.tree.children))
+	}
+	assertTreeStateClosed(t, removed)
+	assertExactSource(t, result, result.Source)
+	if err := session.Close(); err != nil {
+		t.Fatal(err)
+	}
+
+	session, err = registry.NewSession(source, Query{Language: "baml"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	parent := session.tree
+	retained := parent.children[0].tree
+	if err := session.Close(); err != nil {
+		t.Fatal(err)
+	}
+	assertTreeStateClosed(t, retained)
+	assertTreeStateClosed(t, parent)
+}
+
 func TestIncrementalMatchesFreshAcrossEdits(t *testing.T) {
 	t.Parallel()
 	registry, err := DefaultRegistry()
@@ -150,6 +255,37 @@ func TestSessionRejectsSplitUTF8EditAndCloses(t *testing.T) {
 	if _, err := session.Result(); !errors.Is(err, ErrClosed) {
 		t.Fatalf("Result error = %v, want ErrClosed", err)
 	}
+}
+
+func TestFailedIncrementalParsePreservesCurrentSnapshot(t *testing.T) {
+	t.Parallel()
+	registry, err := DefaultRegistry()
+	if err != nil {
+		t.Fatal(err)
+	}
+	const source = "package p\nvar answer = 1\n"
+	session, err := registry.NewSession(source, Query{Language: "go"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { _ = session.Close() })
+	nativeTree := session.tree.tree
+	parse := session.tree.parse
+	session.tree.parse = func([]byte, *sitter.Tree) *sitter.Tree { return nil }
+
+	start := strings.Index(source, "1")
+	if _, err := session.ApplyEdit(Edit{StartByte: start, OldEndByte: start + 1, NewText: "2"}); err == nil {
+		t.Fatal("expected incremental parse failure")
+	}
+	if session.tree.tree != nativeTree || session.tree.source != source || session.source != source {
+		t.Fatal("failed parse mutated the current native tree/source pair")
+	}
+	session.tree.parse = parse
+	result, err := session.Result()
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertExactSource(t, result, source)
 }
 
 func TestRegistryCopiesAndValidatesLanguageDeclarations(t *testing.T) {
@@ -275,6 +411,9 @@ func TestRegisteredInjectionRebasesSpansAndSurvivesEdits(t *testing.T) {
 		t.Fatal(err)
 	}
 	assertClassifies(t, initial, "`hello`", chroma.NameFunction, "tree-sitter.function")
+	child := session.tree.children[0]
+	parser := child.tree.parser
+	nativeTree := child.tree.tree
 
 	insert := strings.Index(source, "var template")
 	incremental, err := session.ApplyEdit(Edit{StartByte: insert, OldEndByte: insert, NewText: "// moved\n"})
@@ -282,6 +421,7 @@ func TestRegisteredInjectionRebasesSpansAndSurvivesEdits(t *testing.T) {
 		t.Fatal(err)
 	}
 	assertClassifies(t, incremental, "`hello`", chroma.NameFunction, "tree-sitter.function")
+	assertRetainedInjectedChild(t, session, child, parser, nativeTree, false)
 	fresh, err := registry.Highlight(incremental.Source, Query{Language: "outer"})
 	if err != nil {
 		t.Fatal(err)
@@ -289,6 +429,15 @@ func TestRegisteredInjectionRebasesSpansAndSurvivesEdits(t *testing.T) {
 	if !reflect.DeepEqual(incremental, fresh) {
 		t.Fatalf("injected incremental differs from fresh\nincremental: %#v\nfresh: %#v", incremental, fresh)
 	}
+
+	nativeTree = child.tree.tree
+	start := strings.Index(incremental.Source, "hello")
+	incremental, err = session.ApplyEdit(Edit{StartByte: start, OldEndByte: start + len("hello"), NewText: "héllo"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertRetainedInjectedChild(t, session, child, parser, nativeTree, true)
+	assertMatchesFresh(t, registry, incremental)
 }
 
 func TestInjectionValidation(t *testing.T) {
@@ -396,6 +545,61 @@ func assertClassifies(t *testing.T, result Result, text string, tokenType chroma
 		}
 	}
 	t.Fatalf("no single span classifies %q in %#v", text, result.Spans)
+}
+
+func assertClassifiesAt(t *testing.T, result Result, start int, text string, tokenType chroma.TokenType, captureClass string) {
+	t.Helper()
+	end := start + len(text)
+	if start < 0 || end > len(result.Source) {
+		t.Fatalf("source range [%d:%d] is outside %d bytes", start, end, len(result.Source))
+	}
+	if result.Source[start:end] != text {
+		t.Fatalf("source[%d:%d] = %q, want %q", start, end, result.Source[start:end], text)
+	}
+	for _, span := range result.Spans {
+		if span.StartByte <= start && span.EndByte >= end {
+			if span.TokenType != tokenType || span.CaptureClass != captureClass {
+				t.Fatalf("%q span = %#v, want token %s capture %q", text, span, tokenType, captureClass)
+			}
+			return
+		}
+	}
+	t.Fatalf("no single span classifies %q at byte %d in %#v", text, start, result.Spans)
+}
+
+func assertMatchesFresh(t *testing.T, registry *Registry, incremental Result) {
+	t.Helper()
+	fresh, err := registry.Highlight(incremental.Source, Query{Language: incremental.Language})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !reflect.DeepEqual(incremental, fresh) {
+		t.Fatalf("incremental differs from fresh\nincremental: %#v\nfresh: %#v", incremental, fresh)
+	}
+}
+
+func assertRetainedInjectedChild(
+	t *testing.T,
+	session *Session,
+	child *injectedState,
+	parser *sitter.Parser,
+	previousTree *sitter.Tree,
+	wantReparse bool,
+) {
+	t.Helper()
+	if len(session.tree.children) != 1 || session.tree.children[0] != child || child.tree.parser != parser {
+		t.Fatal("injected child/parser identity was not retained")
+	}
+	if gotReparse := child.tree.tree != previousTree; gotReparse != wantReparse {
+		t.Fatalf("injected native tree changed = %v, want %v", gotReparse, wantReparse)
+	}
+}
+
+func assertTreeStateClosed(t *testing.T, state *treeState) {
+	t.Helper()
+	if state.parser != nil || state.tree != nil || state.query != nil || state.cursor != nil || len(state.injections) != 0 || len(state.children) != 0 {
+		t.Fatal("Tree-sitter state retained native resources after Close")
+	}
 }
 
 type changingLexer struct {
