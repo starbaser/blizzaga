@@ -119,26 +119,42 @@ cat artichoke.hs | blizzaga --language haskell
 
 <img alt="output of blizzaga command, Haskell code block" src="./test/golden/svg/haskell.svg" width="600" />
 
+#### Reusing the highlighter
+
+The public [`highlight`](https://pkg.go.dev/github.com/starbaser/blizzaga/highlight) package returns
+the exact source plus neutral, byte-addressed token classifications. It does not apply a theme or
+put ANSI into the source. `highlight.Highlight` is the one-shot entry point; editable documents use
+`Registry.NewSession`, `Session.ApplyEdit`, and `Session.Close` to retain and incrementally update
+the native parser and syntax tree. Chroma-backed sessions re-lex after an edit but use the same
+exact-source result contract.
+
+```go
+result, err := highlight.Highlight(source, highlight.Query{Language: "go"})
+// result.Source is byte-for-byte source; result.Spans carries classifications.
+```
+
+`highlight.SrceryStyle()` exposes the CLI's base Chroma style for other renderers.
+
 #### Adding a Tree-sitter language
 
-Tree-sitter support is intentionally a Blizzaga integration rather than a Chroma fork. The neutral
-engine under `internal/highlight/treesitter` executes a grammar's `highlights.scm` query and emits
-byte spans. The adapter under `internal/highlight/chromalexer` resolves overlapping captures and
-converts those spans to Chroma v2 tokens.
+Tree-sitter support is intentionally a Blizzaga integration rather than a Chroma fork. Construct a
+validated, frozen registry with `highlight.NewRegistry`, passing `highlight.Language` descriptors
+that carry the statically linked grammar, aliases, highlight query, and capture map. Registered
+Tree-sitter languages take precedence over Chroma's complete fallback catalog.
 
 To add another statically linked language:
 
 1. Add the grammar's Go binding to `go.mod`.
-2. Embed its highlight query beside the language constructor under `internal/highlight/languages`.
-3. Construct a neutral engine, optionally extend the standard capture map, and wrap it with the
-   Chroma adapter.
-4. Register the lexer explicitly in `RegisterTreeSitterLexers` before Chroma performs a lookup.
+2. Embed its highlight query beside the registry construction.
+3. Start with `highlight.StandardCaptures()` and add grammar-specific capture mappings.
+4. Pass the descriptor to `highlight.NewRegistry` before creating a document session.
 
-Registration replaces the matching Chroma lexer name while retaining its aliases, filename globs,
-MIME types, priority, and content analyser. Highlight queries may use Tree-sitter's built-in text
-predicates and the `priority` setting. Unsupported property predicates, custom predicates, and
-other settings fail during registration rather than being ignored. Grammar bindings use cgo and
-are compiled into the Blizzaga binary; runtime-loaded parser plug-ins are not part of this contract.
+Highlight queries may use Tree-sitter's built-in text predicates and the `priority` setting.
+Unsupported property predicates, custom predicates, and other settings fail during registry
+construction rather than being ignored. An `highlight.Injection` can select another registered
+grammar for `@injection.content`; injected spans are rebased to the parent source and owned by the
+same session lifecycle. Grammar bindings use cgo and are compiled into the consumer; runtime-loaded
+parser plug-ins are not part of this contract.
 
 ### Theme
 

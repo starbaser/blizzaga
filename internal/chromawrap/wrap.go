@@ -1,4 +1,5 @@
-package highlight
+// Package chromawrap projects Chroma classifications across display wrapping.
+package chromawrap
 
 import (
 	"fmt"

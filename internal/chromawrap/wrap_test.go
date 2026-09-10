@@ -1,4 +1,4 @@
-package highlight
+package chromawrap
 
 import (
 	"strings"

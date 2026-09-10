@@ -11,7 +11,6 @@ import (
 
 	"github.com/alecthomas/chroma/v2"
 	formatter "github.com/alecthomas/chroma/v2/formatters/svg"
-	"github.com/alecthomas/chroma/v2/lexers"
 	"github.com/alecthomas/chroma/v2/styles"
 	"github.com/alecthomas/kong"
 	"github.com/beevik/etree"
@@ -21,8 +20,9 @@ import (
 	"github.com/charmbracelet/x/cellbuf"
 	"github.com/mattn/go-isatty"
 
+	"github.com/starbaser/blizzaga/highlight"
 	in "github.com/starbaser/blizzaga/input"
-	"github.com/starbaser/blizzaga/internal/highlight"
+	"github.com/starbaser/blizzaga/internal/chromawrap"
 	"github.com/starbaser/blizzaga/render"
 )
 
@@ -42,7 +42,6 @@ func main() {
 	var (
 		input  string
 		err    error
-		lexer  chroma.Lexer
 		config Config
 		scale  float64
 	)
@@ -139,13 +138,13 @@ func main() {
 		os.Exit(0)
 	}
 
-	if err := highlight.RegisterTreeSitterLexers(); err != nil {
+	highlighter, err := highlight.DefaultRegistry()
+	if err != nil {
 		printErrorFatal("Could not initialize syntax highlighting", err)
 	}
 
 	if config.Input == "-" || in.IsPipe(os.Stdin) {
 		input, err = in.ReadInput(os.Stdin)
-		lexer = lexers.Analyse(input)
 	} else if config.Execute != "" {
 		config.Language = "ansi"
 	} else {
@@ -153,11 +152,6 @@ func main() {
 		if err != nil {
 			printErrorFatal("File not found", err)
 		}
-		lexer = lexers.Get(config.Input)
-	}
-
-	if config.Language != "" {
-		lexer = lexers.Get(config.Language)
 	}
 
 	// adjust for 1-indexing
@@ -172,7 +166,6 @@ func main() {
 		}
 		config.Language = "ansi"
 		config.Wrap = 0
-		lexer = nil
 	}
 
 	strippedInput := ansi.Strip(input)
@@ -184,10 +177,6 @@ func main() {
 	if config.Wrap > 0 && isAnsi {
 		strippedInput = cellbuf.Wrap(strippedInput, config.Wrap, "")
 		input = cellbuf.Wrap(input, config.Wrap, "")
-	}
-
-	if !isAnsi && lexer == nil {
-		printErrorFatal("Language Unknown", errors.New("specify a language with the --language flag"))
 	}
 
 	if input == "" {
@@ -216,12 +205,17 @@ func main() {
 		// codes and print the text to properly size the input.
 		it = chroma.Literator(chroma.Token{Type: chroma.Text, Value: strippedInput})
 	} else {
-		it, err = chroma.Coalesce(lexer).Tokenise(nil, input)
+		result, highlightErr := highlighter.Highlight(input, highlight.Query{
+			Language: config.Language,
+			Filename: config.Input,
+		})
+		err = highlightErr
 		if err != nil {
 			printErrorFatal("Could not lex file", err)
 		}
+		it = chroma.Literator(result.Tokens()...)
 		if config.Wrap > 0 {
-			it, strippedInput, err = highlight.WrapTokens(it, config.Wrap)
+			it, strippedInput, err = chromawrap.WrapTokens(it, config.Wrap)
 			if err != nil {
 				printErrorFatal("Could not wrap highlighted file", err)
 			}

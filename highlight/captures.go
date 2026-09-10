@@ -1,4 +1,4 @@
-package chromalexer
+package highlight
 
 import (
 	"strings"
@@ -6,19 +6,8 @@ import (
 	"github.com/alecthomas/chroma/v2"
 )
 
-// CaptureStyle maps a Tree-sitter capture to a Chroma token type. Priority
-// breaks ties when several captures cover the exact same byte range.
-type CaptureStyle struct {
-	TokenType chroma.TokenType
-	Priority  int
-}
-
-// CaptureMap maps conventional Tree-sitter highlight capture names to Chroma.
-// Dotted captures fall back through their parents when no exact entry exists.
-type CaptureMap map[string]CaptureStyle
-
-// StandardCaptures returns a fresh mapping for the conventional highlight
-// capture vocabulary used by Tree-sitter grammar repositories.
+// StandardCaptures returns a fresh map for Tree-sitter's conventional
+// highlight-capture vocabulary.
 func StandardCaptures() CaptureMap {
 	return CaptureMap{
 		"attribute":             {TokenType: chroma.NameAttribute, Priority: 140},
@@ -39,6 +28,7 @@ func StandardCaptures() CaptureMap {
 		"function.macro":        {TokenType: chroma.NameFunctionMagic, Priority: 230},
 		"function.method":       {TokenType: chroma.NameFunction, Priority: 210},
 		"keyword":               {TokenType: chroma.Keyword, Priority: 150},
+		"keyword.control":       {TokenType: chroma.Keyword, Priority: 170},
 		"keyword.coroutine":     {TokenType: chroma.KeywordReserved, Priority: 160},
 		"keyword.declaration":   {TokenType: chroma.KeywordDeclaration, Priority: 170},
 		"keyword.directive":     {TokenType: chroma.KeywordNamespace, Priority: 170},
@@ -54,6 +44,8 @@ func StandardCaptures() CaptureMap {
 		"parameter":             {TokenType: chroma.NameVariable, Priority: 140},
 		"property":              {TokenType: chroma.NameProperty, Priority: 160},
 		"punctuation":           {TokenType: chroma.Punctuation, Priority: 100},
+		"punctuation.bracket":   {TokenType: chroma.Punctuation, Priority: 110},
+		"punctuation.delimiter": {TokenType: chroma.Punctuation, Priority: 110},
 		"string":                {TokenType: chroma.LiteralString, Priority: 100},
 		"string.escape":         {TokenType: chroma.LiteralStringEscape, Priority: 250},
 		"string.regex":          {TokenType: chroma.LiteralStringRegex, Priority: 130},
@@ -65,19 +57,17 @@ func StandardCaptures() CaptureMap {
 		"variable.member":       {TokenType: chroma.NameVariableInstance, Priority: 160},
 		"variable.other.member": {TokenType: chroma.NameProperty, Priority: 170},
 		"variable.parameter":    {TokenType: chroma.NameVariable, Priority: 150},
-		"punctuation.bracket":   {TokenType: chroma.Punctuation, Priority: 110},
-		"punctuation.delimiter": {TokenType: chroma.Punctuation, Priority: 110},
 	}
 }
 
-func (m CaptureMap) lookup(name string) (CaptureStyle, bool) {
+func (m CaptureMap) lookup(name string) (CaptureMapping, bool) {
 	for {
-		if style, ok := m[name]; ok {
-			return style, true
+		if mapping, ok := m[name]; ok {
+			return mapping, true
 		}
 		separator := strings.LastIndexByte(name, '.')
 		if separator < 0 {
-			return CaptureStyle{}, false
+			return CaptureMapping{}, false
 		}
 		name = name[:separator]
 	}
