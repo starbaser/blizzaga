@@ -113,6 +113,10 @@ declared return type is `filament.Template`; ordinary BAML raw strings remain st
 use the first-party grammar pinned from Alloy through the Nix flake; the remaining languages
 continue to use Chroma's built-in lexers.
 
+FCSS uses Chroma's CSS lexer through either `--language fcss` or an `.fcss` filename. An explicit
+unknown language selects Chroma's plain-text fallback; it does not silently reinterpret the
+language from a filename or the source contents.
+
 ```bash
 cat artichoke.hs | blizzaga --language haskell
 ```

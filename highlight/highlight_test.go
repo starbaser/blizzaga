@@ -59,6 +59,51 @@ func TestChromaFallbackPreservesExactSource(t *testing.T) {
 	}
 }
 
+func TestFCSSRoutesToCSSLexer(t *testing.T) {
+	t.Parallel()
+	registry, err := DefaultRegistry()
+	if err != nil {
+		t.Fatal(err)
+	}
+	const source = ".panel {\r\n  color: #ff5c57;\r\n}\r\n"
+	tests := []struct {
+		name  string
+		query Query
+	}{
+		{name: "css-language", query: Query{Language: "css"}},
+		{name: "language", query: Query{Language: "fcss"}},
+		{name: "filename", query: Query{Filename: "theme.fcss"}},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			result, err := registry.Highlight(source, test.query)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if result.Language != "CSS" {
+				t.Fatalf("language = %q, want CSS", result.Language)
+			}
+			assertExactSource(t, result, source)
+			assertClassifies(t, result, "panel", chroma.NameClass, "")
+			assertClassifies(t, result, "color", chroma.Keyword, "")
+			for _, span := range result.Spans {
+				if span.CaptureClass != "" {
+					t.Fatalf("FCSS used Tree-sitter capture %q", span.CaptureClass)
+				}
+			}
+		})
+	}
+
+	unknown, err := registry.Highlight(source, Query{Language: "unknown-language", Filename: "theme.fcss"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if unknown.Language != fallbackSelection().name {
+		t.Fatalf("explicit unknown language selected %q, want %q", unknown.Language, fallbackSelection().name)
+	}
+	assertExactSource(t, unknown, source)
+}
+
 func TestDefaultRegistryBundlesBAML(t *testing.T) {
 	t.Parallel()
 	registry, err := DefaultRegistry()

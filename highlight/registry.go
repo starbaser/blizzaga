@@ -240,7 +240,7 @@ func (r *Registry) selectLanguage(query Query, source string) selection {
 		if language := r.byName[normalizeIdentifier(query.Language)]; language != nil {
 			return selection{name: language.name, language: language}
 		}
-		if lexer := lexers.Get(query.Language); lexer != nil {
+		if lexer := matchChromaLanguage(query.Language); lexer != nil {
 			return selection{name: lexer.Config().Name, lexer: lexer}
 		}
 		return fallbackSelection()
@@ -249,7 +249,7 @@ func (r *Registry) selectLanguage(query Query, source string) selection {
 		if language := r.matchFilename(query.Filename); language != nil {
 			return selection{name: language.name, language: language}
 		}
-		if lexer := lexers.Match(query.Filename); lexer != nil {
+		if lexer := matchChromaFilename(query.Filename); lexer != nil {
 			return selection{name: lexer.Config().Name, lexer: lexer}
 		}
 	}
@@ -328,6 +328,22 @@ func bestLanguage(languages []*languageSpec) *languageSpec {
 
 func fallbackSelection() selection {
 	return selection{name: lexers.Fallback.Config().Name, lexer: lexers.Fallback}
+}
+
+func matchChromaLanguage(language string) chroma.Lexer {
+	// FCSS extends CSS at the styling layer and intentionally shares its lexer.
+	if normalizeIdentifier(language) == "fcss" {
+		language = "css"
+	}
+	return lexers.Get(language)
+}
+
+func matchChromaFilename(filename string) chroma.Lexer {
+	// Chroma does not advertise *.fcss on its CSS lexer.
+	if strings.EqualFold(filepath.Ext(filename), ".fcss") {
+		return lexers.Get("css")
+	}
+	return lexers.Match(filename)
 }
 
 func cleanStrings(kind string, values []string) ([]string, error) {
