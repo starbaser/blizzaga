@@ -2,6 +2,8 @@
 
 A fork of charmbracelet/freeze that generates images of code and terminal output, with the srcery theme set as the default.
 
+@../eigengo/CONVENTIONS.md
+
 ## Cross-Project Documentation — first-party stack
 
 This project is part of Kyle's first-party stack (`~/dev/projects/*`). Sibling projects' curated
