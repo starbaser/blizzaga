@@ -5,7 +5,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
     flake-utils.url = "github:numtide/flake-utils";
     tree-sitter-baml = {
-    url = "git+file:/home/eigenmage/dev/projects/alloy/crates/tree-sitter-baml?ref=code/fml-grammar&rev=cc27fb58a2a6687d5ee725c19996b4f67e037f08";
+    url = "github:starbaser/tree-sitter-baml/code/fml-grammar";
       flake = false;
     };
   };
