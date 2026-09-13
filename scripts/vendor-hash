@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# Recompute vendorHash in default.nix without a Nix build.
+#
+# The goModules derivation (proxyVendor = true) inherits default.nix's own
+# preBuild, so it applies the tree-sitter-baml source replace before running
+# `go mod download` — the module never touches the network there. The same
+# replace against a copy of go.mod/go.sum, then a NAR hash of the resulting
+# module download cache, reproduces that derivation's hash exactly.
+set -euo pipefail
+
+root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$root"
+current="$(grep -oP 'vendorHash = \K"[^"]+"' default.nix)"
+system="$(nix eval --impure --raw --expr builtins.currentSystem)"
+
+work="$(mktemp -d)"
+cleanup() {
+	chmod -R u+w "$work"
+	rm -rf "$work"
+}
+trap cleanup EXIT
+
+mkdir "$work/src"
+cp go.mod go.sum "$work/src/"
+cd "$work/src"
+eval "$(nix eval --raw "$root#lib.$system.sourceReplaces")"
+GOWORK=off GOPATH="$work/gopath" GOMODCACHE="$work/gopath/pkg/mod" go mod download
+rm -rf "$work/gopath/pkg/mod/cache/download/sumdb"
+got="$(nix hash path --sri --type sha256 "$work/gopath/pkg/mod/cache/download")"
+cd "$root"
+
+if [[ "\"$got\"" == "$current" ]]; then
+	echo "vendorHash unchanged ($got)"
+else
+	sed -i "s|vendorHash = $current;|vendorHash = \"$got\";|" default.nix
+	echo "vendorHash: $current -> \"$got\""
+fi

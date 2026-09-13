@@ -25,9 +25,10 @@ nix run '.#'              # run via flake
 nix build                # builds default.nix (buildGoModule)
 ```
 
-**Nix `vendorHash` gotcha**: `default.nix` pins `vendorHash`. Any change to `go.mod`/`go.sum`
-invalidates it — the Nix build will fail with a hash mismatch until you update the `vendorHash`
-value to the one Nix reports.
+**Nix `vendorHash` gotcha**: `default.nix` pins `vendorHash`. A `go.mod`/`go.sum` change that
+touches an actually-fetched module invalidates it — run `just vendor-hash` (or
+`bash scripts/vendor-hash`) to recompute it without a Nix build; it reapplies the same
+tree-sitter-baml source replace `default.nix`'s `preBuild` does before hashing the module cache.
 
 **PNG dependency**: PNG output prefers the external `rsvg-convert` (librsvg) binary if present on
 `PATH`, otherwise falls back to the embedded `resvg-go` (WASM) renderer in `png.go`. The Nix dev

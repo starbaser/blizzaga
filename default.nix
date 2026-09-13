@@ -1,16 +1,19 @@
 {
   pkgs,
   treeSitterBaml,
+  go ? pkgs.go,
 }:
 let
+  buildGoModule = pkgs.buildGoModule.override { inherit go; };
   fontDataDirs = pkgs.lib.makeSearchPathOutput "out" "share" [
     pkgs.jetbrains-mono
   ];
 in
-pkgs.buildGoModule {
+buildGoModule {
   name = "blizzaga";
   src = ./.;
   vendorHash = "sha256-okgtlHtTOgNI8PQdExj1pa8HnbQjJVgbTM025u8b/ws=";
+  goSum = ./go.sum;
   # Tree-sitter's Go bindings include native sources outside their Go package
   # directories, which standard Go vendoring omits.
   proxyVendor = true;
