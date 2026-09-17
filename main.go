@@ -143,7 +143,9 @@ func main() {
 		printErrorFatal("Could not initialize syntax highlighting", err)
 	}
 
-	if config.Input == "-" || in.IsPipe(os.Stdin) {
+	// An explicit file argument wins over a piped stdin: scripts and agents
+	// often run with stdin attached to a pipe that never closes.
+	if config.Input == "-" || (config.Input == "" && in.IsPipe(os.Stdin)) {
 		input, err = in.ReadInput(os.Stdin)
 	} else if config.Execute != "" {
 		config.Language = "ansi"

@@ -64,6 +64,27 @@ func TestBlizzagaOutput(t *testing.T) {
 	}
 }
 
+func TestBlizzagaFileArgumentWinsOverPipedStdin(t *testing.T) {
+	output := filepath.Join(t.TempDir(), "piped.svg")
+
+	cmd := blizzagaCommand("test/input/tab.go", "-o", output)
+	cmd.Stdin = strings.NewReader("package piped\n")
+	if err := cmd.Run(); err != nil {
+		t.Fatal(err)
+	}
+
+	svg, err := os.ReadFile(output)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.Contains(string(svg), "piped") {
+		t.Fatal("rendered the piped stdin instead of the file argument")
+	}
+	if !strings.Contains(string(svg), "freeze/issues/50") {
+		t.Fatal("rendered output does not contain the file argument's source")
+	}
+}
+
 func TestBlizzagaMarkdownLanguage(t *testing.T) {
 	dir := t.TempDir()
 	input := filepath.Join(dir, "doc.md")
