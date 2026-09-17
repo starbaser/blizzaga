@@ -124,6 +124,27 @@ func TestDefaultRegistryBundlesBAML(t *testing.T) {
 	assertClassifies(t, result, "1024.0", chroma.LiteralNumber, "tree-sitter.constant.numeric")
 }
 
+func TestBAMLBacktickStrings(t *testing.T) {
+	t.Parallel()
+	registry, err := DefaultRegistry()
+	if err != nil {
+		t.Fatal(err)
+	}
+	source := "function Ask(text: string) -> string {\n  client: Fast\n  prompt: `Summarize \\`this\\`: ${text} for $5\n${ctx.output_format()}`\n}"
+	result, err := registry.Highlight(source, Query{Filename: "ask.baml"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertExactSource(t, result, source)
+	assertClassifies(t, result, "`Summarize ", chroma.LiteralString, "tree-sitter.string")
+	assertClassifies(t, result, "\\`", chroma.LiteralStringEscape, "tree-sitter.constant.character.escape")
+	assertClassifies(t, result, "${", chroma.LiteralStringInterpol, "tree-sitter.punctuation.special")
+	assertClassifiesAt(t, result, 87, "text", chroma.NameVariable, "tree-sitter.variable")
+	assertClassifiesAt(t, result, 91, "}", chroma.LiteralStringInterpol, "tree-sitter.punctuation.special")
+	assertClassifies(t, result, " for $5\n", chroma.LiteralString, "tree-sitter.string")
+	assertClassifies(t, result, "output_format", chroma.NameFunction, "tree-sitter.function.method")
+}
+
 func TestDefaultRegistryScopesFMLInjection(t *testing.T) {
 	t.Parallel()
 	registry, err := DefaultRegistry()

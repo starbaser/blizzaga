@@ -1,4 +1,4 @@
-; Source: github.com/starbaser/tree-sitter-baml at cc27fb58a2a6687d5ee725c19996b4f67e037f08
+; Source: github.com/starbaser/tree-sitter-baml at bbf9ac51dede1bd17c05c83b721ea335223f479e
 ; SPDX-License-Identifier: MIT
 
 ; Declarations and control flow
@@ -62,6 +62,19 @@
 (string_literal) @string
 (raw_string_literal) @string
 (raw_string_delimiter) @punctuation.delimiter
+
+; Backtick strings: only the delimiters and literal text are strings, so the
+; code inside `${...}` keeps its ordinary highlighting.
+(backtick_string (string_delimiter) @string)
+(backtick_string (string_content) @string)
+(escape_sequence) @constant.character.escape
+(interpolation_delimiter) @punctuation.special
+[
+  (template_else)
+  (template_endif)
+  (template_endfor)
+] @keyword.control
+
 (number_literal) @constant.numeric
 (boolean_literal) @constant.builtin.boolean
 (null_literal) @constant.builtin
