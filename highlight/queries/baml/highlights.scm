@@ -65,11 +65,13 @@
 ; Literals
 (string_literal) @string
 
-; Raw and backtick strings share one treatment: the delimiters frame the
-; string, literal text is string content, and the code inside `${...}` (or,
-; for raw strings, the injected template markers) keeps its own highlighting.
+; Raw and backtick strings share one treatment: literal text is string
+; content, and the code inside `${...}` (or, for raw strings, the injected
+; template markers) keeps its own highlighting. Raw-string delimiters (`#"`)
+; are heavy enough to read as punctuation; backtick delimiters frame the
+; string as string delimiters.
 (raw_string_literal) @string
-(raw_string_delimiter) @string.delimiter
+(raw_string_delimiter) @punctuation.delimiter
 (backtick_string (string_delimiter) @string.delimiter)
 (backtick_string (string_content) @string)
 (escape_sequence) @constant.character.escape

@@ -159,8 +159,8 @@ func TestBAMLRawStringsAreTemplates(t *testing.T) {
 		t.Fatal(err)
 	}
 	assertExactSource(t, result, source)
-	assertClassifies(t, result, "#\"", chroma.LiteralStringDelimiter, "tree-sitter.string.delimiter")
-	assertClassifies(t, result, "\"#", chroma.LiteralStringDelimiter, "tree-sitter.string.delimiter")
+	assertClassifies(t, result, "#\"", chroma.Punctuation, "tree-sitter.punctuation.delimiter")
+	assertClassifies(t, result, "\"#", chroma.Punctuation, "tree-sitter.punctuation.delimiter")
 	assertClassifies(t, result, "\nSummarize ", chroma.LiteralString, "tree-sitter.string")
 	assertClassifiesAt(t, result, strings.Index(source, "<instructions")+1, "instructions", chroma.NameTag, "tree-sitter.tag")
 	assertClassifies(t, result, "role", chroma.NameAttribute, "tree-sitter.attribute")
