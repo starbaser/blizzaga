@@ -10,6 +10,9 @@ set -euo pipefail
 
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$root"
+# The dev shell points GOFLAGS at a read-only modfile copy in the store; the
+# replace and download below must operate on the scratch copy instead.
+export GOFLAGS=
 current="$(grep -oP 'vendorHash = \K"[^"]+"' default.nix)"
 system="$(nix eval --impure --raw --expr builtins.currentSystem)"
 

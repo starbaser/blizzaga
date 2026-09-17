@@ -7,6 +7,6 @@ vendor-hash:
 # Bump a first-party dependency to the head of its main branch and
 # recompute vendorHash. rev is for bisecting only; landings track main.
 bump repo rev="main":
-    go get github.com/starbaser/{{repo}}@{{rev}}
-    go mod tidy
+    GOFLAGS= go get github.com/starbaser/{{repo}}@{{rev}}
+    GOFLAGS= go mod tidy
     just vendor-hash
