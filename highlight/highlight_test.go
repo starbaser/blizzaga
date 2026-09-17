@@ -147,6 +147,27 @@ func TestBAMLBacktickStrings(t *testing.T) {
 	assertClassifiesAt(t, result, strings.LastIndex(source, "`"), "`", chroma.LiteralStringDelimiter, "tree-sitter.string.delimiter")
 }
 
+func TestBAMLFourBacktickStrings(t *testing.T) {
+	t.Parallel()
+	registry, err := DefaultRegistry()
+	if err != nil {
+		t.Fatal(err)
+	}
+	source := "function Render(value: string) -> string {\n  let markdown = ````Heading\n```text\ninside\n```\n${value}````\n  markdown\n}\n"
+	result, err := registry.Highlight(source, Query{Filename: "render.baml"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertExactSource(t, result, source)
+	start := strings.Index(source, "````Heading")
+	assertClassifiesAt(t, result, start, "````", chroma.LiteralStringDelimiter, "tree-sitter.string.delimiter")
+	assertClassifiesAt(t, result, strings.Index(source, "```text"), "```", chroma.LiteralString, "tree-sitter.string")
+	interpolation := strings.Index(source, "${value}")
+	assertClassifiesAt(t, result, interpolation, "${", chroma.LiteralStringInterpol, "tree-sitter.punctuation.special")
+	assertClassifiesAt(t, result, interpolation+2, "value", chroma.NameVariable, "tree-sitter.variable")
+	assertClassifiesAt(t, result, interpolation+len("${value}"), "````", chroma.LiteralStringDelimiter, "tree-sitter.string.delimiter")
+}
+
 func TestBAMLRawStringsAreTemplates(t *testing.T) {
 	t.Parallel()
 	registry, err := DefaultRegistry()
