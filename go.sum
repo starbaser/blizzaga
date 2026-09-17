@@ -112,8 +112,8 @@ github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZb
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/rivo/uniseg v0.4.7 h1:WUdvkW8uEhrYfLC4ZzdpI2ztxP1I582+49Oc5Mq64VQ=
 github.com/rivo/uniseg v0.4.7/go.mod h1:FN3SvrM+Zdj16jyLfmOkMNblXMcoc8DfTHruCPUcx88=
-github.com/starbaser/tree-sitter-baml v0.0.0-20260917080340-17fd57427537 h1:tJQ1C54ga5wM7vXEHOQXOmG9wcPiUtYv6Q2Au+LCzQM=
-github.com/starbaser/tree-sitter-baml v0.0.0-20260917080340-17fd57427537/go.mod h1:m1KpmSP+XLx51NUZ53yBSDTRbre3TtVbG+e7Xr4EZL0=
+github.com/starbaser/tree-sitter-baml v0.0.0-20260917223308-5f92d6373e48 h1:OKD6ZqUivsgH8laooGN2g5sdXXz/PONsnL7H9/eiFg8=
+github.com/starbaser/tree-sitter-baml v0.0.0-20260917223308-5f92d6373e48/go.mod h1:m1KpmSP+XLx51NUZ53yBSDTRbre3TtVbG+e7Xr4EZL0=
 github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu7U=
 github.com/stretchr/testify v1.11.1/go.mod h1:wZwfW3scLgRK+23gO65QZefKpKQRnfz6sD981Nm4B6U=
 github.com/tetratelabs/wazero v1.8.0 h1:iEKu0d4c2Pd+QSRieYbnQC9yiFlMS9D+Jr0LsRmcF4g=
