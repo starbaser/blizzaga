@@ -25,11 +25,11 @@
     "tree-sitter-baml": {
       "flake": false,
       "locked": {
-        "lastModified": 1789621521,
-        "narHash": "sha256-QU3jukwUm2WFDyRk0P0f9R66+1+OTTkwOFEYaqr6gCs=",
+        "lastModified": 1789623294,
+        "narHash": "sha256-2jwZIa2EsJjHdMUFGr8Zv6dudcWdE3FrToAdW0zkGhY=",
         "owner": "starbaser",
         "repo": "tree-sitter-baml",
-        "rev": "bbf9ac51dede1bd17c05c83b721ea335223f479e",
+        "rev": "1ce458c48e4c76eb8a34be9c9a9f2192fd086b60",
         "type": "github"
       },
       "original": {
