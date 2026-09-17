@@ -173,9 +173,23 @@ func main() {
 	strippedInput = cut(strippedInput, config.Lines)
 	input = cut(input, config.Lines)
 
+	// lineSources maps rendered rows back to source lines once wrapping has
+	// split some of them; nil means every row is its own source line.
+	var lineSources []int
+
 	// wrap to character limit.
 	if config.Wrap > 0 && isAnsi {
-		strippedInput = cellbuf.Wrap(strippedInput, config.Wrap, "")
+		// The stripped text only sizes the SVG, but wrapping it through the
+		// projection also yields the row map the line-number gutter needs.
+		wrapped, wrapErr := chromawrap.WrapTokens(
+			chroma.Literator(chroma.Token{Type: chroma.Text, Value: strippedInput}),
+			config.Wrap,
+		)
+		if wrapErr != nil {
+			printErrorFatal("Could not wrap input", wrapErr)
+		}
+		strippedInput = wrapped.Text
+		lineSources = wrapped.LineSources
 		input = cellbuf.Wrap(input, config.Wrap, "")
 	}
 
@@ -215,10 +229,13 @@ func main() {
 		}
 		it = chroma.Literator(result.Tokens()...)
 		if config.Wrap > 0 {
-			it, strippedInput, err = chromawrap.WrapTokens(it, config.Wrap)
-			if err != nil {
-				printErrorFatal("Could not wrap highlighted file", err)
+			wrapped, wrapErr := chromawrap.WrapTokens(it, config.Wrap)
+			if wrapErr != nil {
+				printErrorFatal("Could not wrap highlighted file", wrapErr)
 			}
+			it = wrapped.Iterator
+			strippedInput = wrapped.Text
+			lineSources = wrapped.LineSources
 		}
 	}
 
@@ -270,6 +287,7 @@ func main() {
 		IsAnsi:          isAnsi,
 		LongestLineCols: longestLineCols,
 		OffsetLine:      offsetLine,
+		LineSources:     lineSources,
 		LineNumberColor: s.Get(chroma.LineNumbers).Colour.String(),
 	})
 	if err != nil {

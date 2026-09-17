@@ -1,6 +1,7 @@
 package chromawrap
 
 import (
+	"slices"
 	"strings"
 	"testing"
 
@@ -12,15 +13,15 @@ func TestWrapTokensPreservesStylesAcrossInsertedNewlines(t *testing.T) {
 	source := `"This is a long string literal"`
 	iterator := chroma.Literator(chroma.Token{Type: chroma.LiteralString, Value: source})
 
-	wrappedIterator, wrapped, err := WrapTokens(iterator, 10)
+	wrapped, err := WrapTokens(iterator, 10)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if want := cellbuf.Wrap(source, 10, ""); wrapped != want {
-		t.Fatalf("wrapped source = %q, want %q", wrapped, want)
+	if want := cellbuf.Wrap(source, 10, ""); wrapped.Text != want {
+		t.Fatalf("wrapped source = %q, want %q", wrapped.Text, want)
 	}
 
-	for _, token := range wrappedIterator.Tokens() {
+	for _, token := range wrapped.Iterator.Tokens() {
 		if token.Type != chroma.LiteralString {
 			t.Fatalf("wrapped token type = %s, want LiteralString", token.Type)
 		}
@@ -36,17 +37,17 @@ func TestWrapTokensPreservesMixedTokenTypes(t *testing.T) {
 	}
 	wantWrapped := cellbuf.Wrap(joinTokenValues(sourceTokens), 9, "")
 
-	iterator, wrapped, err := WrapTokens(chroma.Literator(sourceTokens...), 9)
+	wrapped, err := WrapTokens(chroma.Literator(sourceTokens...), 9)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if wrapped != wantWrapped {
-		t.Fatalf("wrapped source = %q, want %q", wrapped, wantWrapped)
+	if wrapped.Text != wantWrapped {
+		t.Fatalf("wrapped source = %q, want %q", wrapped.Text, wantWrapped)
 	}
 
-	output := iterator.Tokens()
-	if got := joinTokenValues(output); got != wrapped {
-		t.Fatalf("projected token source = %q, want %q", got, wrapped)
+	output := wrapped.Iterator.Tokens()
+	if got := joinTokenValues(output); got != wrapped.Text {
+		t.Fatalf("projected token source = %q, want %q", got, wrapped.Text)
 	}
 	for _, token := range output {
 		if strings.Contains(token.Value, "one") || strings.Contains(token.Value, "two") ||
@@ -65,12 +66,12 @@ func TestWrapTokensDropsOnlyWhitespaceRemovedByWrapper(t *testing.T) {
 		{Type: chroma.Name, Value: "next"},
 	}
 
-	iterator, wrapped, err := WrapTokens(chroma.Literator(sourceTokens...), 5)
+	wrapped, err := WrapTokens(chroma.Literator(sourceTokens...), 5)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if got := joinTokenValues(iterator.Tokens()); got != wrapped {
-		t.Fatalf("projected token source = %q, want %q", got, wrapped)
+	if got := joinTokenValues(wrapped.Iterator.Tokens()); got != wrapped.Text {
+		t.Fatalf("projected token source = %q, want %q", got, wrapped.Text)
 	}
 }
 
@@ -88,21 +89,100 @@ func TestWrapTokensMatchesCellBufferForPlainText(t *testing.T) {
 		{name: "leading whitespace", source: "    value", width: 5},
 		{name: "trailing whitespace", source: "value    ", width: 5},
 		{name: "explicit newline", source: "first   \nsecond", width: 6},
-		{name: "unicode whitespace", source: "first\u2003second", width: 6},
+		{name: "unicode whitespace", source: "first second", width: 6},
 	}
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			iterator := chroma.Literator(chroma.Token{Type: chroma.Text, Value: test.source})
-			wrappedIterator, wrapped, err := WrapTokens(iterator, test.width)
+			wrapped, err := WrapTokens(iterator, test.width)
 			if err != nil {
 				t.Fatal(err)
 			}
-			if want := cellbuf.Wrap(test.source, test.width, ""); wrapped != want {
-				t.Fatalf("wrapped source = %q, want %q", wrapped, want)
+			if want := cellbuf.Wrap(test.source, test.width, ""); wrapped.Text != want {
+				t.Fatalf("wrapped source = %q, want %q", wrapped.Text, want)
 			}
-			if got := joinTokenValues(wrappedIterator.Tokens()); got != wrapped {
-				t.Fatalf("projected source = %q, want %q", got, wrapped)
+			if got := joinTokenValues(wrapped.Iterator.Tokens()); got != wrapped.Text {
+				t.Fatalf("projected source = %q, want %q", got, wrapped.Text)
+			}
+		})
+	}
+}
+
+func TestWrapTokensMapsDisplayRowsToSourceLines(t *testing.T) {
+	tests := []struct {
+		name        string
+		source      string
+		width       int
+		wantText    string
+		lineSources []int
+	}{
+		{
+			name:        "no wrapping keeps one row per line",
+			source:      "one\ntwo\nthree",
+			width:       10,
+			wantText:    "one\ntwo\nthree",
+			lineSources: []int{0, 1, 2},
+		},
+		{
+			name:        "soft wrapped rows continue their source line",
+			source:      "abcdefghijk",
+			width:       4,
+			wantText:    "abcd\nefgh\nijk",
+			lineSources: []int{0, Continuation, Continuation},
+		},
+		{
+			name:        "source line after a wrapped line is numbered again",
+			source:      "abcdefgh\nxy",
+			width:       4,
+			wantText:    "abcd\nefgh\nxy",
+			lineSources: []int{0, Continuation, 1},
+		},
+		{
+			name:        "wrap at a space then a source newline",
+			source:      "alpha beta\ngamma",
+			width:       5,
+			wantText:    "alpha\nbeta\ngamma",
+			lineSources: []int{0, Continuation, 1},
+		},
+		{
+			name:        "trimmed trailing whitespace keeps the source newline",
+			source:      "first   \nsecond",
+			width:       6,
+			wantText:    "first\nsecond",
+			lineSources: []int{0, 1},
+		},
+		{
+			name:        "blank source lines keep their own numbers",
+			source:      "a\n\nb",
+			width:       4,
+			wantText:    "a\n\nb",
+			lineSources: []int{0, 1, 2},
+		},
+		{
+			name:        "trailing newline yields an empty final row",
+			source:      "abcdef\n",
+			width:       3,
+			wantText:    "abc\ndef\n",
+			lineSources: []int{0, Continuation, 1},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			iterator := chroma.Literator(chroma.Token{Type: chroma.Text, Value: test.source})
+			wrapped, err := WrapTokens(iterator, test.width)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if wrapped.Text != test.wantText {
+				t.Fatalf("wrapped source = %q, want %q", wrapped.Text, test.wantText)
+			}
+			if !slices.Equal(wrapped.LineSources, test.lineSources) {
+				t.Fatalf("line sources = %v, want %v", wrapped.LineSources, test.lineSources)
+			}
+			if rows := strings.Count(wrapped.Text, "\n") + 1; rows != len(wrapped.LineSources) {
+				t.Fatalf("line sources has %d entries for %d rows", len(wrapped.LineSources), rows)
 			}
 		})
 	}

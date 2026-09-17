@@ -372,6 +372,16 @@ func TestBlizzagaConfigurations(t *testing.T) {
 			flags:  []string{"--wrap", "80", "--width", "600"},
 			output: "wrap",
 		},
+		{
+			input:  "test/input/wrap.go",
+			flags:  []string{"--wrap", "80", "--width", "600", "--show-line-numbers"},
+			output: "wrap-line-numbers",
+		},
+		{
+			input:  "test/input/glow.ansi",
+			flags:  []string{"--wrap", "40", "--show-line-numbers"},
+			output: "wrap-line-numbers-ansi",
+		},
 	}
 
 	err := os.RemoveAll("test/output/svg")

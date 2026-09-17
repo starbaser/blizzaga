@@ -33,8 +33,27 @@ type DecorateParams struct {
 	// OffsetLine is added to rendered line numbers (the first captured line).
 	OffsetLine int
 
+	// LineSources maps each rendered row to the 0-based source line it begins;
+	// a negative entry marks a row that continues a wrapped source line and
+	// gets a blank gutter. Nil (or a short slice) numbers rows sequentially.
+	LineSources []int
+
 	// LineNumberColor is the fill color used for injected line numbers.
 	LineNumberColor string
+}
+
+// lineNumberGutter renders the line-number column for a rendered row: the
+// 1-based source line number, or an equally wide blank when the row is the
+// continuation of a wrapped source line.
+func lineNumberGutter(lineSources []int, row, offsetLine int) string {
+	sourceLine := row
+	if row < len(lineSources) {
+		sourceLine = lineSources[row]
+	}
+	if sourceLine < 0 {
+		return fmt.Sprintf("%3s  ", "")
+	}
+	return fmt.Sprintf("%3d  ", sourceLine+1+offsetLine)
 }
 
 // Decorated is the result of Decorate: final image dimensions plus the text
@@ -128,7 +147,7 @@ func Decorate(cfg *Config, p DecorateParams) (Decorated, error) {
 			ln := etree.NewElement("tspan")
 			ln.CreateAttr("xml:space", "preserve")
 			ln.CreateAttr("fill", p.LineNumberColor)
-			ln.SetText(fmt.Sprintf("%3d  ", i+1+p.OffsetLine))
+			ln.SetText(lineNumberGutter(p.LineSources, i, p.OffsetLine))
 			line.InsertChildAt(0, ln)
 		}
 		x := float64(cfg.Padding[left] + cfg.Margin[left])
