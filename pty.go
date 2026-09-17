@@ -40,14 +40,24 @@ func executeCommand(config Config) (string, error) {
 	}
 
 	var out bytes.Buffer
-	var errorOut bytes.Buffer
+	copied := make(chan struct{})
 	go func() {
+		defer close(copied)
 		_, _ = io.Copy(&out, pty)
-		errorOut.Write(out.Bytes())
 	}()
 
-	if err := xpty.WaitProcess(ctx, cmd); err != nil {
-		return errorOut.String(), fmt.Errorf("could not execute: %w", err)
+	waitErr := xpty.WaitProcess(ctx, cmd)
+	// The copy ends when the child's side of the terminal closes. Reading the
+	// buffer before then races the copy, so wait for it; if a grandchild still
+	// holds the terminal past the deadline, close our side to end the copy.
+	select {
+	case <-copied:
+	case <-ctx.Done():
+		_ = pty.Close()
+		<-copied
+	}
+	if waitErr != nil {
+		return out.String(), fmt.Errorf("could not execute: %w", waitErr)
 	}
 	return out.String(), nil
 }
