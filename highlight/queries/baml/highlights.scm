@@ -1,5 +1,10 @@
-; Source: github.com/starbaser/tree-sitter-baml at bbf9ac51dede1bd17c05c83b721ea335223f479e
+; Source: github.com/starbaser/tree-sitter-baml at 17fd57427537e8fa7d6873007807da83a940604f
 ; SPDX-License-Identifier: MIT
+
+; Fallback first: engines such as Neovim and tree-sitter-highlight let a
+; later pattern override an earlier one on the same node, so every more
+; specific identifier capture below must come after this one.
+(identifier) @variable
 
 ; Declarations and control flow
 [
@@ -44,10 +49,10 @@
 ; Functions, methods, parameters, and variables
 (function_declaration name: (identifier) @function)
 (template_string_declaration name: (identifier) @function)
+(member_expression member: (identifier) @variable.other.member)
 (call_expression function: (identifier) @function.call)
 (call_expression
   function: (member_expression member: (identifier) @function.method))
-(member_expression member: (identifier) @variable.other.member)
 (parameter name: (identifier) @variable.parameter)
 (lambda_expression parameters: (lambda_parameters (parameter name: (identifier) @variable.parameter)))
 (let_declaration name: (identifier) @variable)
@@ -56,7 +61,6 @@
 (map_entry key: (identifier) @property)
 (class_property name: (identifier) @property)
 (argument name: (identifier) @variable.parameter)
-(identifier) @variable
 
 ; Literals
 (string_literal) @string

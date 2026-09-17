@@ -4,7 +4,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
     tree-sitter-baml = {
-      url = "github:starbaser/tree-sitter-baml/code/fml-grammar";
+      url = "github:starbaser/tree-sitter-baml";
       flake = false;
     };
   };

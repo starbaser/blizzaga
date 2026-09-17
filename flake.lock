@@ -25,16 +25,15 @@
     "tree-sitter-baml": {
       "flake": false,
       "locked": {
-        "lastModified": 1789623294,
-        "narHash": "sha256-2jwZIa2EsJjHdMUFGr8Zv6dudcWdE3FrToAdW0zkGhY=",
+        "lastModified": 1789632220,
+        "narHash": "sha256-fUZy6lJjyuEU65EfcEQCqukE5ul3OzjGe4JcpIzRn9U=",
         "owner": "starbaser",
         "repo": "tree-sitter-baml",
-        "rev": "1ce458c48e4c76eb8a34be9c9a9f2192fd086b60",
+        "rev": "17fd57427537e8fa7d6873007807da83a940604f",
         "type": "github"
       },
       "original": {
         "owner": "starbaser",
-        "ref": "code/fml-grammar",
         "repo": "tree-sitter-baml",
         "type": "github"
       }
