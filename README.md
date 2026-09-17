@@ -108,8 +108,10 @@ Override this inference with the `--language` flag.
 
 Go, BAML, and injected FML source are highlighted by statically linked Tree-sitter grammars. Their
 syntax trees and highlight queries are translated into Chroma tokens, so they use the same themes
-and SVG formatter as every other language. FML is scoped to raw-string function tails whose
-declared return type is `filament.Template`; ordinary BAML raw strings remain strings. BAML and FML
+and SVG formatter as every other language. Every BAML raw string (`#"..."#`) is parsed with the
+FML grammar: its prose stays string content while Jinja markers, directives, expressions, and FML
+tags inside it are highlighted, matching the `${ }` treatment of backtick strings. A raw-string
+function tail whose declared return type is `filament.Template` is instead full FML markup. BAML and FML
 use the first-party grammar pinned from Alloy through the Nix flake; the remaining languages
 continue to use Chroma's built-in lexers.
 

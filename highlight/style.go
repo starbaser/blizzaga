@@ -8,6 +8,7 @@ const (
 	srceryGreen         = "#519F50"
 	srceryYellow        = "#FBB829"
 	srceryBlue          = "#2C78BF"
+	srceryMagenta       = "#E02C6D"
 	srceryBrightBlack   = "#917E6B"
 	srceryBrightRed     = "#F75341"
 	srceryBrightGreen   = "#98BC37"
@@ -52,26 +53,30 @@ var srceryStyle = chroma.MustNewStyle("srcery", chroma.StyleEntries{
 	chroma.LiteralStringChar:      srceryGreen,
 	chroma.LiteralStringDelimiter: srceryGreen,
 	chroma.LiteralStringEscape:    srceryYellow,
-	chroma.LiteralStringRegex:     srceryYellow,
-	chroma.LiteralNumber:          srceryBrightMagenta,
-	chroma.Operator:               "#C5B088",
-	chroma.Punctuation:            srceryBrightBlack,
-	chroma.TextPunctuation:        srceryBrightBlack,
-	chroma.TextSymbol:             srceryYellow,
-	chroma.Comment:                "italic " + srceryBrightBlack,
-	chroma.CommentSpecial:         "italic " + srceryBrightCyan,
-	chroma.CommentPreproc:         "#0AAEB3",
-	chroma.GenericDeleted:         "bg:" + srceryDarkRed,
-	chroma.GenericEmph:            "italic",
-	chroma.GenericError:           srceryBrightRed,
-	chroma.GenericHeading:         "bold " + srceryBrightBlue + " bg:" + srceryGray1,
-	chroma.GenericInserted:        "bg:" + srceryDarkGreen,
-	chroma.GenericOutput:          srceryBrightBlack,
-	chroma.GenericPrompt:          "#C5B088",
-	chroma.GenericStrong:          "bold",
-	chroma.GenericSubheading:      "bold " + srceryYellow + " bg:" + srceryGray1,
-	chroma.GenericTraceback:       srceryBrightRed,
-	chroma.GenericUnderline:       "underline",
+	// Interpolation and template markers (`${ }`, `{{ }}`, `{% %}`) are match
+	// pairs: the guide's accent.special role, kept apart from red keywords and
+	// the bright magenta constants.
+	chroma.LiteralStringInterpol: srceryMagenta,
+	chroma.LiteralStringRegex:    srceryYellow,
+	chroma.LiteralNumber:         srceryBrightMagenta,
+	chroma.Operator:              "#C5B088",
+	chroma.Punctuation:           srceryBrightBlack,
+	chroma.TextPunctuation:       srceryBrightBlack,
+	chroma.TextSymbol:            srceryYellow,
+	chroma.Comment:               "italic " + srceryBrightBlack,
+	chroma.CommentSpecial:        "italic " + srceryBrightCyan,
+	chroma.CommentPreproc:        "#0AAEB3",
+	chroma.GenericDeleted:        "bg:" + srceryDarkRed,
+	chroma.GenericEmph:           "italic",
+	chroma.GenericError:          srceryBrightRed,
+	chroma.GenericHeading:        "bold " + srceryBrightBlue + " bg:" + srceryGray1,
+	chroma.GenericInserted:       "bg:" + srceryDarkGreen,
+	chroma.GenericOutput:         srceryBrightBlack,
+	chroma.GenericPrompt:         "#C5B088",
+	chroma.GenericStrong:         "bold",
+	chroma.GenericSubheading:     "bold " + srceryYellow + " bg:" + srceryGray1,
+	chroma.GenericTraceback:      srceryBrightRed,
+	chroma.GenericUnderline:      "underline",
 })
 
 // SrceryStyle returns Blizzaga's immutable Srcery Chroma style.

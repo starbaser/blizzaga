@@ -51,6 +51,7 @@ func StandardCaptures() CaptureMap {
 		"punctuation.delimiter":     {TokenType: chroma.Punctuation, Priority: 110},
 		"punctuation.special":       {TokenType: chroma.LiteralStringInterpol, Priority: 120},
 		"string":                    {TokenType: chroma.LiteralString, Priority: 100},
+		"string.delimiter":          {TokenType: chroma.LiteralStringDelimiter, Priority: 130},
 		"string.escape":             {TokenType: chroma.LiteralStringEscape, Priority: 250},
 		"string.regex":              {TokenType: chroma.LiteralStringRegex, Priority: 130},
 		"tag":                       {TokenType: chroma.NameTag, Priority: 150},

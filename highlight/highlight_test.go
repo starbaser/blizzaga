@@ -136,13 +136,44 @@ func TestBAMLBacktickStrings(t *testing.T) {
 		t.Fatal(err)
 	}
 	assertExactSource(t, result, source)
-	assertClassifies(t, result, "`Summarize ", chroma.LiteralString, "tree-sitter.string")
+	assertClassifiesAt(t, result, strings.Index(source, "`Summarize"), "`", chroma.LiteralStringDelimiter, "tree-sitter.string.delimiter")
+	assertClassifies(t, result, "Summarize ", chroma.LiteralString, "tree-sitter.string")
 	assertClassifies(t, result, "\\`", chroma.LiteralStringEscape, "tree-sitter.constant.character.escape")
 	assertClassifies(t, result, "${", chroma.LiteralStringInterpol, "tree-sitter.punctuation.special")
 	assertClassifiesAt(t, result, 87, "text", chroma.NameVariable, "tree-sitter.variable")
 	assertClassifiesAt(t, result, 91, "}", chroma.LiteralStringInterpol, "tree-sitter.punctuation.special")
 	assertClassifies(t, result, " for $5\n", chroma.LiteralString, "tree-sitter.string")
 	assertClassifies(t, result, "output_format", chroma.NameFunction, "tree-sitter.function.method")
+	assertClassifiesAt(t, result, strings.LastIndex(source, "`"), "`", chroma.LiteralStringDelimiter, "tree-sitter.string.delimiter")
+}
+
+func TestBAMLRawStringsAreTemplates(t *testing.T) {
+	t.Parallel()
+	registry, err := DefaultRegistry()
+	if err != nil {
+		t.Fatal(err)
+	}
+	source := "function Ask(events: Event[]) -> string {\n  prompt #\"\nSummarize <instructions role=\"system\">these</instructions>:\n{% for event in events %}\n- {{ event.index }} \\`literal\\`\n{% endfor %}\n\"#\n}"
+	result, err := registry.Highlight(source, Query{Filename: "ask.baml"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertExactSource(t, result, source)
+	assertClassifies(t, result, "#\"", chroma.LiteralStringDelimiter, "tree-sitter.string.delimiter")
+	assertClassifies(t, result, "\"#", chroma.LiteralStringDelimiter, "tree-sitter.string.delimiter")
+	assertClassifies(t, result, "\nSummarize ", chroma.LiteralString, "tree-sitter.string")
+	assertClassifiesAt(t, result, strings.Index(source, "<instructions")+1, "instructions", chroma.NameTag, "tree-sitter.tag")
+	assertClassifies(t, result, "role", chroma.NameAttribute, "tree-sitter.attribute")
+	assertClassifies(t, result, "these", chroma.LiteralString, "tree-sitter.string")
+	assertClassifies(t, result, "{%", chroma.LiteralStringInterpol, "tree-sitter.punctuation.special")
+	assertClassifies(t, result, "for", chroma.Keyword, "tree-sitter.keyword.control")
+	assertClassifiesAt(t, result, strings.Index(source, "{% for event")+7, "event", chroma.NameVariable, "tree-sitter.variable")
+	assertClassifies(t, result, "{{", chroma.LiteralStringInterpol, "tree-sitter.punctuation.special")
+	assertClassifiesAt(t, result, strings.Index(source, "event.index")+len("event."), "index", chroma.NameProperty, "tree-sitter.variable.other.member")
+	assertClassifies(t, result, "}}", chroma.LiteralStringInterpol, "tree-sitter.punctuation.special")
+	assertClassifies(t, result, " \\`literal\\`\n", chroma.LiteralString, "tree-sitter.string")
+	assertClassifies(t, result, "endfor", chroma.Keyword, "tree-sitter.keyword.control")
+	assertClassifies(t, result, "%}", chroma.LiteralStringInterpol, "tree-sitter.punctuation.special")
 }
 
 func TestDefaultRegistryScopesFMLInjection(t *testing.T) {
@@ -159,7 +190,12 @@ func TestDefaultRegistryScopesFMLInjection(t *testing.T) {
 		t.Fatal(err)
 	}
 	assertExactSource(t, result, source)
-	assertClassifiesAt(t, result, strings.Index(source, "{{ name }}")+3, "name", chroma.LiteralString, "tree-sitter.string")
+	// The ordinary raw string is a prompt template: prose is string content,
+	// the expression inside the marker is code.
+	assertClassifies(t, result, "ordinary ", chroma.LiteralString, "tree-sitter.string")
+	assertClassifiesAt(t, result, strings.Index(source, "{{ name }}"), "{{", chroma.LiteralStringInterpol, "tree-sitter.punctuation.special")
+	assertClassifiesAt(t, result, strings.Index(source, "{{ name }}")+3, "name", chroma.NameVariable, "tree-sitter.variable")
+	// The filament.Template tail is FML markup, not string content.
 	assertClassifiesAt(t, result, strings.Index(source, "<region")+1, "region", chroma.NameTag, "tree-sitter.tag")
 	assertClassifiesAt(t, result, strings.Index(source, "class=\"board\""), "class", chroma.NameAttribute, "tree-sitter.attribute")
 	assertClassifiesAt(t, result, strings.Index(source, "Plain Unicode"), "Plain Unicode ✦", chroma.Text, "tree-sitter.markup")
@@ -228,8 +264,13 @@ func TestSessionClosesRemovedAndRetainedInjectionResources(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(session.tree.children) != 0 {
-		t.Fatalf("children after removing template return type = %d, want 0", len(session.tree.children))
+	// Without the filament.Template return type the raw string is an ordinary
+	// prompt template: the FML child is replaced, not merely retained.
+	if len(session.tree.children) != 1 {
+		t.Fatalf("children after removing template return type = %d, want 1", len(session.tree.children))
+	}
+	if replacement := session.tree.children[0].tree; replacement == removed || replacement.spec.name != "BAML Template" {
+		t.Fatalf("child after removing template return type = %q, want a fresh BAML Template child", replacement.spec.name)
 	}
 	assertTreeStateClosed(t, removed)
 	assertExactSource(t, result, result.Source)

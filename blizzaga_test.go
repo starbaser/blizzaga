@@ -382,6 +382,11 @@ func TestBlizzagaConfigurations(t *testing.T) {
 			flags:  []string{"--wrap", "40", "--show-line-numbers"},
 			output: "wrap-line-numbers-ansi",
 		},
+		{
+			input:  "test/input/template.baml",
+			flags:  []string{},
+			output: "baml-template",
+		},
 	}
 
 	err := os.RemoveAll("test/output/svg")

@@ -379,14 +379,19 @@ func (s *treeState) priority(patternIndex, captureIndex uint) (int, bool) {
 }
 
 type injectionRange struct {
-	start  int
-	end    int
-	target *languageSpec
+	start   int
+	end     int
+	target  *languageSpec
+	pattern uint
 }
 
+// injectionRanges collects the content ranges every injection query claims.
+// When several patterns of one query claim the same range, the earliest
+// pattern wins, so queries list their most specific patterns first.
 func (s *treeState) injectionRanges() ([]injectionRange, error) {
 	var ranges []injectionRange
 	for _, injection := range s.injections {
+		claimed := make(map[[2]int]int)
 		matches := injection.cursor.Matches(injection.query, s.tree.RootNode(), []byte(s.source))
 		for {
 			match := matches.Next()
@@ -403,9 +408,19 @@ func (s *treeState) injectionRanges() ([]injectionRange, error) {
 				}
 				start := int(capture.Node.StartByte())
 				end := int(capture.Node.EndByte())
-				if start < end && end <= len(s.source) {
-					ranges = append(ranges, injectionRange{start: start, end: end, target: target})
+				if start >= end || end > len(s.source) {
+					continue
 				}
+				key := [2]int{start, end}
+				if index, ok := claimed[key]; ok {
+					if match.PatternIndex < ranges[index].pattern {
+						ranges[index].target = target
+						ranges[index].pattern = match.PatternIndex
+					}
+					continue
+				}
+				claimed[key] = len(ranges)
+				ranges = append(ranges, injectionRange{start: start, end: end, target: target, pattern: match.PatternIndex})
 			}
 		}
 	}

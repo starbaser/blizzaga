@@ -10,8 +10,12 @@
 (attribute_text_single) @string
 (bare_attribute_value) @string
 
-["<" ">" "/" "{{" "}}" "{%" "%}"] @punctuation.bracket
+["<" ">" "/"] @punctuation.bracket
 "=" @operator
+
+; Template markers are match pairs around embedded code, the same role as the
+; `${ }` interpolation markers of BAML backtick strings.
+["{{" "}}" "{%" "%}"] @punctuation.special
 
 ; Template control flow
 (if_directive "if" @keyword.control)

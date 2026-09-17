@@ -19,6 +19,9 @@ var bamlHighlights string
 //go:embed queries/baml/injections.scm
 var bamlInjections string
 
+//go:embed queries/baml/template.scm
+var bamlTemplateHighlights string
+
 //go:embed queries/fml/highlights.scm
 var fmlHighlights string
 
@@ -57,15 +60,25 @@ func BuiltinLanguages() []Language {
 			Captures:   StandardCaptures(),
 			Injections: []Injection{{
 				Query:     bamlInjections,
-				Languages: map[string]string{"fml": "fml"},
+				Languages: map[string]string{"fml": "fml", "baml-template": "baml-template"},
 			}},
-			Analyse:    analyseBAML,
+			Analyse: analyseBAML,
 		},
 		{
 			Name:       "FML",
 			Aliases:    []string{"fml"},
 			Grammar:    sitter.NewLanguage(tree_sitter_baml.LanguageFML()),
 			Highlights: fmlHighlights,
+			Captures:   StandardCaptures(),
+		},
+		{
+			// The FML grammar over a BAML raw string body. The template query
+			// runs first so its string capture outranks FML's markup capture on
+			// the same text nodes; everything else comes from the FML query.
+			Name:       "BAML Template",
+			Aliases:    []string{"baml-template"},
+			Grammar:    sitter.NewLanguage(tree_sitter_baml.LanguageFML()),
+			Highlights: bamlTemplateHighlights + "\n" + fmlHighlights,
 			Captures:   StandardCaptures(),
 		},
 	}
