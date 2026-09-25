@@ -112,8 +112,9 @@ and SVG formatter as every other language. Every BAML raw string (`#"..."#`) is 
 FML grammar: its prose stays string content while Jinja markers, directives, expressions, and FML
 tags inside it are highlighted, matching the `${ }` treatment of backtick strings. A raw-string
 function tail whose declared return type is `filament.Template` is instead full FML markup. BAML and FML
-use the first-party grammar pinned from Alloy through the Nix flake; the remaining languages
-continue to use Chroma's built-in lexers.
+use the first-party grammar pinned by Blizzaga's Nix flake. Blizzaga embeds its adapted highlight
+queries separately, so a grammar update also needs the corresponding query update and capture tests.
+The remaining languages continue to use Chroma's built-in lexers.
 
 FCSS uses Chroma's CSS lexer through either `--language fcss` or an `.fcss` filename. An explicit
 unknown language selects Chroma's plain-text fallback; it does not silently reinterpret the

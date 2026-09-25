@@ -124,6 +124,42 @@ func TestDefaultRegistryBundlesBAML(t *testing.T) {
 	assertClassifies(t, result, "1024.0", chroma.LiteralNumber, "tree-sitter.constant.numeric")
 }
 
+func TestBAMLSMCUsesBundledGrammarAndCaptures(t *testing.T) {
+	t.Parallel()
+	registry, err := DefaultRegistry()
+	if err != nil {
+		t.Fatal(err)
+	}
+	const source = `@tensor.program(profile: "dense-counted-f32")
+function Probe(@specialize config: Config, batch: Axis) -> tensor.Pair {
+  let slots = tensor.rows {
+    input features: F32[config.axis] = [1.0];
+    support count: I64[] = 1;
+  };
+  let ordinary = batch * 2;
+  let row = smc { $batch >> $config.row @ ($(choose(config)) * $other) };
+  row
+}`
+	result, err := registry.Highlight(source, Query{Filename: "alloy-smc.baml"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertExactSource(t, result, source)
+	assertClassifiesAt(t, result, strings.Index(source, "smc {"), "smc", chroma.LiteralNumber, "tree-sitter.constant.numeric")
+	splice := strings.Index(source, "$batch")
+	assertClassifiesAt(t, result, splice, "$", chroma.LiteralStringInterpol, "tree-sitter.punctuation.special")
+	assertClassifiesAt(t, result, splice+1, "batch", chroma.NameVariable, "tree-sitter.variable")
+	assertClassifiesAt(t, result, strings.Index(source, "$config.row"), "$", chroma.LiteralStringInterpol, "tree-sitter.punctuation.special")
+	assertClassifiesAt(t, result, strings.Index(source, "$config.row")+len("$config."), "row", chroma.NameVariable, "tree-sitter.variable")
+	assertClassifiesAt(t, result, strings.Index(source, " >> ")+1, ">>", chroma.Operator, "tree-sitter.operator")
+	assertClassifiesAt(t, result, strings.Index(source, " @ ")+1, "@", chroma.Operator, "tree-sitter.keyword.operator")
+	assertClassifiesAt(t, result, strings.Index(source, " * $other")+1, "*", chroma.Operator, "tree-sitter.operator")
+	assertClassifiesAt(t, result, strings.Index(source, "batch * 2")+len("batch "), "*", chroma.Operator, "tree-sitter.operator")
+	assertClassifiesAt(t, result, strings.Index(source, "tensor.rows")+len("tensor."), "rows", chroma.Keyword, "tree-sitter.keyword.special")
+	assertClassifiesAt(t, result, strings.Index(source, "input features"), "input", chroma.Keyword, "tree-sitter.keyword.special")
+	assertClassifiesAt(t, result, strings.Index(source, "F32["), "F32", chroma.KeywordType, "tree-sitter.type.builtin")
+}
+
 func TestBAMLBacktickStrings(t *testing.T) {
 	t.Parallel()
 	registry, err := DefaultRegistry()

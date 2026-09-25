@@ -1,4 +1,4 @@
-; Source: github.com/starbaser/tree-sitter-baml at 17fd57427537e8fa7d6873007807da83a940604f
+; Source: github.com/starbaser/tree-sitter-baml at 553f06a5b8011d15e0c03d54234ea548d08e97f5
 ; SPDX-License-Identifier: MIT
 
 ; Fallback first: engines such as Neovim and tree-sitter-highlight let a
@@ -31,6 +31,7 @@
   "return"
   "match"
   "throws"
+  "throw"
 ] @keyword.control
 
 "let" @keyword.storage
@@ -53,6 +54,15 @@
 (call_expression function: (identifier) @function.call)
 (call_expression
   function: (member_expression member: (identifier) @function.method))
+(graph_call_expression callee: (identifier) @function.call)
+(graph_call_expression
+  callee: (member_expression member: (identifier) @function.method))
+(graph_call_expression
+  callee: (generic_callee function: (identifier) @function.call))
+(graph_call_expression
+  callee: (generic_callee
+    function: (member_expression member: (identifier) @function.method)))
+(graph_call_expression mode: (identifier) @keyword.special)
 (parameter name: (identifier) @variable.parameter)
 (lambda_expression parameters: (lambda_parameters (parameter name: (identifier) @variable.parameter)))
 (let_declaration name: (identifier) @variable)
@@ -61,6 +71,22 @@
 (map_entry key: (identifier) @property)
 (class_property name: (identifier) @property)
 (argument name: (identifier) @variable.parameter)
+(parameter_attribute name: (identifier) @attribute)
+
+; SMC uses the numeric accent; dollar splices retain normal variable colors.
+(smc_expression keyword: (identifier) @constant.numeric
+  (#eq? @constant.numeric "smc"))
+(smc_splice "$" @punctuation.special)
+(smc_lift ">>" @operator)
+(smc_product "*" @operator)
+(tensor_rows_expression
+  namespace: (identifier) @variable
+  constructor: (identifier) @keyword.special
+  (#eq? @variable "tensor")
+  (#eq? @keyword.special "rows"))
+(tensor_row role: _ @keyword.special)
+(tensor_row name: (identifier) @property)
+(tensor_row dtype: _ @type.builtin)
 
 ; Literals
 (string_literal) @string
@@ -126,6 +152,11 @@
   "@@"
 ] @attribute
 (block_attribute name: (identifier) @attribute)
+(block_attribute name: (qualified_identifier (identifier) @attribute))
+(attribute_argument name: (identifier) @variable.parameter)
+; The generic annotation capture outranks @operator in Blizzaga; give the
+; quotation's @ a distinct operator capture with the required priority.
+(smc_sequence "@" @keyword.operator)
 (client_property "client" @keyword.special)
 (prompt_property "prompt" @keyword.special)
 (config_block type: _ @keyword.special)
