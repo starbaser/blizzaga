@@ -5,6 +5,7 @@ import (
 	"regexp"
 
 	"github.com/alecthomas/chroma/v2/lexers"
+	bamlqueries "github.com/starbaser/tree-sitter-baml"
 	tree_sitter_baml "github.com/starbaser/tree-sitter-baml/bindings/go"
 	sitter "github.com/tree-sitter/go-tree-sitter"
 	tree_sitter_go "github.com/tree-sitter/tree-sitter-go/bindings/go"
@@ -13,8 +14,8 @@ import (
 //go:embed queries/go/highlights.scm
 var goHighlights string
 
-//go:embed queries/baml/highlights.scm
-var bamlHighlights string
+//go:embed queries/baml/overrides.scm
+var bamlHighlightOverrides string
 
 //go:embed queries/baml/injections.scm
 var bamlInjections string
@@ -56,7 +57,7 @@ func BuiltinLanguages() []Language {
 			Filenames:  []string{"*.baml"},
 			MIMETypes:  []string{"text/x-baml"},
 			Grammar:    sitter.NewLanguage(tree_sitter_baml.Language()),
-			Highlights: bamlHighlights,
+			Highlights: bamlqueries.BAMLHighlights() + "\n" + bamlHighlightOverrides,
 			Captures:   StandardCaptures(),
 			Injections: []Injection{{
 				Query:     bamlInjections,
