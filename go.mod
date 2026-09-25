@@ -20,7 +20,7 @@ require (
 	github.com/kanrichan/resvg-go v0.0.2-0.20231001163256-63db194ca9f5
 	github.com/mattn/go-isatty v0.0.22
 	github.com/mattn/go-runewidth v0.0.23
-	github.com/starbaser/tree-sitter-baml v0.0.0-20260925021356-1bdf78542dbb
+	github.com/starbaser/tree-sitter-baml v0.0.0-20260925081358-d091834acc43
 	github.com/tree-sitter/go-tree-sitter v0.25.0
 	github.com/tree-sitter/tree-sitter-go v0.25.0
 	golang.org/x/image v0.43.0
